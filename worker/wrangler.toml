@@ -1,0 +1,26 @@
+name = "magnum-cpa-lead-worker"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+# Create with: wrangler kv namespace create LEADS_KV
+# Then paste the returned id below.
+kv_namespaces = [
+  { binding = "LEADS_KV", id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID" }
+]
+
+# Flushes the pending-Canopy retry queue. Runs every 15 minutes; a no-op scan
+# while Canopy isn't configured yet.
+[triggers]
+crons = ["*/15 * * * *"]
+
+[vars]
+# Comma-separated list of origins allowed to call this Worker. Add your
+# custom domain here later if/when the GoDaddy -> Cloudflare DNS cutover happens.
+ALLOWED_ORIGINS = "https://glendley.github.io"
+
+# Secrets (never put these here — set via `wrangler secret put <NAME>`):
+#   TURNSTILE_SECRET_KEY   (required before real launch)
+#   CANOPY_CLIENT_ID       (Phase 2, once you have Canopy API access)
+#   CANOPY_CLIENT_SECRET   (Phase 2)
+#   CANOPY_API_BASE        (Phase 2 — confirm against real Canopy docs)
+#   CANOPY_TOKEN_URL       (Phase 2 — confirm against real Canopy docs)

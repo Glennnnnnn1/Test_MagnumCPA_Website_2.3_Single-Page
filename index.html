@@ -276,6 +276,14 @@
   .fld label{display:block;font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px;}
   .fld input,.fld select,.fld textarea{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:8px;font-size:1rem;font-family:inherit;}
   .fld input:focus,.fld select:focus,.fld textarea:focus{outline:2px solid var(--gold);border-color:transparent;}
+  .fld-optional{text-transform:none;font-weight:400;color:var(--muted);letter-spacing:0;}
+  .fld-error{display:block;color:#c0392b;font-size:.78rem;margin-top:5px;min-height:0;}
+  .fld input.invalid,.fld select.invalid,.fld textarea.invalid{border-color:#c0392b;}
+  .form-error-banner{background:#fff0f0;color:#c0392b;border:1px solid #f5c6cb;border-radius:8px;
+    padding:12px 16px;font-size:.9rem;margin-bottom:18px;}
+  /* Honeypot: off-screen, not display:none (some bots specifically skip
+     display:none fields), never focusable/autofillable by real visitors. */
+  .hp-field{position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;}
   .form-intro{text-align:center;color:#dbe4f5;max-width:620px;margin:0 auto 28px;}
   .step-head{font-size:1.25rem;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:10px;margin-bottom:6px;}
   .step-head .num{width:30px;height:30px;border-radius:50%;background:var(--gold);color:var(--navy-dark);display:grid;place-items:center;font-size:.95rem;}
@@ -614,13 +622,36 @@
       <div id="step1" class="form-card">
         <h2 class="bookcall-title">Book Your Free Strategy Call</h2>
         <p class="bookcall-sub">Available slots: Mon–Fri, 9:00am–5:00pm EST · Sat–Sun 2:00pm – 6:00pm </p>
-        <form onsubmit="return goToCalendar(event)">
+        <div class="form-error-banner" id="formError" style="display:none;"></div>
+        <form id="leadForm" onsubmit="return submitLeadForm(event)" novalidate>
           <div class="grid2">
-            <div class="fld"><label>First Name</label><input type="text" id="dcFirst" placeholder="First" required></div>
-            <div class="fld"><label>Last Name</label><input type="text" id="dcLast" placeholder="Last" required></div>
+            <div class="fld"><label>First Name</label><input type="text" id="dcFirst" placeholder="First" required><span class="fld-error" id="err-dcFirst"></span></div>
+            <div class="fld"><label>Last Name</label><input type="text" id="dcLast" placeholder="Last" required><span class="fld-error" id="err-dcLast"></span></div>
           </div>
-          <div class="fld"><label>Business Email</label><input type="email" id="dcEmail" placeholder="you@company.com" required></div>
-          <div class="fld"><label>Phone Number</label><input type="tel" id="dcPhone" placeholder="(555) 555-5555" required></div>
+          <div class="fld"><label>Business Email</label><input type="email" id="dcEmail" placeholder="you@company.com" required><span class="fld-error" id="err-dcEmail"></span></div>
+          <div class="fld"><label>Phone Number</label><input type="tel" id="dcPhone" placeholder="(555) 555-5555" required><span class="fld-error" id="err-dcPhone"></span></div>
+          <div class="grid2">
+            <div class="fld"><label>Business Name <span class="fld-optional">(optional)</span></label><input type="text" id="dcBusiness" placeholder="Your business name"></div>
+            <div class="fld"><label>State</label>
+              <select id="dcState" required>
+                <option value="">Select your state</option>
+                <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
+                <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
+                <option>District of Columbia</option><option>Florida</option><option>Georgia</option><option>Hawaii</option>
+                <option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option>
+                <option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option>
+                <option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option>
+                <option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option>
+                <option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option>
+                <option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option>
+                <option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option>
+                <option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option>
+                <option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option>
+                <option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
+              </select>
+              <span class="fld-error" id="err-dcState"></span>
+            </div>
+          </div>
           <div class="fld"><label>I Need Help With</label>
             <select id="dcHelp">
               <option>Tax Strategy &amp; Planning</option>
@@ -641,7 +672,39 @@
               <option>Not applicable / Individual</option>
             </select>
           </div>
-          <button type="submit" class="btn btn-dark" style="width:100%;">RESERVE MY FREE CALL →</button>
+          <div class="grid2">
+            <div class="fld"><label>Preferred Contact Method</label>
+              <select id="dcContactMethod">
+                <option>Email</option>
+                <option>Phone Call</option>
+                <option>Text Message</option>
+              </select>
+            </div>
+            <div class="fld"><label>Best Time to Call</label>
+              <select id="dcBestTime">
+                <option>Morning (9am–12pm)</option>
+                <option>Afternoon (12pm–4pm)</option>
+                <option>Evening (4pm–6pm)</option>
+                <option>Anytime</option>
+              </select>
+            </div>
+          </div>
+          <div class="fld full"><label>Message <span class="fld-optional">(optional)</span></label>
+            <textarea id="dcMessage" rows="4" maxlength="2000" placeholder="Anything else we should know?"></textarea>
+            <span class="fld-error" id="err-dcMessage"></span>
+          </div>
+
+          <!-- Honeypot: invisible to real visitors, left blank by them; bots
+               that auto-fill every field trip it. Positioned off-screen
+               (not display:none) and unfocusable/unautofillable. -->
+          <div class="hp-field" aria-hidden="true">
+            <label for="dcCompanyWebsite">Company Website</label>
+            <input type="text" id="dcCompanyWebsite" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="cf-turnstile" data-sitekey="REPLACE_WITH_YOUR_TURNSTILE_SITE_KEY" style="margin-bottom:16px;"></div>
+
+          <button type="submit" class="btn btn-dark" id="leadSubmitBtn" style="width:100%;">RESERVE MY FREE CALL →</button>
           <p class="bookcall-note">🔒 Your information is private and never sold. We'll confirm within 2 hours.</p>
         </form>
       </div>
@@ -842,14 +905,15 @@
   revShow(0);
   if (revSlides > 1){ setInterval(function(){ revMove(1); }, 7000); }
 
-  /* ===== Request a consultation (Acuity) ===== */
+  /* ===== Request a consultation: secure lead capture, then Acuity ===== */
   var ACUITY_BASE = 'https://magnumcpa.as.me/schedule/c78873bb/appointment/7960861?appointmentTypeIds%5B%5D=7960861';
-  function goToCalendar(e){
-    e.preventDefault();
-    var first = document.getElementById('dcFirst').value.trim();
-    var last = document.getElementById('dcLast').value.trim();
-    var email = document.getElementById('dcEmail').value.trim();
-    var phone = document.getElementById('dcPhone').value.trim();
+
+  // Fill in once the Worker is deployed (see SETUP-CLOUDFLARE.md). Until
+  // then the form fails closed with a friendly message rather than silently
+  // skipping validation/spam checks.
+  var LEAD_API_URL = 'REPLACE_WITH_YOUR_WORKER_URL/lead';
+
+  function revealScheduler(first, last, email, phone){
     var url = ACUITY_BASE +
       '&firstName=' + encodeURIComponent(first) +
       '&lastName='  + encodeURIComponent(last) +
@@ -860,11 +924,126 @@
     document.getElementById('step1').style.display = 'none';
     document.getElementById('step2').style.display = 'block';
     document.getElementById('request').scrollIntoView({behavior:'smooth'});
-    return false;
   }
   function backToDetails(){
     document.getElementById('step2').style.display = 'none';
     document.getElementById('step1').style.display = 'block';
+  }
+
+  /* ---- client-side validation / sanitization ----
+     UX politeness only — the real security boundary is the Worker, which
+     never trusts anything the browser claims to have already checked. */
+  var LEAD_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var LEAD_PHONE_RE = /^\+?1?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+
+  function leadStripTags(s){ return (s || '').replace(/<[^>]*>/g, ''); }
+
+  function clearLeadErrors(){
+    document.querySelectorAll('#leadForm .fld-error').forEach(function(el){ el.textContent = ''; });
+    document.querySelectorAll('#leadForm .invalid').forEach(function(el){ el.classList.remove('invalid'); });
+    var banner = document.getElementById('formError');
+    banner.style.display = 'none';
+    banner.textContent = '';
+  }
+  function showLeadFieldError(id, message){
+    var input = document.getElementById(id);
+    var err = document.getElementById('err-' + id);
+    if (input) input.classList.add('invalid');
+    if (err) err.textContent = message;
+  }
+  function showLeadFormBanner(message){
+    var banner = document.getElementById('formError');
+    banner.textContent = message;
+    banner.style.display = 'block';
+    banner.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  function collectLeadFields(){
+    return {
+      firstName: leadStripTags(document.getElementById('dcFirst').value.trim()),
+      lastName: leadStripTags(document.getElementById('dcLast').value.trim()),
+      email: leadStripTags(document.getElementById('dcEmail').value.trim()),
+      phone: leadStripTags(document.getElementById('dcPhone').value.trim()),
+      businessName: leadStripTags(document.getElementById('dcBusiness').value.trim()),
+      state: document.getElementById('dcState').value,
+      serviceNeeded: document.getElementById('dcHelp').value,
+      revenue: document.getElementById('dcRevenue').value,
+      preferredContact: document.getElementById('dcContactMethod').value,
+      bestTimeToCall: document.getElementById('dcBestTime').value,
+      message: leadStripTags(document.getElementById('dcMessage').value.trim())
+    };
+  }
+
+  function validateLeadClientSide(lead){
+    var ok = true;
+    if (!lead.firstName){ showLeadFieldError('dcFirst', 'First name is required.'); ok = false; }
+    if (!lead.lastName){ showLeadFieldError('dcLast', 'Last name is required.'); ok = false; }
+    if (!lead.email){ showLeadFieldError('dcEmail', 'Email is required.'); ok = false; }
+    else if (!LEAD_EMAIL_RE.test(lead.email)){ showLeadFieldError('dcEmail', 'Enter a valid email address.'); ok = false; }
+    if (!lead.phone){ showLeadFieldError('dcPhone', 'Phone number is required.'); ok = false; }
+    else if (!LEAD_PHONE_RE.test(lead.phone)){ showLeadFieldError('dcPhone', 'Enter a valid US phone number.'); ok = false; }
+    if (!lead.state){ showLeadFieldError('dcState', 'Please select your state.'); ok = false; }
+    if (lead.message.length > 2000){ showLeadFieldError('dcMessage', 'Message is too long.'); ok = false; }
+    return ok;
+  }
+
+  function getTurnstileToken(){
+    var el = document.querySelector('#leadForm [name="cf-turnstile-response"]');
+    return el ? el.value : '';
+  }
+
+  function submitLeadForm(e){
+    e.preventDefault();
+    clearLeadErrors();
+    var lead = collectLeadFields();
+    if (!validateLeadClientSide(lead)) return false;
+
+    var btn = document.getElementById('leadSubmitBtn');
+    btn.disabled = true;
+    var originalLabel = btn.textContent;
+    btn.textContent = 'Sending…';
+
+    var payload = {
+      meta: {
+        turnstileToken: getTurnstileToken(),
+        ts: Date.now(),
+        hp: document.getElementById('dcCompanyWebsite').value
+      },
+      lead: lead
+    };
+
+    fetch(LEAD_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function(resp){
+      return resp.json().catch(function(){ return {}; }).then(function(data){
+        return { status: resp.status, data: data };
+      });
+    }).then(function(result){
+      if (result.data && result.data.ok){
+        revealScheduler(lead.firstName, lead.lastName, lead.email, lead.phone);
+        return;
+      }
+      if (result.data && result.data.error === 'validation' && result.data.fields){
+        var fieldMap = { firstName:'dcFirst', lastName:'dcLast', email:'dcEmail', phone:'dcPhone', state:'dcState', message:'dcMessage' };
+        Object.keys(result.data.fields).forEach(function(f){
+          if (fieldMap[f]) showLeadFieldError(fieldMap[f], result.data.fields[f]);
+        });
+        showLeadFormBanner('Please check the highlighted fields and try again.');
+      } else if (result.status === 429 || (result.data && result.data.error === 'rate_limited')){
+        showLeadFormBanner('Too many submissions — please wait a few minutes and try again.');
+      } else {
+        showLeadFormBanner('Something went wrong — please try again or call us at (916) 616-1789.');
+      }
+    }).catch(function(){
+      showLeadFormBanner('Something went wrong — please try again or call us at (916) 616-1789.');
+    }).finally(function(){
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    });
+
+    return false;
   }
 
   /* ===== One-time booking popup (once per browser session) ===== */
@@ -975,6 +1154,7 @@
 </script>
 
 <script src="https://embed.acuityscheduling.com/js/embed.js" type="text/javascript"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <script src="site.js"></script>
 <script src="search.js"></script>
