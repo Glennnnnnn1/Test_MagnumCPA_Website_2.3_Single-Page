@@ -5,7 +5,7 @@ compatibility_date = "2026-01-01"
 # Create with: wrangler kv namespace create LEADS_KV
 # Then paste the returned id below.
 kv_namespaces = [
-  { binding = "LEADS_KV", id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID" }
+  { binding = "LEADS_KV", id = "363eb08d23cb47ab9176fa209afbcef5" }
 ]
 
 # Flushes the pending-Canopy retry queue. Runs every 15 minutes; a no-op scan

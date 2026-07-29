@@ -702,7 +702,7 @@
             <input type="text" id="dcCompanyWebsite" tabindex="-1" autocomplete="off">
           </div>
 
-          <div class="cf-turnstile" data-sitekey="REPLACE_WITH_YOUR_TURNSTILE_SITE_KEY" style="margin-bottom:16px;"></div>
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAABKjiEdCTa8l7GC" style="margin-bottom:16px;"></div>
 
           <button type="submit" class="btn btn-dark" id="leadSubmitBtn" style="width:100%;">RESERVE MY FREE CALL →</button>
           <p class="bookcall-note">🔒 Your information is private and never sold. We'll confirm within 2 hours.</p>
@@ -911,7 +911,7 @@
   // Fill in once the Worker is deployed (see SETUP-CLOUDFLARE.md). Until
   // then the form fails closed with a friendly message rather than silently
   // skipping validation/spam checks.
-  var LEAD_API_URL = 'REPLACE_WITH_YOUR_WORKER_URL/lead';
+  var LEAD_API_URL = 'https://magnum-cpa-lead-worker.magnum-cpa.workers.dev/lead';
 
   function revealScheduler(first, last, email, phone){
     var url = ACUITY_BASE +
