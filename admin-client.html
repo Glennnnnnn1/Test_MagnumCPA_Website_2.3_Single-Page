@@ -113,6 +113,14 @@
 <div class="container">
   <section class="pane active" id="pane-details">
     <div class="card"><h3>Client Details</h3><div class="info-grid" id="detailsGrid"></div></div>
+    <div class="card">
+      <h3>Canopy Tax Link <span style="font-weight:400;font-size:.8rem;color:var(--muted);">(optional — integration ready)</span></h3>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:14px;">Link this portal account to the client's record in Canopy Tax. Once connected, shared files can sync to Canopy and Canopy document requests will appear in this client's portal.</p>
+      <div class="asana-bar">
+        <input class="field" style="flex:1;margin:0;" type="text" id="canopyClientId" placeholder="Canopy Client ID">
+        <button class="btn green" type="button" onclick="saveCanopyId()">Save</button>
+      </div>
+    </div>
   </section>
 
   <section class="pane" id="pane-documents">
@@ -205,6 +213,13 @@
     const p=profile;
     const rows=[['Email',p.email],['Phone',p.phone],['Sex',p.sex],['Date of Birth',p.dob],['Occupation',p.job],['Address',p.addr],['Sign-up Date',p.created_at?new Date(p.created_at).toLocaleString():''],['About',p.bio]];
     document.getElementById('detailsGrid').innerHTML = rows.map(r=>'<div class="it"><label>'+r[0]+'</label><span>'+(r[1]?esc(r[1]):'—')+'</span></div>').join('');
+    document.getElementById('canopyClientId').value = p.canopy_client_id || '';
+  }
+  async function saveCanopyId(){
+    const val = document.getElementById('canopyClientId').value.trim();
+    await Magnum.saveCanopyClientId(clientId, val);
+    profile.canopy_client_id = val;
+    alert(val ? 'Canopy Client ID saved.' : 'Canopy link removed.');
   }
 
   // documents — files the client attached in the organizer (Supabase Storage)
@@ -359,9 +374,10 @@
     const st = document.getElementById('sharedStatus');
     st.textContent = 'Uploading…';
     try {
-      await Magnum.uploadSharedFile(clientId, file, 'admin', note);
+      const saved = await Magnum.uploadSharedFile(clientId, file, 'admin', note);
       await notifyClient('Our team shared a new file with you: '+file.name + (note ? ' — '+note : ''));
       Magnum.emailClientFileShared(clientId, file.name, note);   // email the client (best-effort)
+      Magnum.canopyPushDocument(clientId, saved.path, file.name); // mirror to Canopy (best-effort, no-op until connected)
       st.textContent = '✓ Uploaded';
       noteEl.value = '';
       setTimeout(function(){ st.textContent=''; }, 2500);

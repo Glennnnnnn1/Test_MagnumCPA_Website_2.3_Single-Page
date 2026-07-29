@@ -334,6 +334,10 @@
 <!-- ===== Documents ===== -->
 <section id="panel-docs" class="panel">
   <div class="container">
+    <div class="card" id="canopyReqCard" style="display:none;">
+      <div class="card-head"><span class="ic">📥</span><h2>Document Requests</h2></div>
+      <div class="card-body"><div id="canopyReqList"></div></div>
+    </div>
     <div class="card">
       <div class="card-head"><span class="ic">🗂️</span><h2 id="orgTitle">Organizer</h2></div>
       <div class="card-body">
@@ -776,6 +780,20 @@
   function pushAdminNotify(text, type){
     if (user) Magnum.addNotification(user.id, 'admin', text, type);
   }
+
+  // ----- Canopy Tax document requests (shown only once your team connects Canopy) -----
+  async function renderCanopyRequests(){
+    const reqs = await Magnum.getDocumentRequests(user.id);
+    const card = document.getElementById('canopyReqCard');
+    if (!reqs.length){ card.style.display = 'none'; return; }
+    card.style.display = 'block';
+    document.getElementById('canopyReqList').innerHTML = reqs.map(function(r){
+      return '<div class="feed-item"><div class="fd">'+escapeHtml(r.status||'pending')+'</div>'+
+        '<b>'+escapeHtml(r.title)+'</b>'+
+        (r.description?'<div class="ft">'+escapeHtml(r.description)+'</div>':'')+
+      '</div>';
+    }).join('');
+  }
   document.addEventListener('click', function(e){
     const w = document.querySelector('.notif-wrap');
     if (w && !w.contains(e.target)) document.getElementById('notifPanel').classList.remove('open');
@@ -793,6 +811,7 @@
     renderMeetings();
     renderShared();
     renderNotif();
+    renderCanopyRequests();
 
     // ----- realtime: live chat + notifications -----
     sb.channel('client-'+user.id)
@@ -805,6 +824,9 @@
       .on('postgres_changes',
           { event:'*', schema:'public', table:'shared_files', filter:'user_id=eq.'+user.id },
           function(){ renderShared(); })
+      .on('postgres_changes',
+          { event:'*', schema:'public', table:'canopy_document_requests', filter:'user_id=eq.'+user.id },
+          function(){ renderCanopyRequests(); })
       .subscribe();
   })();
 </script>

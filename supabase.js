@@ -211,7 +211,38 @@ const Magnum = {
   async setReviewApproved(id, on){
     return await sb.from('reviews').update({ approved: on }).eq('id', id);
   },
-  async deleteReview(id){ return await sb.from('reviews').delete().eq('id', id); }
+  async deleteReview(id){ return await sb.from('reviews').delete().eq('id', id); },
+
+  // ----- Canopy Tax integration (readiness scaffold) -----
+  // These are all best-effort / safe no-ops until the canopy-sync Edge
+  // Function is deployed with real Canopy API credentials — see
+  // SETUP-CANOPY.md. The portal works normally either way.
+  async saveCanopyClientId(userId, canopyClientId){
+    return await sb.from('profiles').update({ canopy_client_id: canopyClientId || null }).eq('id', userId);
+  },
+  async getDocumentRequests(userId){
+    const { data } = await sb.from('canopy_document_requests').select('*')
+      .eq('user_id', userId).order('created_at', { ascending: false });
+    return data || [];
+  },
+  async canopyPushDocument(userId, path, fileName){
+    try {
+      const { data, error } = await sb.functions.invoke('canopy-sync', {
+        body: { action: 'push_document', user_id: userId, path: path, file_name: fileName }
+      });
+      if (error) return { ok: false };
+      return data;
+    } catch(e){ return { ok: false }; }
+  },
+  async canopyPullRequests(userId){
+    try {
+      const { data, error } = await sb.functions.invoke('canopy-sync', {
+        body: { action: 'pull_requests', user_id: userId }
+      });
+      if (error) return { ok: false };
+      return data;
+    } catch(e){ return { ok: false }; }
+  }
 };
 
 window.Magnum = Magnum;
