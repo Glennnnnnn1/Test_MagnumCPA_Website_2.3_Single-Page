@@ -38,16 +38,6 @@
 
   .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:26px 0 14px;flex-wrap:wrap;}
   .bar h2{color:var(--navy);font-size:1.3rem;}
-  .settings-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:0 6px 18px rgba(36,58,82,.05);}
-  .settings-card .gr-toggle{display:flex;gap:10px;align-items:flex-start;cursor:pointer;margin-bottom:16px;color:#3c4757;font-size:.95rem;}
-  .settings-card .gr-toggle input{width:18px;height:18px;margin-top:3px;flex:none;cursor:pointer;}
-  .settings-card .gr-fld{margin-bottom:16px;}
-  .settings-card .gr-fld label{display:block;font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:6px;}
-  .settings-card .gr-fld input{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:8px;font-size:.92rem;font-family:inherit;}
-  .settings-card .gr-fld input:focus{outline:2px solid var(--gold);border-color:transparent;}
-  .settings-card .gr-hint{font-size:.78rem;color:var(--muted);margin-top:6px;}
-  .settings-card .saved{color:var(--green);font-weight:700;font-size:.85rem;opacity:0;transition:opacity .3s;}
-  .settings-card .saved.show{opacity:1;}
   .search{padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:.95rem;min-width:240px;}
 
   .client{background:#fff;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden;box-shadow:0 6px 18px rgba(36,58,82,.05);}
@@ -146,31 +136,7 @@
   .cv-reply button{width:44px;height:44px;border-radius:50%;border:0;background:var(--gold);color:var(--navy-dark);font-size:1.05rem;cursor:pointer;flex:none;}
   .cv-empty{margin:auto;color:var(--muted);font-style:italic;text-align:center;padding:30px;}
 
-  /* documents pane */
-  .docbox{display:grid;grid-template-columns:340px 1fr;background:#fff;border:1px solid var(--border);
-    border-radius:var(--radius);overflow:hidden;box-shadow:0 6px 18px rgba(36,58,82,.05);min-height:480px;}
-  .doc-list{border-right:1px solid var(--border);background:#fafbfc;max-height:620px;overflow-y:auto;}
-  .doc-item{display:flex;gap:12px;align-items:center;padding:13px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:.15s;}
-  .doc-item:hover{background:#f1f4f7;}
-  .doc-item.active{background:#fff;box-shadow:inset 3px 0 0 var(--gold);}
-  .doc-item .fic{width:38px;height:38px;border-radius:8px;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-size:1.1rem;flex:none;}
-  .doc-item .m{flex:1;min-width:0;}
-  .doc-item .m b{color:var(--navy);font-size:.9rem;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .doc-item .m span{font-size:.78rem;color:var(--muted);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .doc-view{display:flex;flex-direction:column;min-width:0;}
-  .dv-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;justify-content:space-between;}
-  .dv-head .t{min-width:0;}
-  .dv-head .t b{color:var(--navy);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .dv-head .t span{font-size:.82rem;color:var(--muted);}
-  .dv-head a{background:var(--gold);color:var(--navy-dark);font-weight:700;padding:8px 14px;border-radius:6px;font-size:.82rem;flex:none;}
-  .dv-body{flex:1;background:#f3f5f8;min-height:360px;display:flex;}
-  .dv-body iframe{width:100%;height:100%;border:0;min-height:420px;}
-  .dv-body img{max-width:100%;max-height:560px;margin:auto;display:block;object-fit:contain;}
-  .dv-body .dv-fallback{margin:auto;text-align:center;color:var(--muted);padding:40px;}
-
   @media (max-width:680px){
-    .docbox{grid-template-columns:1fr;}
-    .doc-list{max-height:240px;}
     .stats{grid-template-columns:repeat(2,1fr);}
     .info-grid{grid-template-columns:1fr;}
     .chatbox{grid-template-columns:1fr;}
@@ -241,66 +207,73 @@
       </div>
     </div>
 
-    <div class="bar"><h2>Uploaded Documents</h2><input class="search" id="docSearch" type="text" placeholder="Search file, client or category..." oninput="renderDocuments()" style="max-width:320px;"></div>
-    <div class="docbox">
-      <div class="doc-list" id="docPaneList"></div>
-      <div class="doc-view" id="docView">
-        <div class="cv-empty">Select a document on the left to preview it here.</div>
-      </div>
-    </div>
-
-    <div class="bar"><h2>Google Review Invite</h2></div>
-    <div class="settings-card">
-      <label class="gr-toggle">
-        <input type="checkbox" id="grEnabled">
-        <span>After a client leaves feedback in the portal, invite them to post a Google review.</span>
-      </label>
-      <div class="gr-fld">
-        <label for="grUrl">Google review link</label>
-        <input type="url" id="grUrl" placeholder="https://g.page/r/...  or  https://search.google.com/local/writereview?placeid=...">
-        <p class="gr-hint">Paste your Google Business “write a review” link. Find it in your Google Business Profile → Ask for reviews → Share review form.</p>
-      </div>
-      <div style="display:flex;align-items:center;gap:14px;">
-        <button class="btn" onclick="saveReviewSettings()">Save</button>
-        <span class="saved" id="grSaved">✓ Saved</span>
-      </div>
-    </div>
-
     <div class="bar"><h2>Client Feedback</h2></div>
     <div id="fbList"></div>
   </div>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
 <script src="organizer.js"></script>
 <script>
-  async function adminLogout(){ await Magnum.signOut(); window.location.href = 'admin-login.html'; }
+  // ----- guard -----
+  if (sessionStorage.getItem('magnum_admin') !== '1'){ window.location.href = 'admin-login.html'; }
 
-  // ----- data (loaded from Supabase) -----
-  let REVIEWS = [];
-  let CHAT = {};    // user_id -> [messages]
-  let ANOTIF = [];  // admin notifications
+  function adminLogout(){ sessionStorage.removeItem('magnum_admin'); window.location.href = 'admin-login.html'; }
 
-  async function loadAll(){
-    const { data: profs } = await sb.from('profiles').select('*').neq('role','admin').order('created_at',{ascending:true});
-    const { data: orgs }  = await sb.from('organizer').select('user_id,data');
-    const orgMap = {}; (orgs||[]).forEach(o => orgMap[o.user_id] = o.data || {});
-    CLIENTS = (profs||[]).map(function(p){
-      const data = orgMap[p.id] || {};
-      const docs = [];
-      ORGANIZER_SECTIONS.forEach(function(sec){ sec.fields.forEach(function(f){
+  // ----- data access -----
+  function getSignups(){ try{return JSON.parse(localStorage.getItem('magnum_signups')||'[]');}catch(e){return [];} }
+  function getFeedback(){ try{return JSON.parse(localStorage.getItem('magnum_feedback')||'[]');}catch(e){return [];} }
+  function profileFor(email){
+    try{ return JSON.parse(localStorage.getItem('magnum_profile_'+(email||'').toLowerCase())||'{}'); }
+    catch(e){ return {}; }
+  }
+  function organizerFor(email){
+    try{ return JSON.parse(localStorage.getItem('magnum_organizer_'+(email||'').toLowerCase())||'{}'); }
+    catch(e){ return {}; }
+  }
+  function orgSummary(email){
+    const data = organizerFor(email);
+    if (!data || !Object.keys(data).length) return '<p class="empty">Organizer not started.</p>';
+    let html = '';
+    ORGANIZER_SECTIONS.forEach(function(sec){
+      const rows = sec.fields.filter(function(f){
+        if (f.type === 'display') return false;
         const v = data[f.id];
-        if (f.type==='file' && v && v.name) docs.push({ name:v.name, path:v.path, category:f.label });
-      });});
-      return { id:p.id, email:p.email, name:p.name||'(no name)', profile:p, docs:docs };
+        return v && (typeof v === 'string' ? v.trim() !== '' : true);
+      }).map(function(f){
+        const v = data[f.id];
+        if (f.type === 'file' && v && v.name)
+          return '<div class="it"><label>'+esc(f.label)+'</label><span><a href="'+v.data+'" download="'+esc(v.name)+'">📎 '+esc(v.name)+'</a></span></div>';
+        return '<div class="it"><label>'+esc(f.label)+'</label><span>'+esc(v)+'</span></div>';
+      });
+      if (rows.length) html += '<div class="org-sec"><h5>'+esc(sec.title)+'</h5><div class="info-grid">'+rows.join('')+'</div></div>';
     });
+    return html || '<p class="empty">Organizer not started.</p>';
+  }
+  function docsFor(email){
+    try{ return JSON.parse(localStorage.getItem('magnum_docs_'+(email||'').toLowerCase())||'[]'); }
+    catch(e){ return []; }
+  }
 
-    const { data: msgs } = await sb.from('chat_messages').select('*').order('created_at',{ascending:true});
-    CHAT = {}; (msgs||[]).forEach(function(m){ (CHAT[m.user_id]=CHAT[m.user_id]||[]).push(m); });
-
-    REVIEWS = await Magnum.getReviews();
-    ANOTIF  = await Magnum.getAdminNotifications();
+  // merge signups + profiles into one client list keyed by email
+  function getClients(){
+    const map = {};
+    getSignups().forEach(s => {
+      const k = (s.email||'').toLowerCase();
+      map[k] = { email: s.email, name: s.name, signupDate: s.date };
+    });
+    for (let i=0;i<localStorage.length;i++){
+      const key = localStorage.key(i);
+      if (key && key.indexOf('magnum_profile_')===0){
+        const email = key.slice('magnum_profile_'.length);
+        if (!map[email]) map[email] = { email: email, name: '' };
+      }
+    }
+    return Object.keys(map).map(k => {
+      const base = map[k];
+      const p = profileFor(base.email);
+      const docs = docsFor(base.email);
+      return Object.assign(base, { profile: p, docs: docs, name: p.name || base.name || '(no name)' });
+    });
   }
 
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -311,7 +284,7 @@
 
   // ----- render -----
   function renderStats(clients){
-    const fb = REVIEWS;
+    const fb = getFeedback();
     const totalDocs = clients.reduce((a,c)=>a+c.docs.length,0);
     document.getElementById('stClients').textContent = clients.length;
     document.getElementById('stDocs').textContent = totalDocs;
@@ -323,7 +296,7 @@
   function clientRow(c){
     const p = c.profile || {};
     const ava = p.photo ? '<img src="'+p.photo+'" alt="">' : initial(c.name);
-    return '<a class="client-link" href="admin-client.html?id='+encodeURIComponent(c.id)+'">'+
+    return '<a class="client-link" href="admin-client.html?email='+encodeURIComponent(c.email)+'">'+
         '<div class="ava">'+ava+'</div>'+
         '<div class="who"><b>'+esc(c.name)+'</b><span>'+esc(c.email)+'</span></div>'+
         '<span class="chev">›</span>'+
@@ -342,12 +315,22 @@
       (filtered.length > 10 ? '<p class="clients-more">Showing 10 of '+filtered.length+' — search to narrow results.</p>' : '');
   }
 
-  function getChatMsgs(id){ return CHAT[id] || []; }
-  function getChatThreads(){ return Object.keys(CHAT); }
-  function nameFor(id){ const c = CLIENTS.find(c => c.id === id); return c ? c.name : id; }
-  function emailForId(id){ const c = CLIENTS.find(c => c.id === id); return c ? c.email : ''; }
+  function chatKeyFor(email){ return 'magnum_chat_' + (email||'').toLowerCase(); }
+  function getChat(email){ try{return JSON.parse(localStorage.getItem(chatKeyFor(email))||'[]');}catch(e){return [];} }
+  function getChatThreads(){
+    const emails = [];
+    for (let i=0;i<localStorage.length;i++){
+      const k = localStorage.key(i);
+      if (k && k.indexOf('magnum_chat_')===0) emails.push(k.slice('magnum_chat_'.length));
+    }
+    return emails;
+  }
+  function nameFor(email){
+    const c = CLIENTS.find(c => (c.email||'').toLowerCase() === (email||'').toLowerCase());
+    return c ? c.name : email;
+  }
 
-  let activeId = null;
+  let activeEmail = null;
 
   function renderMessages(){
     const threads = getChatThreads();
@@ -359,37 +342,38 @@
       return;
     }
     // newest-active conversations first
-    threads.sort(function(a,b){
-      const la = getChatMsgs(a).slice(-1)[0], lb = getChatMsgs(b).slice(-1)[0];
-      return ((lb?lb.created_at:'')||'').localeCompare((la?la.created_at:'')||'');
+    threads.sort((a,b)=>{
+      const la = getChat(a).slice(-1)[0], lb = getChat(b).slice(-1)[0];
+      return (lb?lb.date:'').localeCompare(la?la.date:'');
     });
-    list.innerHTML = threads.map(function(id){
-      const msgs = getChatMsgs(id);
+    list.innerHTML = threads.map(email=>{
+      const msgs = getChat(email);
       const last = msgs[msgs.length-1];
-      const preview = last ? (last.sender==='team'?'You: ':'') + last.text : 'No messages yet';
-      return '<div class="conv-item'+(id===activeId?' active':'')+'" onclick="openConv(\''+esc(id)+'\')">'+
-        '<div class="ava">'+initial(nameFor(id))+'</div>'+
-        '<div class="ci"><b>'+esc(nameFor(id))+'</b><span>'+esc(preview)+'</span></div>'+
+      const preview = last ? (last.from==='admin'?'You: ':'') + last.text : 'No messages yet';
+      return '<div class="conv-item'+(email===activeEmail?' active':'')+'" onclick="openConv(\''+esc(email)+'\')">'+
+        '<div class="ava">'+initial(nameFor(email))+'</div>'+
+        '<div class="ci"><b>'+esc(nameFor(email))+'</b><span>'+esc(preview)+'</span></div>'+
         '<span class="badge">'+msgs.length+'</span>'+
       '</div>';
     }).join('');
 
-    if(!activeId || threads.indexOf(activeId)===-1){ activeId = threads[0]; }
+    // keep current selection if still present, else default to first
+    if(!activeEmail || threads.indexOf(activeEmail)===-1){ activeEmail = threads[0]; }
     renderConvView();
   }
 
-  function openConv(id){ activeId = id; renderMessages(); }
+  function openConv(email){ activeEmail = email; renderMessages(); }
 
   function renderConvView(){
     const view = document.getElementById('convView');
-    if(!activeId){ view.innerHTML = '<div class="cv-empty">Select a conversation to read and reply.</div>'; return; }
-    const msgs = getChatMsgs(activeId);
+    if(!activeEmail){ view.innerHTML = '<div class="cv-empty">Select a conversation to read and reply.</div>'; return; }
+    const msgs = getChat(activeEmail);
     const bubbles = msgs.length
-      ? msgs.map(function(m){ return '<div class="bubble '+(m.sender==='team'?'me':'them')+'">'+esc(m.text)+'<span class="bt">'+esc(m.created_at?new Date(m.created_at).toLocaleString():'')+'</span></div>'; }).join('')
+      ? msgs.map(m => '<div class="bubble '+(m.from==='admin'?'me':'them')+'">'+esc(m.text)+'<span class="bt">'+esc(m.date)+'</span></div>').join('')
       : '<div class="cv-empty">No messages in this conversation yet.</div>';
     view.innerHTML =
-      '<div class="cv-head"><div class="ava">'+initial(nameFor(activeId))+'</div>'+
-        '<div><b>'+esc(nameFor(activeId))+'</b><span>'+esc(emailForId(activeId))+'</span></div></div>'+
+      '<div class="cv-head"><div class="ava">'+initial(nameFor(activeEmail))+'</div>'+
+        '<div><b>'+esc(nameFor(activeEmail))+'</b><span>'+esc(activeEmail)+'</span></div></div>'+
       '<div class="cv-thread" id="cvThread">'+bubbles+'</div>'+
       '<div class="cv-reply">'+
         '<input type="text" id="cvReply" placeholder="Type your reply..." autocomplete="off" '+
@@ -400,105 +384,37 @@
     if(t){ t.scrollTop = t.scrollHeight; }
   }
 
-  async function notifyClient(userId, text){
-    await Magnum.addNotification(userId, 'client', text, 'message');
+  function notifyClient(email, text){
+    const k = 'magnum_notify_' + (email||'').toLowerCase();
+    let a; try{ a = JSON.parse(localStorage.getItem(k)||'[]'); }catch(e){ a=[]; }
+    a.push({ id:'n'+Date.now().toString(36), text:text, date:new Date().toLocaleString(), read:false });
+    localStorage.setItem(k, JSON.stringify(a));
   }
-  async function sendReply(){
-    if(!activeId) return;
+  function sendReply(){
+    if(!activeEmail) return;
     const inp = document.getElementById('cvReply');
     const text = (inp.value||'').trim();
     if(!text) return;
-    inp.value = '';
-    var row = await Magnum.sendChat(activeId, 'team', text);
-    var arr = CHAT[activeId] = CHAT[activeId] || [];
-    if (row && !arr.some(function(x){ return x.id === row.id; })) arr.push(row);
-    renderConvView();
+    const msgs = getChat(activeEmail);
+    msgs.push({ from:'admin', text:text, date:new Date().toLocaleString() });
+    localStorage.setItem(chatKeyFor(activeEmail), JSON.stringify(msgs));
+    notifyClient(activeEmail, 'You have a new reply from our team.');
     renderMessages();
-    await notifyClient(activeId, 'You have a new reply from our team.');
   }
 
-  // ----- documents (all clients) -----
-  let DOCS = [];          // flat list of every uploaded document
-  let activeDocKey = null;
-  function buildDocs(){
-    DOCS = [];
-    CLIENTS.forEach(function(c){
-      (c.docs||[]).forEach(function(d){
-        DOCS.push({ key:c.id+'|'+d.path, name:d.name, path:d.path, category:d.category||'',
-                    clientName:c.name, clientEmail:c.email });
-      });
-    });
-  }
-  function renderDocuments(){
-    const q = (document.getElementById('docSearch').value||'').toLowerCase();
-    const filtered = DOCS.filter(function(d){
-      return (d.name+' '+d.category+' '+d.clientName+' '+d.clientEmail).toLowerCase().includes(q);
-    });
-    const el = document.getElementById('docPaneList');
-    if(!filtered.length){
-      el.innerHTML = '<p class="empty" style="padding:18px;">No documents found.</p>';
-      document.getElementById('docView').innerHTML = '<div class="cv-empty">No documents to preview.</div>';
-      return;
-    }
-    el.innerHTML = filtered.map(function(d){
-      return '<div class="doc-item'+(d.key===activeDocKey?' active':'')+'" onclick="openDoc(\''+esc(d.key).replace(/'/g,"\\'")+'\')">'+
-        '<div class="fic">'+fileIcon('',d.name)+'</div>'+
-        '<div class="m"><b>'+esc(d.name)+'</b><span>'+esc(d.clientName)+' • '+esc(d.category||'Document')+'</span></div>'+
-      '</div>';
-    }).join('');
-    if(activeDocKey && !filtered.some(function(d){return d.key===activeDocKey;})) activeDocKey = null;
-  }
-  async function openDoc(key){
-    activeDocKey = key;
-    renderDocuments();
-    const d = DOCS.find(function(x){ return x.key===key; });
-    const view = document.getElementById('docView');
-    if(!d){ view.innerHTML = '<div class="cv-empty">Document not found.</div>'; return; }
-    view.innerHTML =
-      '<div class="dv-head"><div class="t"><b>'+esc(d.name)+'</b><span>'+esc(d.clientName)+' • '+esc(d.category||'Document')+'</span></div></div>'+
-      '<div class="dv-body"><div class="dv-fallback">Loading preview…</div></div>';
-    const url = await Magnum.fileUrl(d.path);
-    if(activeDocKey !== key) return; // user moved on while loading
-    const lower = (d.name||'').toLowerCase();
-    const isImg = /\.(png|jpe?g|gif|webp|bmp|svg)$/.test(lower);
-    const isPdf = lower.endsWith('.pdf');
-    const body = isImg ? '<img src="'+url+'" alt="'+esc(d.name)+'">'
-               : isPdf ? '<iframe src="'+url+'#toolbar=1" title="'+esc(d.name)+'"></iframe>'
-               : '<div class="dv-fallback">Preview not available for this file type.<br><br>'+
-                 '<a class="btn" href="'+url+'" target="_blank" rel="noopener" style="display:inline-block;">⬇ Download to view</a></div>';
-    document.getElementById('docView').innerHTML =
-      '<div class="dv-head"><div class="t"><b>'+esc(d.name)+'</b><span>'+esc(d.clientName)+' • '+esc(d.category||'Document')+'</span></div>'+
-        '<a href="'+url+'" target="_blank" rel="noopener">⬇ Download</a></div>'+
-      '<div class="dv-body">'+body+'</div>';
-  }
-
-  // ----- Google review invite settings -----
-  async function loadReviewSettings(){
-    const s = await Magnum.getSettings();
-    document.getElementById('grEnabled').checked = s.google_review_enabled === '1';
-    document.getElementById('grUrl').value = s.google_review_url || '';
-  }
-  async function saveReviewSettings(){
-    const enabled = document.getElementById('grEnabled').checked ? '1' : '0';
-    const url = document.getElementById('grUrl').value.trim();
-    const r1 = await Magnum.setSetting('google_review_enabled', enabled);
-    const r2 = await Magnum.setSetting('google_review_url', url);
-    if ((r1 && r1.error) || (r2 && r2.error)){ alert('Could not save: '+((r1&&r1.error&&r1.error.message)||(r2&&r2.error&&r2.error.message))); return; }
-    const n = document.getElementById('grSaved'); n.classList.add('show'); setTimeout(function(){ n.classList.remove('show'); }, 2000);
-  }
-
+  function setFeedback(a){ localStorage.setItem('magnum_feedback', JSON.stringify(a)); }
   function renderFeedback(){
-    const fb = REVIEWS;
+    const fb = getFeedback();
     const el = document.getElementById('fbList');
     if(!fb.length){ el.innerHTML = '<p class="empty">No feedback yet.</p>'; return; }
-    el.innerHTML = fb.slice().reverse().map(function(f){
+    el.innerHTML = fb.slice().reverse().map(f=>{
       const ava = f.photo ? '<img src="'+f.photo+'" alt="">' : initial(f.name);
       const idA = "'" + (f.id||'') + "'";
       const action = f.approved
         ? '<button class="btn" style="background:#e2e7ec;color:#243a52;" onclick="featureFb('+idA+',false)">★ Remove from About Us</button>'
         : '<button class="btn green" onclick="featureFb('+idA+',true)">★ Feature on About Us</button>';
       return '<div class="fb-item"><div class="fb-top"><div class="fb-ava">'+ava+'</div>'+
-        '<div><div class="fb-name">'+esc(f.name)+'</div><div class="fb-date">'+esc(f.created_at?new Date(f.created_at).toLocaleString():'')+(f.approved?' · ✓ Featured':'')+'</div></div>'+
+        '<div><div class="fb-name">'+esc(f.name)+'</div><div class="fb-date">'+esc(f.date)+(f.approved?' · ✓ Featured':'')+'</div></div>'+
         '<div class="fb-stars">'+starString(f.rating)+'</div></div>'+
         '<div class="fb-text">'+esc(f.text)+'</div>'+
         '<div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">'+action+
@@ -506,18 +422,18 @@
       '</div>';
     }).join('');
   }
-  async function featureFb(id, on){
+  function featureFb(id, on){
     if (on && !confirm('Feature this review on the public About Us page?')) return;
-    await Magnum.setReviewApproved(id, on);
-    const r = REVIEWS.find(f => (f.id||'')===id);
-    if (r){ r.approved = on; }
-    renderFeedback();
-    if (on && r && r.user_id) await notifyClient(r.user_id, 'Your review is now featured on our About Us page. Thank you!');
+    const fb = getFeedback().map(f => { if((f.id||'')===id) f.approved = on; return f; });
+    setFeedback(fb); renderFeedback();
+    if (on){
+      const r = fb.find(f => (f.id||'')===id);
+      if (r && r.email) notifyClient(r.email, 'Your review is now featured on our About Us page. Thank you!');
+    }
   }
-  async function deleteFb(id){
+  function deleteFb(id){
     if (!confirm('Delete this review?')) return;
-    await Magnum.deleteReview(id);
-    REVIEWS = REVIEWS.filter(f => (f.id||'')!==id);
+    setFeedback(getFeedback().filter(f => (f.id||'')!==id));
     renderFeedback();
   }
 
@@ -529,37 +445,40 @@
     return h+'</Table></Worksheet>';
   }
   function exportExcel(){
+    const signups = getSignups();
+    const signSheet = sheet('Sign Ups', ['Full Name','Email','Password','Sign-up Date'],
+      signups.map(r=>[r.name,r.email,r.password,r.date]));
     const infoSheet = sheet('Client Info',
       ['Full Name','Email','Phone','Sex','Date of Birth','Occupation','Address','About Me','Files Uploaded'],
       CLIENTS.map(c=>[c.name,c.email,c.profile.phone,c.profile.sex,c.profile.dob,c.profile.job,c.profile.addr,c.profile.bio,c.docs.length]));
     const xml='<?xml version="1.0"?>\n<?mso-application progid="Excel.Sheet"?>\n'+
       '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'+
-      infoSheet+'</Workbook>';
+      signSheet+infoSheet+'</Workbook>';
     const blob=new Blob([xml],{type:'application/vnd.ms-excel'});
     const url=URL.createObjectURL(blob); const a=document.createElement('a');
-    a.href=url; a.download='magnum-clients.xls'; document.body.appendChild(a); a.click(); a.remove();
+    a.href=url; a.download='magnum-signups.xls'; document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
   }
 
   // ----- notifications (admin) -----
+  function getANotif(){ try{return JSON.parse(localStorage.getItem('magnum_admin_notify')||'[]');}catch(e){return [];} }
   function renderNotif(){
-    const a = ANOTIF;
+    const a = getANotif();
     const unread = a.filter(n => !n.read).length;
     document.getElementById('notifDot').style.display = unread ? 'block' : 'none';
     const el = document.getElementById('notifList');
-    el.innerHTML = a.length ? a.slice().reverse().map(function(n){
-      const link = n.user_id ? ' <a href="admin-client.html?id='+encodeURIComponent(n.user_id)+'">View client →</a>' : '';
+    el.innerHTML = a.length ? a.slice().reverse().map(n => {
+      const link = n.email ? ' <a href="admin-client.html?email='+encodeURIComponent(n.email)+'">View client →</a>' : '';
       const feat = n.type === 'feedback' ? ' <a href="#" onclick="document.getElementById(\'notifPanel\').classList.remove(\'open\');document.querySelector(\'#fbList\').scrollIntoView({behavior:\'smooth\'});return false;">Review feedback →</a>' : '';
-      return '<div class="ni'+(n.read?'':' unread')+'">'+esc(n.text)+feat+link+'<span class="nd">'+esc(n.created_at?new Date(n.created_at).toLocaleString():'')+'</span></div>';
+      return '<div class="ni'+(n.read?'':' unread')+'">'+esc(n.text)+feat+link+'<span class="nd">'+esc(n.date)+'</span></div>';
     }).join('') : '<div class="notif-empty">No notifications.</div>';
   }
-  async function toggleNotif(){
+  function toggleNotif(){
     const p = document.getElementById('notifPanel');
     if (p.classList.toggle('open')){
-      const unreadIds = ANOTIF.filter(n => !n.read).map(n => n.id);
-      ANOTIF.forEach(n => n.read = true);
+      const a = getANotif().map(n => (n.read=true, n));
+      localStorage.setItem('magnum_admin_notify', JSON.stringify(a));
       renderNotif();
-      if (unreadIds.length) await Magnum.markRead(unreadIds);
     }
   }
   document.addEventListener('click', function(e){
@@ -567,34 +486,21 @@
     if (w && !w.contains(e.target)) document.getElementById('notifPanel').classList.remove('open');
   });
 
-  // ----- init -----
-  (async function init(){
-    await Magnum.requireAdmin();
-    await loadAll();
-    renderStats(CLIENTS);
-    renderClients();
-    buildDocs();
-    renderDocuments();
-    renderMessages();
-    renderFeedback();
-    renderNotif();
-    loadReviewSettings();
+  // live-update when a client changes something in another tab
+  window.addEventListener('storage', function(e){
+    if (!e.key) return;
+    if (e.key === 'magnum_admin_notify') renderNotif();
+    if (e.key === 'magnum_feedback') renderFeedback();
+    if (e.key.indexOf('magnum_chat_') === 0) renderMessages();
+  });
 
-    // ----- realtime: live client messages + admin notifications -----
-    sb.channel('admin-live')
-      .on('postgres_changes',
-          { event:'INSERT', schema:'public', table:'chat_messages' },
-          function(payload){
-            var m = payload.new; if(!m) return;
-            var arr = CHAT[m.user_id] = CHAT[m.user_id] || [];
-            if (!arr.some(function(x){ return x.id === m.id; })) arr.push(m);
-            renderMessages();
-          })
-      .on('postgres_changes',
-          { event:'INSERT', schema:'public', table:'notifications', filter:'recipient=eq.admin' },
-          async function(){ ANOTIF = await Magnum.getAdminNotifications(); renderNotif(); })
-      .subscribe();
-  })();
+  // init
+  CLIENTS = getClients();
+  renderStats(CLIENTS);
+  renderClients();
+  renderMessages();
+  renderFeedback();
+  renderNotif();
 </script>
 </body>
 </html>

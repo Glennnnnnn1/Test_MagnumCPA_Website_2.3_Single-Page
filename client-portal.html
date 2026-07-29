@@ -172,11 +172,9 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
 <script>
-  // If already signed in, go straight to the dashboard.
-  Magnum.currentUser().then(function(u){ if (u) location.href = 'dashboard.html'; });
+  // Where sign-in / sign-up actually completes. Add your live portal URL here.
+  const PORTAL_URL = "";
 
   function setMode(mode){
     const signup = mode === 'signup';
@@ -195,42 +193,118 @@
       : 'New client? <a href="#" onclick="setMode(\'signup\');return false;">Create an account</a>';
   }
 
-  async function emailContinue(e){
+  // ---- Sign-up storage (kept in this browser) ----
+  const STORE_KEY = 'magnum_signups';
+  function getSignups(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); }
+    catch(e){ return []; }
+  }
+  function saveSignup(rec){
+    const all = getSignups();
+    all.push(rec);
+    localStorage.setItem(STORE_KEY, JSON.stringify(all));
+    return all.length;
+  }
+  function xmlEsc(s){
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+  // Gather every saved client profile from this browser.
+  function getProfiles(){
+    const out = [];
+    for (let i = 0; i < localStorage.length; i++){
+      const k = localStorage.key(i);
+      if (k && k.indexOf('magnum_profile_') === 0){
+        try {
+          const p = JSON.parse(localStorage.getItem(k)) || {};
+          p._email = k.slice('magnum_profile_'.length);
+          out.push(p);
+        } catch(e){}
+      }
+    }
+    return out;
+  }
+
+  function cell(v){ return '<Cell><Data ss:Type="String">' + xmlEsc(v) + '</Data></Cell>'; }
+  function sheet(name, headers, rows){
+    let html = '<Worksheet ss:Name="' + xmlEsc(name) + '"><Table>';
+    html += '<Row>' + headers.map(cell).join('') + '</Row>';
+    rows.forEach(r => { html += '<Row>' + r.map(cell).join('') + '</Row>'; });
+    return html + '</Table></Worksheet>';
+  }
+
+  // Build ONE Excel file: "Sign Ups" sheet + "Client Info" sheet.
+  function exportSignupsToExcel(){
+    const signups = getSignups();
+    const profiles = getProfiles();
+    if (!signups.length && !profiles.length){
+      alert('No sign-ups or profiles have been saved yet.');
+      return;
+    }
+
+    const signupSheet = sheet(
+      'Sign Ups',
+      ['Full Name','Email','Password','Sign-up Date'],
+      signups.map(r => [r.name, r.email, r.password, r.date])
+    );
+
+    const infoSheet = sheet(
+      'Client Info',
+      ['Full Name','Email','Phone','Sex','Date of Birth','Occupation','Address','About Me','Has Photo'],
+      profiles.map(p => [
+        p.name, p._email, p.phone, p.sex, p.dob, p.job, p.addr, p.bio,
+        p.photo ? 'Yes' : 'No'
+      ])
+    );
+
+    const xml =
+      '<?xml version="1.0"?>\n<?mso-application progid="Excel.Sheet"?>\n' +
+      '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" ' +
+      'xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">' +
+      signupSheet + infoSheet +
+      '</Workbook>';
+
+    const blob = new Blob([xml], {type:'application/vnd.ms-excel'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'magnum-signups.xls';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function emailContinue(e){
     e.preventDefault();
     const signup = document.body.classList.contains('mode-signup');
-    const btn = document.getElementById('submitBtn');
-    const em = email.value.trim();
-    const pass = pw.value;
-    btn.disabled = true;
 
-    try {
-      if (signup){
-        if (pass !== pw2.value){ alert('Passwords do not match. Please re-enter.'); return false; }
-        if (pass.length < 6){ alert('Please choose a password of at least 6 characters.'); return false; }
-        const { data, error } = await Magnum.signUp(fullname.value.trim(), em, pass);
-        if (error){ alert(error.message); return false; }
-        // If email confirmation is OFF, a session exists now → go to dashboard.
-        if (data.session){
-          window.location.href = 'dashboard.html';
-        } else {
-          alert('Account created! Please check your email to confirm your address, then log in.');
-          e.target.reset();
-          setMode('login');
-        }
-        return false;
-      }
-
-      // Log in
-      const { error } = await Magnum.signIn(em, pass);
-      if (error){
-        alert('Incorrect email or password. If you have not signed up yet, please use the Sign Up tab.');
-        return false;
-      }
-      window.location.href = 'dashboard.html';
+    if (signup){
+      if (pw.value !== pw2.value){ alert('Passwords do not match. Please re-enter.'); return false; }
+      const count = saveSignup({
+        name: fullname.value.trim(),
+        email: email.value.trim(),
+        password: pw.value,
+        date: new Date().toLocaleString()
+      });
+      alert('Thanks for signing up! Your information has been saved (' + count + ' total on this device).');
+      e.target.reset();
+      setMode('login');
       return false;
-    } finally {
-      btn.disabled = false;
     }
+
+    // Log In: check the entered details against the saved sign-ups
+    // (the same records that the magnum-signups.xls file is built from).
+    const em = email.value.trim().toLowerCase();
+    const match = getSignups().find(u =>
+      String(u.email || '').trim().toLowerCase() === em && u.password === pw.value);
+    if (!match){
+      alert('Incorrect email or password. If you have not signed up yet, please use the Sign Up tab.');
+      return false;
+    }
+    // Success — remember the session and open the portal dashboard.
+    sessionStorage.setItem('magnum_currentUser', match.email);
+    window.location.href = 'dashboard.html';
+    return false;
   }
 </script>
 </body>

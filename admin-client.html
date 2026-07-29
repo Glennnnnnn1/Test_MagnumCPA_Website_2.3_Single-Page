@@ -38,26 +38,6 @@
   .doc-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;}
   .doc-row .m{flex:1;min-width:0;}.doc-row .m b{display:block;color:var(--navy);font-size:.92rem;}
   .doc-row .m span{font-size:.76rem;color:var(--muted);}.doc-row a{color:var(--blue);font-weight:700;font-size:.82rem;}
-  .docbox{display:grid;grid-template-columns:320px 1fr;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-height:460px;}
-  .doc-list{border-right:1px solid var(--border);background:#fafbfc;max-height:600px;overflow-y:auto;}
-  .doc-item{display:flex;gap:12px;align-items:center;padding:13px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:.15s;}
-  .doc-item:hover{background:#f1f4f7;}
-  .doc-item.active{background:#fff;box-shadow:inset 3px 0 0 var(--gold);}
-  .doc-item .fic{width:38px;height:38px;border-radius:8px;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-size:1.1rem;flex:none;}
-  .doc-item .m{flex:1;min-width:0;}
-  .doc-item .m b{color:var(--navy);font-size:.9rem;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .doc-item .m span{font-size:.78rem;color:var(--muted);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .doc-view{display:flex;flex-direction:column;min-width:0;}
-  .dv-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;justify-content:space-between;}
-  .dv-head .t{min-width:0;}
-  .dv-head .t b{color:var(--navy);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .dv-head .t span{font-size:.82rem;color:var(--muted);}
-  .dv-head a{background:var(--gold);color:var(--navy-dark);font-weight:700;padding:8px 14px;border-radius:6px;font-size:.82rem;flex:none;}
-  .dv-body{flex:1;background:#f3f5f8;min-height:360px;display:flex;}
-  .dv-body iframe{width:100%;height:100%;border:0;min-height:420px;}
-  .dv-body img{max-width:100%;max-height:560px;margin:auto;display:block;object-fit:contain;}
-  .dv-empty,.dv-fallback{margin:auto;text-align:center;color:var(--muted);font-style:italic;padding:40px;}
-  @media(max-width:680px){.docbox{grid-template-columns:1fr;}.doc-list{max-height:240px;}}
 
   /* organizer accordion */
   .osec{border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;}
@@ -88,7 +68,7 @@
     <a href="admin.html"><img src="images/MAGNUM%20CPA%20LOGO.png" alt="Magnum CPA PC"></a>
     <div class="r">
       <a href="admin.html" class="btn ghost">← All Clients</a>
-      <button class="btn ghost" onclick="Magnum.signOut().then(function(){location.href='admin-login.html';});">Log Out</button>
+      <button class="btn ghost" onclick="sessionStorage.removeItem('magnum_admin');location.href='admin-login.html';">Log Out</button>
     </div>
   </div>
 </header>
@@ -113,23 +93,10 @@
 <div class="container">
   <section class="pane active" id="pane-details">
     <div class="card"><h3>Client Details</h3><div class="info-grid" id="detailsGrid"></div></div>
-    <div class="card">
-      <h3>Canopy Tax Link <span style="font-weight:400;font-size:.8rem;color:var(--muted);">(optional — integration ready)</span></h3>
-      <p style="color:var(--muted);font-size:.9rem;margin-bottom:14px;">Link this portal account to the client's record in Canopy Tax. Once connected, shared files can sync to Canopy and Canopy document requests will appear in this client's portal.</p>
-      <div class="asana-bar">
-        <input class="field" style="flex:1;margin:0;" type="text" id="canopyClientId" placeholder="Canopy Client ID">
-        <button class="btn green" type="button" onclick="saveCanopyId()">Save</button>
-      </div>
-    </div>
   </section>
 
   <section class="pane" id="pane-documents">
-    <div class="card"><h3>Uploaded Documents</h3>
-      <div class="docbox">
-        <div class="doc-list" id="docList"></div>
-        <div class="doc-view" id="docView"><div class="dv-empty">Select a document on the left to preview it here.</div></div>
-      </div>
-    </div>
+    <div class="card"><h3>Uploaded Documents</h3><div id="docList"></div></div>
   </section>
 
   <section class="pane" id="pane-organizer">
@@ -161,18 +128,6 @@
       <h3 style="margin-top:22px;">Posted Updates</h3>
       <div id="updList"></div>
     </div>
-
-    <div class="card">
-      <h3>Shared Files</h3>
-      <p style="color:var(--muted);font-size:.9rem;margin-bottom:14px;">Upload any file to share with this client (returns, statements, forms…). The client can download it and upload files back here.</p>
-      <div class="field"><label>Note for the client — what is this file for? (optional)</label>
-        <input type="text" id="sharedNote" placeholder="e.g. Your signed 2025 tax return — please review and keep for your records."></div>
-      <label class="btn" style="display:inline-block;cursor:pointer;">⬆ Upload File for Client
-        <input type="file" id="sharedInput" style="display:none;" onchange="uploadShared(event)">
-      </label>
-      <span id="sharedStatus" style="margin-left:12px;font-size:.85rem;color:var(--muted);"></span>
-      <div id="sharedList" style="margin-top:16px;"></div>
-    </div>
   </section>
 
   <section class="pane" id="pane-meetings">
@@ -190,18 +145,19 @@
   </section>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
 <script src="organizer.js"></script>
 <script>
-  const clientId = new URLSearchParams(location.search).get('id') || '';
+  if (sessionStorage.getItem('magnum_admin') !== '1'){ location.href = 'admin-login.html'; }
+  const email = (new URLSearchParams(location.search).get('email') || '').toLowerCase();
+  const lc = email;
   function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-  let profile = {};
-  let orgData = {};
-  let cname = 'Client';
-
-  async function notifyClient(text){ await Magnum.addNotification(clientId, 'client', text, 'update'); }
+  function gj(k,d){ try{return JSON.parse(localStorage.getItem(k)||d);}catch(e){return JSON.parse(d);} }
+  function uid(){ return 'x'+Math.random().toString(36).slice(2)+Date.now().toString(36); }
+  function notifyClient(text){
+    const k='magnum_notify_'+lc; const a=gj(k,'[]');
+    a.push({id:uid(),text:text,date:new Date().toLocaleString(),read:false});
+    localStorage.setItem(k,JSON.stringify(a));
+  }
 
   function showPane(p){
     document.querySelectorAll('.pane').forEach(s=>s.classList.remove('active'));
@@ -209,68 +165,34 @@
     document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.p===p));
   }
 
-  function renderDetails(){
-    const p=profile;
-    const rows=[['Email',p.email],['Phone',p.phone],['Sex',p.sex],['Date of Birth',p.dob],['Occupation',p.job],['Address',p.addr],['Sign-up Date',p.created_at?new Date(p.created_at).toLocaleString():''],['About',p.bio]];
-    document.getElementById('detailsGrid').innerHTML = rows.map(r=>'<div class="it"><label>'+r[0]+'</label><span>'+(r[1]?esc(r[1]):'—')+'</span></div>').join('');
-    document.getElementById('canopyClientId').value = p.canopy_client_id || '';
-  }
-  async function saveCanopyId(){
-    const val = document.getElementById('canopyClientId').value.trim();
-    await Magnum.saveCanopyClientId(clientId, val);
-    profile.canopy_client_id = val;
-    alert(val ? 'Canopy Client ID saved.' : 'Canopy link removed.');
-  }
+  // ----- data -----
+  const signup = gj('magnum_signups','[]').find(s=>(s.email||'').toLowerCase()===lc) || {};
+  const profile = gj('magnum_profile_'+lc,'{}');
+  const cname = profile.name || signup.name || email || 'Client';
+  document.getElementById('cName').textContent = cname;
+  document.getElementById('cEmail').textContent = email;
+  document.title = cname + ' — Magnum CPA Admin';
 
-  // documents — files the client attached in the organizer (Supabase Storage)
-  let DOCS=[]; let activeDocKey=null;
-  function fileIcon(n){ n=(n||'').toLowerCase(); if(/\.(png|jpe?g|gif|webp|bmp|svg)$/.test(n))return '🖼️'; if(n.endsWith('.pdf'))return '📕'; if(n.endsWith('.doc')||n.endsWith('.docx'))return '📘'; if(n.endsWith('.xls')||n.endsWith('.xlsx'))return '📗'; return '📄'; }
-  function renderDocs(){
-    DOCS=[];
-    ORGANIZER_SECTIONS.forEach(function(sec){ sec.fields.forEach(function(f){
-      const v=orgData[f.id];
-      if(f.type==='file' && v && v.name && v.path) DOCS.push({key:v.path,name:v.name,path:v.path,category:f.label});
-    });});
+  // details
+  (function(){
+    const p=profile;
+    const rows=[['Email',email],['Phone',p.phone],['Sex',p.sex],['Date of Birth',p.dob],['Occupation',p.job],['Address',p.addr],['Sign-up Date',signup.date],['About',p.bio]];
+    document.getElementById('detailsGrid').innerHTML = rows.map(r=>'<div class="it"><label>'+r[0]+'</label><span>'+(r[1]?esc(r[1]):'—')+'</span></div>').join('');
+  })();
+
+  // documents
+  (function(){
+    const docs=gj('magnum_docs_'+lc,'[]');
     const el=document.getElementById('docList');
-    if(!DOCS.length){
-      el.innerHTML='<p class="empty" style="padding:18px;">No documents uploaded.</p>';
-      document.getElementById('docView').innerHTML='<div class="dv-empty">No documents to preview.</div>';
-      return;
-    }
-    el.innerHTML=DOCS.map(function(d){
-      return '<div class="doc-item'+(d.key===activeDocKey?' active':'')+'" onclick="openDoc(\''+esc(d.key).replace(/'/g,"\\'")+'\')">'+
-        '<div class="fic">'+fileIcon(d.name)+'</div>'+
-        '<div class="m"><b>'+esc(d.name)+'</b><span>'+esc(d.category||'Document')+'</span></div>'+
-      '</div>';
-    }).join('');
-  }
-  async function openDoc(key){
-    activeDocKey=key; renderDocs();
-    const d=DOCS.find(function(x){return x.key===key;});
-    const view=document.getElementById('docView');
-    if(!d){ view.innerHTML='<div class="dv-empty">Document not found.</div>'; return; }
-    view.innerHTML=
-      '<div class="dv-head"><div class="t"><b>'+esc(d.name)+'</b><span>'+esc(d.category||'Document')+'</span></div></div>'+
-      '<div class="dv-body"><div class="dv-fallback">Loading preview…</div></div>';
-    const url=await Magnum.fileUrl(d.path);
-    if(activeDocKey!==key) return;
-    const lower=(d.name||'').toLowerCase();
-    const isImg=/\.(png|jpe?g|gif|webp|bmp|svg)$/.test(lower);
-    const isPdf=lower.endsWith('.pdf');
-    const body=isImg ? '<img src="'+url+'" alt="'+esc(d.name)+'">'
-             : isPdf ? '<iframe src="'+url+'#toolbar=1" title="'+esc(d.name)+'"></iframe>'
-             : '<div class="dv-fallback">Preview not available for this file type.<br><br>'+
-               '<a class="btn" href="'+url+'" target="_blank" rel="noopener" style="display:inline-block;">⬇ Download to view</a></div>';
-    document.getElementById('docView').innerHTML=
-      '<div class="dv-head"><div class="t"><b>'+esc(d.name)+'</b><span>'+esc(d.category||'Document')+'</span></div>'+
-        '<a href="'+url+'" target="_blank" rel="noopener">⬇ Download</a></div>'+
-      '<div class="dv-body">'+body+'</div>';
-  }
+    el.innerHTML = docs.length ? docs.map(d=>'<div class="doc-row"><div class="m"><b>'+esc(d.name)+'</b><span>'+esc(d.category||'')+' · '+esc(d.date||'')+'</span></div><a href="'+d.data+'" download="'+esc(d.name)+'">Download</a></div>').join('') : '<p class="empty">No documents uploaded.</p>';
+  })();
 
   // ----- organizer (editable) -----
+  const orgKey='magnum_organizer_'+lc;
+  let orgData=gj(orgKey,'{}');
   function renderOrg(){
     document.getElementById('orgTitle').textContent = ORGANIZER_TITLE + ' — ' + cname;
-    const defaults = organizerDefaults(profile, profile.email||'');
+    const defaults = organizerDefaults(profile, email);
     document.getElementById('orgSections').innerHTML = ORGANIZER_SECTIONS.map(function(sec){
       const fields=sec.fields.map(function(f){
         let v=orgData[f.id];
@@ -279,143 +201,71 @@
         if(f.type==='display') return '<div class="ofield"><label>'+esc(f.label)+'</label><div class="ostatic">'+esc(f.value)+'</div></div>';
         if(f.type==='yesno') return '<div class="ofield"><label>'+esc(f.label)+'</label><select id="o_'+f.id+'">'+['','Yes','No'].map(o=>'<option'+(v===o?' selected':'')+'>'+o+'</option>').join('')+'</select></div>';
         if(f.type==='textarea') return '<div class="ofield"><label>'+esc(f.label)+'</label><textarea id="o_'+f.id+'" rows="2">'+esc(v||'')+'</textarea></div>';
-        if(f.type==='file'){ const cur=(v&&v.name)?'<span class="ofile">📎 '+esc(v.name)+'</span>':'<span class="ofile" style="color:var(--muted)">No file</span>'; return '<div class="ofield"><label>'+esc(f.label)+'</label>'+cur+'</div>'; }
+        if(f.type==='file'){ const cur=(v&&v.name)?'<a href="'+v.data+'" download="'+esc(v.name)+'" class="ofile">📎 '+esc(v.name)+'</a>':'<span class="ofile" style="color:var(--muted)">No file</span>'; return '<div class="ofield"><label>'+esc(f.label)+'</label>'+cur+'</div>'; }
         const t=(f.type==='date'?'date':(f.type==='number'?'number':'text'));
         return '<div class="ofield"><label>'+esc(f.label)+'</label><input type="'+t+'" id="o_'+f.id+'" value="'+esc(v||'')+'"></div>';
       }).join('');
       return '<div class="osec"><button type="button" class="osec-head" onclick="this.parentNode.classList.toggle(\'open\')"><span>'+esc(sec.title)+'</span><span class="chev">▸</span></button><div class="osec-body">'+fields+'</div></div>';
     }).join('');
   }
-  async function saveOrg(e){
+  function saveOrg(e){
     e.preventDefault();
     ORGANIZER_SECTIONS.forEach(sec=>sec.fields.forEach(function(f){
       if(f.type==='display'||f.type==='file') return;
       const el=document.getElementById('o_'+f.id); if(el) orgData[f.id]=el.value;
     }));
-    const { error } = await Magnum.saveOrganizer(clientId, orgData);
-    if (error){ alert('Could not save: '+error.message); return false; }
-    await notifyClient('Our team updated your tax organizer.');
+    localStorage.setItem(orgKey,JSON.stringify(orgData));
+    notifyClient('Our team updated your tax organizer.');
     const n=document.getElementById('orgSaved'); n.classList.add('show'); setTimeout(()=>n.classList.remove('show'),2000);
     return false;
   }
 
   // ----- account updates -----
+  const updKey='magnum_updates_'+lc, asanaKey='magnum_asana_'+lc;
   function renderAsana(){
-    const url=profile.asana_url||'';
+    const url=localStorage.getItem(asanaKey)||'';
     document.getElementById('asanaUrl').value=url;
     const open=document.getElementById('asanaOpen');
     if(url){ open.href=url; open.style.display='inline-block'; } else { open.style.display='none'; }
   }
-  async function saveAsana(){
+  function saveAsana(){
     const url=document.getElementById('asanaUrl').value.trim();
-    const wasEmpty = !profile.asana_url;
-    await Magnum.saveProfile(clientId, { asana_url: url });
-    profile.asana_url = url; renderAsana();
-    // The client never sees the Asana URL itself — only an automatic status note.
-    if (url){
-      await Magnum.addUpdate(clientId, '📋 Your project tracker is now linked to your account. We’ll post filing & e-filing status updates here as they progress.', null);
-      await notifyClient('Your account status tracker has been updated.');
-      renderUpdates();
-    }
+    localStorage.setItem(asanaKey,url); renderAsana();
   }
-  async function renderUpdates(){
-    const a=await Magnum.getUpdates(clientId);
+  function renderUpdates(){
+    const a=gj(updKey,'[]');
     const el=document.getElementById('updList');
-    el.innerHTML = a.length ? a.slice().reverse().map(u=>'<div class="feed-item"><button class="del" onclick="delUpdate(\''+u.id+'\')">Delete</button><div class="d">'+esc(u.created_at?new Date(u.created_at).toLocaleString():'')+'</div><div class="t">'+esc(u.text)+'</div>'+(u.task?'<div class="a"><a href="'+esc(u.task)+'" target="_blank" rel="noopener">Open Asana task ↗</a></div>':'')+'</div>').join('') : '<p class="empty">No updates posted yet.</p>';
+    el.innerHTML = a.length ? a.slice().reverse().map(u=>'<div class="feed-item"><button class="del" onclick="delUpdate(\''+u.id+'\')">Delete</button><div class="d">'+esc(u.date)+'</div><div class="t">'+esc(u.text)+'</div>'+(u.task?'<div class="a"><a href="'+esc(u.task)+'" target="_blank" rel="noopener">Open Asana task ↗</a></div>':'')+'</div>').join('') : '<p class="empty">No updates posted yet.</p>';
   }
-  async function addUpdate(e){
+  function addUpdate(e){
     e.preventDefault();
-    const text=document.getElementById('updText').value.trim();
-    await Magnum.addUpdate(clientId, text, document.getElementById('updTask').value.trim());
-    await notifyClient('New account update: '+text.slice(0,60));
+    const a=gj(updKey,'[]');
+    a.push({id:uid(),text:document.getElementById('updText').value.trim(),task:document.getElementById('updTask').value.trim(),date:new Date().toLocaleString()});
+    localStorage.setItem(updKey,JSON.stringify(a));
+    notifyClient('New account update: '+document.getElementById('updText').value.trim().slice(0,60));
     e.target.reset(); renderUpdates(); return false;
   }
-  async function delUpdate(id){ await Magnum.deleteUpdate(id); renderUpdates(); }
+  function delUpdate(id){ let a=gj(updKey,'[]').filter(u=>u.id!==id); localStorage.setItem(updKey,JSON.stringify(a)); renderUpdates(); }
 
   // ----- meeting notes -----
-  async function renderMeetings(){
-    const a=await Magnum.getMeetings(clientId);
+  const mtKey='magnum_meetings_'+lc;
+  function renderMeetings(){
+    const a=gj(mtKey,'[]');
     const el=document.getElementById('mtList');
-    el.innerHTML = a.length ? a.slice().reverse().map(m=>'<div class="feed-item"><button class="del" onclick="delMeeting(\''+m.id+'\')">Delete</button><div class="d">'+esc(m.created_at?new Date(m.created_at).toLocaleString():'')+'</div><b style="color:var(--navy)">'+esc(m.title)+'</b><div class="t" style="white-space:pre-wrap;margin-top:4px;">'+esc(m.notes)+'</div>'+(m.drive?'<div class="a"><a href="'+esc(m.drive)+'" target="_blank" rel="noopener">📁 Open Google Drive folder ↗</a></div>':'')+'</div>').join('') : '<p class="empty">No meeting notes yet.</p>';
+    el.innerHTML = a.length ? a.slice().reverse().map(m=>'<div class="feed-item"><button class="del" onclick="delMeeting(\''+m.id+'\')">Delete</button><div class="d">'+esc(m.date)+'</div><b style="color:var(--navy)">'+esc(m.title)+'</b><div class="t" style="white-space:pre-wrap;margin-top:4px;">'+esc(m.notes)+'</div>'+(m.drive?'<div class="a"><a href="'+esc(m.drive)+'" target="_blank" rel="noopener">📁 Open Google Drive folder ↗</a></div>':'')+'</div>').join('') : '<p class="empty">No meeting notes yet.</p>';
   }
-  async function addMeeting(e){
+  function addMeeting(e){
     e.preventDefault();
-    const title=document.getElementById('mtTitle').value.trim();
-    await Magnum.addMeeting(clientId, title, document.getElementById('mtNotes').value.trim(), document.getElementById('mtDrive').value.trim());
-    await notifyClient('New meeting notes added: '+title.slice(0,60));
+    const a=gj(mtKey,'[]');
+    a.push({id:uid(),title:document.getElementById('mtTitle').value.trim(),notes:document.getElementById('mtNotes').value.trim(),drive:document.getElementById('mtDrive').value.trim(),date:new Date().toLocaleString()});
+    localStorage.setItem(mtKey,JSON.stringify(a));
+    notifyClient('New meeting notes added: '+document.getElementById('mtTitle').value.trim().slice(0,60));
     e.target.reset(); renderMeetings(); return false;
   }
-  async function delMeeting(id){ await Magnum.deleteMeeting(id); renderMeetings(); }
+  function delMeeting(id){ let a=gj(mtKey,'[]').filter(m=>m.id!==id); localStorage.setItem(mtKey,JSON.stringify(a)); renderMeetings(); }
 
-  // ----- shared files (two-way exchange) -----
-  async function renderShared(){
-    const files = await Magnum.getSharedFiles(clientId);
-    const el = document.getElementById('sharedList');
-    if (!files.length){ el.innerHTML = '<p class="empty">No shared files yet.</p>'; return; }
-    const rows = await Promise.all(files.slice().reverse().map(async function(f){
-      const url = await Magnum.fileUrl(f.path);
-      const who = f.uploaded_by === 'client' ? '⬆ Uploaded by client' : '✔ Shared by you';
-      const when = f.created_at ? new Date(f.created_at).toLocaleString() : '';
-      const note = f.note ? '<div style="font-size:.85rem;color:#3c4757;margin-top:4px;">📝 '+esc(f.note)+'</div>' : '';
-      return '<div class="doc-row" style="flex-wrap:wrap;"><div class="fic">'+fileIcon(f.name)+'</div>'+
-        '<div class="m"><b>'+esc(f.name)+'</b><span>'+who+' • '+esc(when)+'</span></div>'+
-        '<a href="'+url+'" target="_blank" rel="noopener">Download</a>'+
-        '<button class="del" style="background:0;border:0;color:#c0392b;cursor:pointer;font-weight:700;font-size:.82rem;margin-left:10px;" onclick="delShared(\''+f.id+'\',\''+esc(f.path).replace(/'/g,"\\'")+'\')">Delete</button>'+
-        (note?'<div style="flex-basis:100%;">'+note+'</div>':'')+
-      '</div>';
-    }));
-    el.innerHTML = rows.join('');
-  }
-  async function uploadShared(e){
-    const file = e.target.files[0];
-    if (!file) return;
-    const noteEl = document.getElementById('sharedNote');
-    const note = (noteEl.value || '').trim();
-    const st = document.getElementById('sharedStatus');
-    st.textContent = 'Uploading…';
-    try {
-      const saved = await Magnum.uploadSharedFile(clientId, file, 'admin', note);
-      await notifyClient('Our team shared a new file with you: '+file.name + (note ? ' — '+note : ''));
-      Magnum.emailClientFileShared(clientId, file.name, note);   // email the client (best-effort)
-      Magnum.canopyPushDocument(clientId, saved.path, file.name); // mirror to Canopy (best-effort, no-op until connected)
-      st.textContent = '✓ Uploaded';
-      noteEl.value = '';
-      setTimeout(function(){ st.textContent=''; }, 2500);
-    } catch(err){ st.textContent=''; alert('Upload failed: '+(err.message||err)); }
-    e.target.value = '';
-    renderShared();
-  }
-  async function delShared(id, path){
-    if (!confirm('Delete this file? This cannot be undone.')) return;
-    await Magnum.deleteSharedFile(id, path);
-    renderShared();
-  }
-
-  // ----- init -----
-  (async function init(){
-    await Magnum.requireAdmin();
-    if (!clientId){ alert('No client specified.'); location.href='admin.html'; return; }
-    profile = await Magnum.getProfile(clientId);
-    orgData = await Magnum.getOrganizer(clientId);
-    cname = profile.name || profile.email || 'Client';
-    document.getElementById('cName').textContent = cname;
-    document.getElementById('cEmail').textContent = profile.email || '';
-    document.title = cname + ' — Magnum CPA Admin';
-    renderDetails();
-    renderDocs();
-    renderOrg();
-    renderAsana();
-    renderUpdates();
-    renderShared();
-    renderMeetings();
-
-    // live-refresh shared files when the client uploads
-    sb.channel('admin-client-'+clientId)
-      .on('postgres_changes',
-          { event:'*', schema:'public', table:'shared_files', filter:'user_id=eq.'+clientId },
-          function(){ renderShared(); })
-      .subscribe();
-  })();
+  // init
+  renderOrg(); renderAsana(); renderUpdates(); renderMeetings();
 </script>
 </body>
 </html>

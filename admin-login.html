@@ -80,32 +80,22 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
 <script>
-  // If already signed in as an admin, skip straight to the dashboard.
-  (async function(){
-    const u = await Magnum.currentUser();
-    if (u){
-      const { data } = await sb.from('profiles').select('role').eq('id', u.id).maybeSingle();
-      if (data && data.role === 'admin') location.href = 'admin.html';
-    }
-  })();
+  // ===== Admin credentials — CHANGE THESE before going live =====
+  const ADMIN_USER = "admin@magnumcpa.com";
+  const ADMIN_PASS = "magnum2026";
+  // ==============================================================
 
-  async function adminLogin(e){
+  function adminLogin(e){
     e.preventDefault();
-    const email = document.getElementById('user').value.trim();
-    const pass  = document.getElementById('pass').value;
-    const { data, error } = await Magnum.signIn(email, pass);
-    if (error){ alert('Invalid admin credentials.'); return false; }
-    // Verify this account is actually an admin; if not, sign back out.
-    const { data: prof } = await sb.from('profiles').select('role').eq('id', data.user.id).maybeSingle();
-    if (!prof || prof.role !== 'admin'){
-      await Magnum.signOut();
-      alert('This account does not have admin access.');
-      return false;
+    const u = document.getElementById('user').value.trim().toLowerCase();
+    const p = document.getElementById('pass').value;
+    if (u === ADMIN_USER.toLowerCase() && p === ADMIN_PASS){
+      sessionStorage.setItem('magnum_admin', '1');
+      window.location.href = 'admin.html';
+    } else {
+      alert('Invalid admin credentials.');
     }
-    window.location.href = 'admin.html';
     return false;
   }
 </script>

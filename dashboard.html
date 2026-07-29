@@ -334,10 +334,6 @@
 <!-- ===== Documents ===== -->
 <section id="panel-docs" class="panel">
   <div class="container">
-    <div class="card" id="canopyReqCard" style="display:none;">
-      <div class="card-head"><span class="ic">📥</span><h2>Document Requests</h2></div>
-      <div class="card-body"><div id="canopyReqList"></div></div>
-    </div>
     <div class="card">
       <div class="card-head"><span class="ic">🗂️</span><h2 id="orgTitle">Organizer</h2></div>
       <div class="card-body">
@@ -362,14 +358,6 @@
       <div class="card-body">
         <p style="color:var(--muted);margin-bottom:16px;">Updates posted by our team about your account and tax work.</p>
         <div id="updatesList"></div>
-
-        <h3 style="margin:28px 0 10px;color:var(--navy);font-size:1.05rem;">📎 Shared Files</h3>
-        <p style="color:var(--muted);margin-bottom:14px;font-size:.92rem;">Files shared by our team appear here for you to download. You can also upload files back to us — drafts, statements, signed forms, anything we ask for.</p>
-        <label class="upload-btn">⬆ Upload a File
-          <input type="file" id="sharedInput" onchange="uploadShared(event)">
-        </label>
-        <span id="sharedStatus" style="margin-left:12px;font-size:.85rem;color:var(--muted);"></span>
-        <div id="sharedList" style="margin-top:16px;"></div>
       </div>
     </div>
   </div>
@@ -435,30 +423,39 @@
 </section>
 
 <script src="https://embed.acuityscheduling.com/js/embed.js" type="text/javascript"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
 <script src="organizer.js"></script>
 <script>
-  // ----- session / user (Supabase) -----
-  let user = null;     // auth user {id,email}
-  let profile = {};    // profiles row
-  let orgData = {};    // organizer JSON
+  // ----- session / user -----
+  const currentEmail = sessionStorage.getItem('magnum_currentUser');
+  if (!currentEmail){ window.location.href = 'client-portal.html'; }
 
+  function getSignups(){
+    try { return JSON.parse(localStorage.getItem('magnum_signups') || '[]'); }
+    catch(e){ return []; }
+  }
+  const signupRec = getSignups().find(u =>
+    String(u.email||'').toLowerCase() === String(currentEmail||'').toLowerCase()) || {};
+
+  const profileKey = 'magnum_profile_' + (currentEmail||'').toLowerCase();
+  function loadProfile(){ try{return JSON.parse(localStorage.getItem(profileKey)||'{}');}catch(e){return {};} }
   function initial(name){ return (name||'?').trim().charAt(0).toUpperCase() || '?'; }
 
+  let profile = loadProfile();
+
+  // prefill from signup if profile empty
   function renderProfile(){
-    document.getElementById('p_name').value  = profile.name  || '';
-    document.getElementById('p_email').value = user ? user.email : '';
+    document.getElementById('p_name').value  = profile.name  || signupRec.name  || '';
+    document.getElementById('p_email').value = currentEmail || signupRec.email || '';
     document.getElementById('p_phone').value = profile.phone || '';
     document.getElementById('p_sex').value   = profile.sex   || '';
     document.getElementById('p_bio').value   = profile.bio   || '';
     document.getElementById('welcomeName').textContent =
-      (profile.name || 'Client').split(' ')[0];
+      (profile.name || signupRec.name || 'Client').split(' ')[0];
     renderAvatar();
   }
   function renderAvatar(){
     const av = document.getElementById('avatar');
-    const name = document.getElementById('p_name').value || profile.name;
+    const name = document.getElementById('p_name').value || signupRec.name;
     if (profile.photo){
       av.innerHTML = '<img src="'+profile.photo+'" alt="Profile photo">';
     } else {
@@ -477,16 +474,13 @@
     reader.readAsDataURL(file);
   }
 
-  async function saveProfile(e){
+  function saveProfile(e){
     e.preventDefault();
     profile.name  = document.getElementById('p_name').value.trim();
     profile.phone = document.getElementById('p_phone').value.trim();
     profile.sex   = document.getElementById('p_sex').value;
     profile.bio   = document.getElementById('p_bio').value.trim();
-    await Magnum.saveProfile(user.id, {
-      name: profile.name, phone: profile.phone, sex: profile.sex,
-      bio: profile.bio, photo: profile.photo || null
-    });
+    localStorage.setItem(profileKey, JSON.stringify(profile));
     document.getElementById('welcomeName').textContent = (profile.name||'Client').split(' ')[0];
     renderAvatar();
     pushAdminNotify(clientDisplayName() + ' updated their profile.', 'profile');
@@ -496,8 +490,8 @@
     return false;
   }
 
-  async function logout(){
-    await Magnum.signOut();
+  function logout(){
+    sessionStorage.removeItem('magnum_currentUser');
     window.location.href = 'client-portal.html';
   }
 
@@ -512,81 +506,70 @@
   });
   starWrap.addEventListener('mouseleave', ()=>paint(rating));
 
-  // ----- feedback / reviews -----
-  let myReviewRow = null;
-  let reviewList = [];
-  let appSettings = {};
-  function googleReviewOn(){ return appSettings.google_review_enabled === '1' && !!(appSettings.google_review_url||'').trim(); }
+  // ----- feedback -----
+  function getFeedback(){ try{return JSON.parse(localStorage.getItem('magnum_feedback')||'[]');}catch(e){return [];} }
+  function setFeedback(a){ localStorage.setItem('magnum_feedback', JSON.stringify(a)); }
   function starString(n){ return '★★★★★'.slice(0,n) + '☆☆☆☆☆'.slice(0,5-n); }
-  function escapeHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  function fbDate(f){ return f.created_at ? new Date(f.created_at).toLocaleString() : ''; }
+  function uid(){ return 'f'+Math.random().toString(36).slice(2)+Date.now().toString(36); }
+  function myFeedback(){ return getFeedback().find(f => (f.email||'').toLowerCase() === (currentEmail||'').toLowerCase()); }
 
-  async function loadFeedback(){
-    reviewList = await Magnum.getReviews();   // RLS returns approved reviews + the client's own
-    myReviewRow = user ? (reviewList.find(f => f.user_id === user.id) || null) : null;
-    appSettings = await Magnum.getSettings();
-    renderFeedback();
-  }
-  function googleReviewBtn(){
-    if (!googleReviewOn()) return '';
-    return '<a class="btn" href="'+escapeHtml(appSettings.google_review_url)+'" target="_blank" rel="noopener" '+
-      'style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;text-decoration:none;">'+
-      '<span style="font-size:1.1rem;">⭐</span> Leave us a Google review</a>';
-  }
   function renderFeedback(){
+    const mine = myFeedback();
+    // show the client's own review with edit/delete, if any
     const mineEl = document.getElementById('myFb');
-    if (myReviewRow){
-      mineEl.innerHTML = '<div class="fb-mine"><div class="fb-stars" style="color:var(--gold)">'+starString(myReviewRow.rating)+'</div>'+
-        '<div style="margin:4px 0;color:#3c4757;">'+escapeHtml(myReviewRow.text)+'</div>'+
-        '<div style="font-size:.75rem;color:var(--muted);">'+escapeHtml(fbDate(myReviewRow))+(myReviewRow.approved?' · ✓ Featured on About Us':' · pending review')+'</div>'+
-        '<div class="acts"><button class="edit" onclick="editFeedback()">Edit</button><button class="del" onclick="deleteFeedback()">Delete</button></div>'+
-        googleReviewBtn()+'</div>';
+    if (mine){
+      mineEl.innerHTML = '<div class="fb-mine"><div class="fb-stars" style="color:var(--gold)">'+starString(mine.rating)+'</div>'+
+        '<div style="margin:4px 0;color:#3c4757;">'+escapeHtml(mine.text)+'</div>'+
+        '<div style="font-size:.75rem;color:var(--muted);">'+escapeHtml(mine.date)+(mine.approved?' · ✓ Featured on About Us':' · pending review')+'</div>'+
+        '<div class="acts"><button class="edit" onclick="editFeedback()">Edit</button><button class="del" onclick="deleteFeedback()">Delete</button></div></div>';
     } else { mineEl.innerHTML = ''; }
 
+    const list = getFeedback();
     const el = document.getElementById('fbList');
-    if (!reviewList.length){ el.innerHTML = '<p class="empty">No feedback yet. Be the first to share your experience!</p>'; return; }
-    el.innerHTML = reviewList.slice().reverse().map(f => {
+    if (!list.length){ el.innerHTML = '<p class="empty">No feedback yet. Be the first to share your experience!</p>'; return; }
+    el.innerHTML = list.slice().reverse().map(f => {
       const ava = f.photo ? '<img src="'+f.photo+'" alt="">' : initial(f.name);
       return '<div class="fb-item"><div class="fb-top"><div class="fb-ava">'+ava+'</div>'+
-          '<div><div class="fb-name">'+escapeHtml(f.name)+'</div><div class="fb-date">'+escapeHtml(fbDate(f))+'</div></div>'+
+          '<div><div class="fb-name">'+escapeHtml(f.name)+'</div><div class="fb-date">'+escapeHtml(f.date)+'</div></div>'+
           '<div class="fb-stars" style="margin-left:auto;">'+starString(f.rating)+'</div></div>'+
         '<div class="fb-text">'+escapeHtml(f.text)+'</div></div>';
     }).join('');
   }
+  function escapeHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   function editFeedback(){
-    if (!myReviewRow) return;
-    document.getElementById('fbText').value = myReviewRow.text;
-    rating = myReviewRow.rating; paint(rating);
+    const mine = myFeedback(); if (!mine) return;
+    document.getElementById('fbText').value = mine.text;
+    rating = mine.rating; paint(rating);
     showPanel('feedback');
     document.getElementById('fbText').focus();
   }
-  async function deleteFeedback(){
-    if (!myReviewRow || !confirm('Delete your review?')) return;
-    await Magnum.deleteReview(myReviewRow.id);
+  function deleteFeedback(){
+    if (!confirm('Delete your review?')) return;
+    setFeedback(getFeedback().filter(f => (f.email||'').toLowerCase() !== (currentEmail||'').toLowerCase()));
     rating = 0; paint(0); document.getElementById('fbText').value = '';
-    await loadFeedback();
+    renderFeedback();
   }
 
-  async function postFeedback(e){
+  function postFeedback(e){
     e.preventDefault();
     if (!rating){ alert('Please select a star rating.'); return false; }
-    const name = (profile.name || 'Client').trim();
+    const name = (profile.name || signupRec.name || 'Client').trim();
     const text = document.getElementById('fbText').value.trim();
-    const row = { user_id: user.id, name: name, photo: profile.photo || '', rating: rating, text: text, approved: false };
-    if (myReviewRow) row.id = myReviewRow.id;
-    const { error } = await Magnum.upsertReview(row);
-    if (error){ alert('Could not submit: ' + error.message); return false; }
+    let list = getFeedback();
+    const existing = list.find(f => (f.email||'').toLowerCase() === (currentEmail||'').toLowerCase());
+    if (existing){
+      existing.name = name; existing.photo = profile.photo || ''; existing.rating = rating;
+      existing.text = text; existing.date = new Date().toLocaleString(); existing.approved = false;
+    } else {
+      list.push({ id:uid(), email:(currentEmail||''), name:name, photo:profile.photo||'', rating:rating, text:text, date:new Date().toLocaleString(), approved:false });
+    }
+    setFeedback(list);
+    // notify admins to review / feature it
     pushAdminNotify('New ' + rating + '★ review from ' + name + ' — review to feature on About Us.', 'feedback');
     document.getElementById('fbText').value = ''; rating = 0; paint(0);
-    await loadFeedback();
-    if (googleReviewOn()){
-      if (confirm('Thank you! Your review was submitted.\n\nWould you also share your experience on Google? It really helps our practice.')){
-        window.open(appSettings.google_review_url, '_blank', 'noopener');
-      }
-    } else {
-      alert('Thank you! Your review was submitted. Our team will review featuring it on our website.');
-    }
+    renderFeedback();
+    alert('Thank you! Your review was submitted. Our team will review featuring it on our website.');
     return false;
   }
 
@@ -600,9 +583,13 @@
   }
 
   // ----- tax organizer -----
+  const orgKey = 'magnum_organizer_' + (currentEmail||'').toLowerCase();
+  function getOrg(){ try{return JSON.parse(localStorage.getItem(orgKey)||'{}');}catch(e){return {};} }
+  let orgData = getOrg();
+
   function renderOrganizer(){
     document.getElementById('orgTitle').textContent = ORGANIZER_TITLE;
-    const defaults = organizerDefaults(profile, user ? user.email : '');
+    const defaults = organizerDefaults(profile, currentEmail);
     const wrap = document.getElementById('orgSections');
     wrap.innerHTML = ORGANIZER_SECTIONS.map(function(sec, si){
       const fields = sec.fields.map(function(f){
@@ -633,7 +620,16 @@
     }).join('');
   }
 
-  function syncOrgInputs(){
+  function orgFile(id, e){
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){ orgData[id] = { name:file.name, size:file.size, data:ev.target.result }; };
+    reader.readAsDataURL(file);
+  }
+
+  function saveOrganizer(e){
+    e.preventDefault();
     ORGANIZER_SECTIONS.forEach(function(sec){
       sec.fields.forEach(function(f){
         if (f.type === 'display' || f.type === 'file') return;
@@ -641,24 +637,8 @@
         if (el) orgData[f.id] = el.value;
       });
     });
-  }
-
-  async function orgFile(id, e){
-    const file = e.target.files[0];
-    if (!file) return;
-    syncOrgInputs();
-    try {
-      orgData[id] = await Magnum.uploadFile(user.id, id, file);   // {name,size,path}
-      await Magnum.saveOrganizer(user.id, orgData);                // persist immediately
-      renderOrganizer();
-    } catch(err){ alert('Upload failed: ' + (err.message || err)); }
-  }
-
-  async function saveOrganizer(e){
-    e.preventDefault();
-    syncOrgInputs();
-    const { error } = await Magnum.saveOrganizer(user.id, orgData);
-    if (error){ alert('Could not save your organizer: ' + error.message); return false; }
+    try { localStorage.setItem(orgKey, JSON.stringify(orgData)); }
+    catch(err){ alert('Your organizer is too large to store in the browser (likely large file uploads). Try smaller files.'); return false; }
     pushAdminNotify(clientDisplayName() + ' updated their tax organizer.', 'organizer');
     const note = document.getElementById('orgSaved');
     note.classList.add('show');
@@ -667,16 +647,20 @@
   }
 
   // ----- chat with the team -----
-  async function renderChat(){
-    const msgs = await Magnum.getChat(user.id);
+  const chatKey = 'magnum_chat_' + (currentEmail||'').toLowerCase();
+  function getChat(){ try{return JSON.parse(localStorage.getItem(chatKey)||'[]');}catch(e){return [];} }
+  function setChat(arr){ localStorage.setItem(chatKey, JSON.stringify(arr)); }
+
+  function renderChat(){
+    const msgs = getChat();
     const el = document.getElementById('chatThread');
     if (!msgs.length){
       el.innerHTML = '<p class="chat-empty">👋 Hi! Send us a message and our team will reply right here.</p>';
       return;
     }
     el.innerHTML = msgs.map(m =>
-      '<div class="bubble ' + (m.sender === 'client' ? 'me' : 'them') + '">' +
-        escapeHtml(m.text) + '<span class="bt">' + escapeHtml(m.created_at ? new Date(m.created_at).toLocaleString() : '') + '</span></div>'
+      '<div class="bubble ' + (m.from === 'client' ? 'me' : 'them') + '">' +
+        escapeHtml(m.text) + '<span class="bt">' + escapeHtml(m.date) + '</span></div>'
     ).join('');
     el.scrollTop = el.scrollHeight;
   }
@@ -687,12 +671,14 @@
   }
   function closeMsg(){ document.body.classList.remove('chat-open'); }
 
-  async function sendMessage(e){
+  function sendMessage(e){
     e.preventDefault();
     const input = document.getElementById('msgText');
     const text = input.value.trim();
     if (!text) return false;
-    await Magnum.sendChat(user.id, 'client', text);
+    const msgs = getChat();
+    msgs.push({ from:'client', text:text, date:new Date().toLocaleString() });
+    setChat(msgs);
     input.value = '';
     renderChat();
     pushAdminNotify(clientDisplayName() + ' sent a new message.', 'message');
@@ -700,135 +686,74 @@
   }
 
   // ----- account updates (read-only, posted by admin) -----
-  async function renderUpdates(){
-    const a = await Magnum.getUpdates(user.id);
+  function gj(k){ try{return JSON.parse(localStorage.getItem(k)||'[]');}catch(e){return [];} }
+  function renderUpdates(){
+    const a = gj('magnum_updates_' + (currentEmail||'').toLowerCase());
     const el = document.getElementById('updatesList');
     el.innerHTML = a.length ? a.slice().reverse().map(u =>
-      '<div class="feed-item"><div class="fd">'+escapeHtml(u.created_at?new Date(u.created_at).toLocaleString():'')+'</div><div class="ft">'+escapeHtml(u.text)+'</div></div>'
+      '<div class="feed-item"><div class="fd">'+escapeHtml(u.date)+'</div><div class="ft">'+escapeHtml(u.text)+'</div>'+
+      (u.task?'<div class="fa"><a href="'+escapeHtml(u.task)+'" target="_blank" rel="noopener">View task ↗</a></div>':'')+'</div>'
     ).join('') : '<p class="empty">No updates yet. Your team will post account updates here.</p>';
   }
-  async function renderMeetings(){
-    const a = await Magnum.getMeetings(user.id);
+  function renderMeetings(){
+    const a = gj('magnum_meetings_' + (currentEmail||'').toLowerCase());
     const el = document.getElementById('meetingsList');
     el.innerHTML = a.length ? a.slice().reverse().map(m =>
-      '<div class="feed-item"><div class="fd">'+escapeHtml(m.created_at?new Date(m.created_at).toLocaleString():'')+'</div><h4>'+escapeHtml(m.title)+'</h4><div class="ft">'+escapeHtml(m.notes)+'</div>'+
+      '<div class="feed-item"><div class="fd">'+escapeHtml(m.date)+'</div><h4>'+escapeHtml(m.title)+'</h4><div class="ft">'+escapeHtml(m.notes)+'</div>'+
       (m.drive?'<div class="fa"><a href="'+escapeHtml(m.drive)+'" target="_blank" rel="noopener">📁 Open Google Drive folder ↗</a></div>':'')+'</div>'
     ).join('') : '<p class="empty">No meeting notes yet.</p>';
   }
 
-  // ----- shared files (two-way exchange) -----
-  function fileIcon(n){ n=(n||'').toLowerCase(); if(/\.(png|jpe?g|gif|webp|bmp|svg)$/.test(n))return '🖼️'; if(n.endsWith('.pdf'))return '📕'; if(n.endsWith('.doc')||n.endsWith('.docx'))return '📘'; if(n.endsWith('.xls')||n.endsWith('.xlsx'))return '📗'; return '📄'; }
-  async function renderShared(){
-    const files = await Magnum.getSharedFiles(user.id);
-    const el = document.getElementById('sharedList');
-    if (!files.length){ el.innerHTML = '<p class="empty">No shared files yet.</p>'; return; }
-    const rows = await Promise.all(files.slice().reverse().map(async function(f){
-      const url = await Magnum.fileUrl(f.path);
-      const who = f.uploaded_by === 'admin' ? '✔ Shared by our team' : '⬆ Uploaded by you';
-      const when = f.created_at ? new Date(f.created_at).toLocaleString() : '';
-      const delBtn = f.uploaded_by === 'client'
-        ? '<button class="del" onclick="delShared(\''+f.id+'\',\''+escapeHtml(f.path).replace(/'/g,"\\'")+'\')">Delete</button>' : '';
-      const note = f.note ? '<div style="flex-basis:100%;font-size:.85rem;color:#3c4757;margin-top:4px;">📝 '+escapeHtml(f.note)+'</div>' : '';
-      return '<div class="doc-row" style="flex-wrap:wrap;"><div class="fic">'+fileIcon(f.name)+'</div>'+
-        '<div class="meta"><b>'+escapeHtml(f.name)+'</b><span>'+who+' • '+escapeHtml(when)+'</span></div>'+
-        '<a class="dl" href="'+url+'" target="_blank" rel="noopener">Download</a>'+delBtn+note+
-      '</div>';
-    }));
-    el.innerHTML = rows.join('');
-  }
-  async function uploadShared(e){
-    const file = e.target.files[0];
-    if (!file) return;
-    const st = document.getElementById('sharedStatus');
-    st.textContent = 'Uploading…';
-    try {
-      await Magnum.uploadSharedFile(user.id, file, 'client');
-      pushAdminNotify(clientDisplayName() + ' uploaded a file: ' + file.name, 'file');
-      st.textContent = '✓ Uploaded';
-      setTimeout(function(){ st.textContent=''; }, 2500);
-    } catch(err){ st.textContent=''; alert('Upload failed: '+(err.message||err)); }
-    e.target.value = '';
-    renderShared();
-  }
-  async function delShared(id, path){
-    if (!confirm('Delete this file?')) return;
-    await Magnum.deleteSharedFile(id, path);
-    renderShared();
-  }
-
   // ----- notifications -----
-  let notifRows = [];
-  async function renderNotif(){
-    notifRows = await Magnum.getNotifications(user.id, 'client');
-    const unread = notifRows.filter(n => !n.read).length;
+  const notifKey = 'magnum_notify_' + (currentEmail||'').toLowerCase();
+  function getNotif(){ try{return JSON.parse(localStorage.getItem(notifKey)||'[]');}catch(e){return [];} }
+  function renderNotif(){
+    const a = getNotif();
+    const unread = a.filter(n => !n.read).length;
     document.getElementById('notifDot').style.display = unread ? 'block' : 'none';
     const el = document.getElementById('notifList');
-    el.innerHTML = notifRows.length ? notifRows.slice().reverse().map(n =>
-      '<div class="ni'+(n.read?'':' unread')+'">'+escapeHtml(n.text)+'<span class="nd">'+escapeHtml(n.created_at?new Date(n.created_at).toLocaleString():'')+'</span></div>'
+    el.innerHTML = a.length ? a.slice().reverse().map(n =>
+      '<div class="ni'+(n.read?'':' unread')+'">'+escapeHtml(n.text)+'<span class="nd">'+escapeHtml(n.date)+'</span></div>'
     ).join('') : '<div class="notif-empty">No notifications.</div>';
   }
-  async function toggleNotif(){
+  function toggleNotif(){
     const p = document.getElementById('notifPanel');
     const open = p.classList.toggle('open');
-    if (open){
-      const unreadIds = notifRows.filter(n => !n.read).map(n => n.id);
-      if (unreadIds.length){ await Magnum.markRead(unreadIds); renderNotif(); }
+    if (open){ // mark read
+      const a = getNotif().map(n => (n.read=true, n));
+      localStorage.setItem(notifKey, JSON.stringify(a));
+      renderNotif();
     }
   }
-  function clientDisplayName(){ return (profile.name || (user && user.email) || 'A client'); }
-  // notify the admin (fire-and-forget) when the client makes any account change
+  function clientDisplayName(){ return (profile.name || signupRec.name || currentEmail || 'A client'); }
+  // admin notification helper (used when the client makes any account change)
   function pushAdminNotify(text, type){
-    if (user) Magnum.addNotification(user.id, 'admin', text, type);
-  }
-
-  // ----- Canopy Tax document requests (shown only once your team connects Canopy) -----
-  async function renderCanopyRequests(){
-    const reqs = await Magnum.getDocumentRequests(user.id);
-    const card = document.getElementById('canopyReqCard');
-    if (!reqs.length){ card.style.display = 'none'; return; }
-    card.style.display = 'block';
-    document.getElementById('canopyReqList').innerHTML = reqs.map(function(r){
-      return '<div class="feed-item"><div class="fd">'+escapeHtml(r.status||'pending')+'</div>'+
-        '<b>'+escapeHtml(r.title)+'</b>'+
-        (r.description?'<div class="ft">'+escapeHtml(r.description)+'</div>':'')+
-      '</div>';
-    }).join('');
+    let a; try{ a = JSON.parse(localStorage.getItem('magnum_admin_notify')||'[]'); }catch(e){ a=[]; }
+    a.push({ id:'a'+Date.now().toString(36), text:text, type:type||'', email:(currentEmail||''), date:new Date().toLocaleString(), read:false });
+    localStorage.setItem('magnum_admin_notify', JSON.stringify(a));
   }
   document.addEventListener('click', function(e){
     const w = document.querySelector('.notif-wrap');
     if (w && !w.contains(e.target)) document.getElementById('notifPanel').classList.remove('open');
   });
 
-  // ----- init -----
-  (async function init(){
-    user = await Magnum.requireClient();
-    profile = await Magnum.myProfile();
-    orgData = await Magnum.getOrganizer(user.id);
-    renderProfile();
-    renderOrganizer();
-    await loadFeedback();
-    renderUpdates();
-    renderMeetings();
-    renderShared();
-    renderNotif();
-    renderCanopyRequests();
+  // live-update when the team changes something in another tab
+  window.addEventListener('storage', function(e){
+    if (!e.key) return;
+    if (e.key.indexOf('magnum_notify_') === 0) renderNotif();
+    if (e.key.indexOf('magnum_updates_') === 0) renderUpdates();
+    if (e.key.indexOf('magnum_meetings_') === 0) renderMeetings();
+    if (e.key.indexOf('magnum_chat_') === 0 && document.body.classList.contains('chat-open')) renderChat();
+    if (e.key === 'magnum_feedback') renderFeedback();
+  });
 
-    // ----- realtime: live chat + notifications -----
-    sb.channel('client-'+user.id)
-      .on('postgres_changes',
-          { event:'INSERT', schema:'public', table:'chat_messages', filter:'user_id=eq.'+user.id },
-          function(){ if (document.body.classList.contains('chat-open')) renderChat(); })
-      .on('postgres_changes',
-          { event:'INSERT', schema:'public', table:'notifications', filter:'user_id=eq.'+user.id },
-          function(){ renderNotif(); })
-      .on('postgres_changes',
-          { event:'*', schema:'public', table:'shared_files', filter:'user_id=eq.'+user.id },
-          function(){ renderShared(); })
-      .on('postgres_changes',
-          { event:'*', schema:'public', table:'canopy_document_requests', filter:'user_id=eq.'+user.id },
-          function(){ renderCanopyRequests(); })
-      .subscribe();
-  })();
+  // init
+  renderProfile();
+  renderFeedback();
+  renderOrganizer();
+  renderUpdates();
+  renderMeetings();
+  renderNotif();
 </script>
 </body>
 </html>
