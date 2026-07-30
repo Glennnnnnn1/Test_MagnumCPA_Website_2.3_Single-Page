@@ -19,7 +19,7 @@ crons = ["*/15 * * * *"]
 ALLOWED_ORIGINS = "https://glendley.github.io"
 
 # Secrets (never put these here — set via `wrangler secret put <NAME>`):
-#   TURNSTILE_SECRET_KEY   (required before real launch)
+#   TURNSTILE_SECRET_KEY   (already set — required before real launch)
 #   CANOPY_CLIENT_ID       (Phase 2, once you have Canopy API access)
 #   CANOPY_CLIENT_SECRET   (Phase 2)
 #   CANOPY_API_BASE        (Phase 2 — confirm against real Canopy docs)
