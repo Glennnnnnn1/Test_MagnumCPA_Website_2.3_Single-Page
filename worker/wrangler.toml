@@ -16,7 +16,7 @@ crons = ["*/15 * * * *"]
 [vars]
 # Comma-separated list of origins allowed to call this Worker. Add your
 # custom domain here later if/when the GoDaddy -> Cloudflare DNS cutover happens.
-ALLOWED_ORIGINS = "https://glendley.github.io"
+ALLOWED_ORIGINS = "https://glennnnnnn1.github.io"
 
 # Secrets (never put these here — set via `wrangler secret put <NAME>`):
 #   TURNSTILE_SECRET_KEY   (already set — required before real launch)
