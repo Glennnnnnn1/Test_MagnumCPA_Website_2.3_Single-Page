@@ -1,0 +1,133 @@
+<svg viewBox="0 0 800 1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 700; fill: #1f2937; }
+      .step-num { font-size: 14px; font-weight: 700; fill: white; }
+      .step-title { font-size: 13px; font-weight: 600; fill: #1f2937; }
+      .step-detail { font-size: 11px; fill: #6b7280; }
+      .arrow { stroke: #9ca3af; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .pass { fill: #d1fae5; stroke: #6ee7b7; }
+      .fail { fill: #fee2e2; stroke: #fca5a5; }
+      .neutral { fill: #e0e7ff; stroke: #a5b4fc; }
+      .box { stroke-width: 1.5; }
+      .label-outcome { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#9ca3af"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" class="title">Lead Capture Funnel</text>
+  <text x="400" y="55" text-anchor="middle" class="step-detail">Magnum CPA Request-a-Consultation Form</text>
+
+  <!-- STEP 1: Browser Validation -->
+  <rect x="250" y="80" width="300" height="70" rx="6" class="box neutral"/>
+  <circle cx="270" cy="100" r="16" style="fill: #6366f1;"/>
+  <text x="270" y="107" text-anchor="middle" class="step-num">1</text>
+  <text x="320" y="100" class="step-title">Browser Validation</text>
+  <text x="320" y="120" class="step-detail">Required fields, valid email/phone</text>
+  <text x="320" y="135" class="step-detail">Honeypot field check</text>
+
+  <!-- Arrow 1 -->
+  <path d="M 400 150 L 400 185" class="arrow"/>
+
+  <!-- STEP 2: Turnstile Bot Check -->
+  <rect x="250" y="185" width="300" height="70" rx="6" class="box neutral"/>
+  <circle cx="270" cy="205" r="16" style="fill: #6366f1;"/>
+  <text x="270" y="212" text-anchor="middle" class="step-num">2</text>
+  <text x="320" y="205" class="step-title">Turnstile Bot Challenge</text>
+  <text x="320" y="225" class="step-detail">Invisible verification from Cloudflare</text>
+  <text x="320" y="240" class="step-detail">Fails closed on any error</text>
+
+  <!-- Arrow 2 -->
+  <path d="M 400 255 L 400 290" class="arrow"/>
+
+  <!-- STEP 3: Rate Limit -->
+  <rect x="250" y="290" width="300" height="70" rx="6" class="box neutral"/>
+  <circle cx="270" cy="310" r="16" style="fill: #6366f1;"/>
+  <text x="270" y="317" text-anchor="middle" class="step-num">3</text>
+  <text x="320" y="310" class="step-title">Rate Limiting</text>
+  <text x="320" y="330" class="step-detail">Max 5 submissions per IP</text>
+  <text x="320" y="345" class="step-detail">Per 10-minute window</text>
+
+  <!-- Arrow 3 -->
+  <path d="M 400 360 L 400 395" class="arrow"/>
+
+  <!-- STEP 4: Server Validation -->
+  <rect x="250" y="395" width="300" height="70" rx="6" class="box neutral"/>
+  <circle cx="270" cy="415" r="16" style="fill: #6366f1;"/>
+  <text x="270" y="422" text-anchor="middle" class="step-num">4</text>
+  <text x="320" y="415" class="step-title">Server-side Validation</text>
+  <text x="320" y="435" class="step-detail">Sanitize &amp; normalize all fields</text>
+  <text x="320" y="450" class="step-detail">Strip HTML, control chars</text>
+
+  <!-- Arrow 4 -->
+  <path d="M 400 465 L 400 500" class="arrow"/>
+
+  <!-- STEP 5: Spam Scoring -->
+  <rect x="250" y="500" width="300" height="90" rx="6" class="box neutral"/>
+  <circle cx="270" cy="525" r="16" style="fill: #6366f1;"/>
+  <text x="270" y="532" text-anchor="middle" class="step-num">5</text>
+  <text x="320" y="525" class="step-title">Spam Scoring</text>
+  <text x="320" y="545" class="step-detail">Disposable email domains</text>
+  <text x="320" y="560" class="step-detail">Known spam keywords</text>
+  <text x="320" y="575" class="step-detail">Multiple links in message</text>
+
+  <!-- Fail path (spam) -->
+  <path d="M 250 545 L 180 545 L 180 750 L 250 750" class="arrow" stroke-dasharray="5,5"/>
+  <text x="175" y="630" text-anchor="end" class="label-outcome" style="fill: #991b1b;">Flagged</text>
+
+  <!-- Arrow 5 (pass) -->
+  <path d="M 400 590 L 400 625" class="arrow"/>
+
+  <!-- STEP 6: Duplicate Detection -->
+  <rect x="250" y="625" width="300" height="90" rx="6" class="box neutral"/>
+  <circle cx="270" cy="650" r="16" style="fill: #6366f1;"/>
+  <text x="270" y="657" text-anchor="middle" class="step-num">6</text>
+  <text x="320" y="650" class="step-title">Duplicate Detection</text>
+  <text x="320" y="670" class="step-detail">Same email/phone in 24h</text>
+  <text x="320" y="685" class="step-detail">Same name in 10 minutes</text>
+  <text x="320" y="700" class="step-detail">Silent flag, no lead created</text>
+
+  <!-- Fail path (duplicate) -->
+  <path d="M 550 665 L 620 665 L 620 750 L 550 750" class="arrow" stroke-dasharray="5,5"/>
+  <text x="625" y="630" text-anchor="start" class="label-outcome" style="fill: #991b1b;">Dupe</text>
+
+  <!-- Arrow 6 (pass) -->
+  <path d="M 400 715 L 400 750" class="arrow"/>
+
+  <!-- STEP 7: Lead Storage -->
+  <rect x="250" y="750" width="300" height="70" rx="6" class="box pass"/>
+  <circle cx="270" cy="770" r="16" style="fill: #059669;"/>
+  <text x="270" y="777" text-anchor="middle" class="step-num" style="fill: white;">7</text>
+  <text x="320" y="770" class="step-title" style="fill: #065f46;">Lead Stored</text>
+  <text x="320" y="790" class="step-detail" style="fill: #047857;">KV queue or Canopy sync</text>
+  <text x="320" y="805" class="step-detail" style="fill: #047857;">Audit logged (90 days)</text>
+
+  <!-- Arrow 7 -->
+  <path d="M 400 820 L 400 855" class="arrow"/>
+
+  <!-- STEP 8: Scheduler Revealed -->
+  <rect x="250" y="855" width="300" height="70" rx="6" class="box pass"/>
+  <circle cx="270" cy="875" r="16" style="fill: #059669;"/>
+  <text x="270" y="882" text-anchor="middle" class="step-num" style="fill: white;">8</text>
+  <text x="320" y="875" class="step-title" style="fill: #065f46;">Acuity Scheduler</text>
+  <text x="320" y="895" class="step-detail" style="fill: #047857;">Calendar revealed to visitor</text>
+  <text x="320" y="910" class="step-detail" style="fill: #047857;">Only clean leads reach here</text>
+
+  <!-- Side outcomes box (flagged leads) -->
+  <rect x="30" y="740" width="180" height="80" rx="6" class="box" style="fill: #fef2f2; stroke: #fee2e2; stroke-width: 1.5;"/>
+  <text x="120" y="760" text-anchor="middle" class="step-title" style="fill: #991b1b;">Flagged Leads</text>
+  <text x="40" y="780" class="step-detail" style="fill: #7f1d1d;">• Logged to audit trail</text>
+  <text x="40" y="795" class="step-detail" style="fill: #7f1d1d;">• Reviewed by staff</text>
+  <text x="40" y="810" class="step-detail" style="fill: #7f1d1d;">• Not sent to Canopy</text>
+
+  <!-- Legend -->
+  <text x="50" y="955" class="step-detail" style="font-size: 12px; font-weight: 600;">Processing:</text>
+  <circle cx="50" cy="975" r="5" style="fill: #6366f1;"/>
+  <text x="65" y="980" class="step-detail">Active checks</text>
+
+  <circle cx="200" cy="975" r="5" style="fill: #10b981;"/>
+  <text x="215" y="980" class="step-detail">Clean lead accepted</text>
+</svg>
