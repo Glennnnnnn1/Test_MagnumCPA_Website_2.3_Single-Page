@@ -23,7 +23,7 @@ if %errorlevel% neq 0 (
 if not exist ".git" (
     echo Setting up Git repository for the first time...
     git init
-    git remote add origin https://github.com/Glendley/Test_MagnumCPA_Website_2.3_Single-Page.git
+    git remote add origin https://github.com/Glennnnnnn1/Test_MagnumCPA_Website_2.3_Single-Page.git
     git branch -M main
     echo Git initialized!
     echo.
@@ -50,19 +50,19 @@ git commit -m "Update site — %TIMESTAMP%"
 :: Push to GitHub
 echo.
 echo Pushing to GitHub...
-git push -u origin main --force
+git push -u origin main
 
 if %errorlevel% equ 0 (
     echo.
     echo ================================================
     echo   SUCCESS! Your site is live on GitHub.
-    echo   https://github.com/Glendley/Test_MagnumCPA_Website_2.3_Single-Page
+    echo   https://github.com/Glennnnnnn1/Test_MagnumCPA_Website_2.3_Single-Page
     echo ================================================
 ) else (
     echo.
     echo ERROR: Push failed. See message above.
     echo Common fixes:
-    echo   - Run: git remote set-url origin https://github.com/Glendley/Test_MagnumCPA_Website_2.3_Single-Page.git
+    echo   - Run: git remote set-url origin https://github.com/Glennnnnnn1/Test_MagnumCPA_Website_2.3_Single-Page.git
     echo   - Make sure you're logged into GitHub on this machine
 )
 

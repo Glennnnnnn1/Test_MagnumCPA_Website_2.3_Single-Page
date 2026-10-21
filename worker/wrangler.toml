@@ -2,24 +2,44 @@ name = "magnum-cpa-lead-worker"
 main = "src/index.ts"
 compatibility_date = "2026-01-01"
 
-# Create with: wrangler kv namespace create LEADS_KV
-# Then paste the returned id below.
+# LEADS_KV  — the main site's consultation form. Do not repoint this.
+# LIBRARY_KV — the gated video library (videos, gate leads, analytics).
+#
+# Create LIBRARY_KV with:
+#   npx wrangler kv namespace create LIBRARY_KV
+# then paste the returned id over the placeholder below. `wrangler dev` works
+# without it (local KV is simulated per binding name); `wrangler deploy` will
+# fail loudly until it's replaced, which is the intended failure mode.
 kv_namespaces = [
-  { binding = "LEADS_KV", id = "363eb08d23cb47ab9176fa209afbcef5" }
+  { binding = "LEADS_KV", id = "363eb08d23cb47ab9176fa209afbcef5" },
+  { binding = "LIBRARY_KV", id = "REPLACE_WITH_ID_FROM_wrangler_kv_namespace_create" }
 ]
 
-# Flushes the pending-Canopy retry queue. Runs every 15 minutes; a no-op scan
-# while Canopy isn't configured yet.
+# Flushes the pending-Canopy retry queue and rolls up raw analytics events
+# into daily/monthly counters. Runs every 15 minutes.
 [triggers]
 crons = ["*/15 * * * *"]
 
 [vars]
-# Comma-separated list of origins allowed to call this Worker. Add your
-# custom domain here later if/when the GoDaddy -> Cloudflare DNS cutover happens.
-ALLOWED_ORIGINS = "https://glennnnnnn1.github.io"
+# Comma-separated list of origins allowed to call this Worker: the live
+# website on magnumcpa.com (bare and www), the video library on
+# library.magnumcpa.com, plus the GitHub Pages user site.
+#
+# The video library frontend must be served from an origin in this list. If it
+# is a GitHub Pages project site under the same account, its origin is already
+# covered — project pages share the user-site origin — and no change is needed.
+# For local development, override this in .dev.vars (gitignored) rather than
+# adding localhost here; a `file://` page sends `Origin: null`, which is never
+# allowlisted, so use a real static server.
+ALLOWED_ORIGINS = "https://magnumcpa.com,https://www.magnumcpa.com,https://library.magnumcpa.com,https://glennnnnnn1.github.io"
 
 # Secrets (never put these here — set via `wrangler secret put <NAME>`):
 #   TURNSTILE_SECRET_KEY   (already set — required before real launch)
+#   ADMIN_PASSWORD_HASH    (video library admin; generate with
+#                           `npm run hash-password` in the Video Library repo)
+#   ADMIN_TOKEN_SECRET     (video library admin; 32 random bytes, base64)
+#   LEAD_WEBHOOK_URL       (optional — POSTs each gate lead as JSON; point it
+#                           at Zapier/Make for a live Google Sheet / Excel file)
 #   CANOPY_CLIENT_ID       (Phase 2, once you have Canopy API access)
 #   CANOPY_CLIENT_SECRET   (Phase 2)
 #   CANOPY_API_BASE        (Phase 2 — confirm against real Canopy docs)

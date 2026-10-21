@@ -1,0 +1,13 @@
+# GitHub Pages build settings.
+# Everything listed under `exclude` stays in the repo but is NOT published on
+# the live website (magnumcpa.com). Keep internal docs, scripts and the
+# Cloudflare Worker source here so visitors can't browse them.
+exclude:
+  - README.md
+  - RECENT-UPDATES.md
+  - SETUP-CLOUDFLARE.md
+  - lead-funnel-diagram.svg
+  - images/lead-funnel-diagram.png
+  - sync.bat
+  - worker/
+  - .claude/

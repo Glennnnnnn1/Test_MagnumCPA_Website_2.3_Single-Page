@@ -167,6 +167,6 @@ Visual and layout refinements to the single-page site:
 | `index.html` | The main single-page website, including the consultation form |
 | `worker/` | The secure lead-capture service |
 | `SETUP-CLOUDFLARE.md` | Setup and maintenance reference for that service |
-| `client-portal.html`, `dashboard.html`, `admin*.html` | Client portal and admin pages |
+| Client portal | Handled by Canopy — the website no longer has its own portal or admin login |
 | `financial-calculators.html` | Financial calculator tools |
 | `RECENT-UPDATES.md` | This document |

@@ -70,12 +70,13 @@
   .submenu a{display:block;text-align:left;border-radius:5px;}
 
   /* ---------- Hero (home) ---------- */
-  .hero{position:relative;overflow:hidden;color:#fff;min-height:100vh;
-    background:#0d1f4a url('images/hero-bg-2.jpg') no-repeat;background-size:auto 115%;background-position:right center;}
+  .hero{position:relative;overflow:hidden;color:#fff;
+    background:#0d1f4a url('images/hero-bg-2.jpg') no-repeat;background-size:cover;background-position:60% center;}
   .hero .container{height:100%;}
   .hero::before{content:"";position:absolute;inset:0;pointer-events:none;
     background:linear-gradient(90deg,rgba(8,22,58,.94) 0%,rgba(8,22,58,.7) 34%,rgba(8,22,58,.25) 54%,rgba(8,22,58,0) 70%);}
-  .hero-wrap{position:relative;z-index:2;display:flex;align-items:flex-end;min-height:90vh;padding:60px 0;}
+  .hero-wrap{position:relative;z-index:2;display:flex;align-items:flex-end;min-height:calc(100vh - 170px);padding:60px 0;}
+  /* fills the first screen below the banner/top bar/nav (~170px) so the hero button isn't cut off */
   .hero-info{max-width:540px;}
   .hero-info .kicker{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.12);
     border:1px solid rgba(255,255,255,.25);border-radius:30px;padding:7px 16px;font-size:.78rem;
@@ -171,7 +172,13 @@
   .rev-dots{display:flex;gap:8px;justify-content:center;margin-top:18px;}
   .rev-dots button{width:11px;height:11px;border-radius:50%;border:0;background:rgba(255,255,255,.45);cursor:pointer;padding:0;}
   .rev-dots button.active{background:var(--gold);}
-  @media(max-width:560px){.rev-nav.prev{left:4px;}.rev-nav.next{right:4px;}.review{padding:26px 22px;}}
+  /* smaller screens: arrows sit beside the dots instead of over the review text */
+  @media(max-width:880px){
+    .rev-dots{min-height:44px;align-items:center;margin-top:14px;}
+    .rev-nav{top:auto;bottom:0;transform:none;}
+    .rev-nav.prev{left:0;}.rev-nav.next{right:0;}
+  }
+  @media(max-width:560px){.review{padding:26px 22px;}}
 
   /* search */
   .search-li a{font-size:1.05rem;}
@@ -196,6 +203,9 @@
   .book-fab:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(244,169,60,.7);}
   @keyframes bookpulse{0%,100%{box-shadow:0 12px 30px rgba(244,169,60,.45);}50%{box-shadow:0 14px 44px rgba(244,169,60,.85);}}
   @media(max-width:560px){.book-fab{right:14px;bottom:14px;padding:12px 18px;font-size:.92rem;}}
+  /* hidden while the hero's own booking button is on screen, so it never covers it */
+  .book-fab{transition:transform .15s,box-shadow .2s,opacity .3s,visibility .3s;}
+  .book-fab.away{opacity:0;visibility:hidden;transform:translateY(16px);}
 
   /* booking popup */
   .bookpop-overlay{position:fixed;inset:0;background:rgba(8,18,46,.72);z-index:120;display:none;align-items:center;justify-content:center;padding:18px;}
@@ -244,15 +254,105 @@
   @media(max-width:860px){.art-grid{grid-template-columns:1fr;}}
 
   /* ----- Resources: tax videos ----- */
-  .vid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
-  .vid-card{background:#fff;color:var(--text);border-radius:12px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.25);}
-  .vid-thumb{aspect-ratio:16/9;background:var(--navy);display:grid;place-items:center;}
-  .vid-thumb .play{width:56px;height:56px;border-radius:50%;background:var(--gold);display:grid;place-items:center;color:var(--navy);font-size:1.2rem;}
-  .vid-thumb .play:after{content:"\25B6";margin-left:3px;}
-  .vid-card .body{padding:18px 20px;}
-  .vid-card h3{color:var(--navy);font-size:1.08rem;margin-bottom:6px;}
-  .vid-card p{color:var(--muted);font-size:.93rem;}
-  @media(max-width:860px){.vid-grid{grid-template-columns:1fr;}}
+  /* Gallery: stacked slides crossfade on top, thumbnail tablist below with one
+     shared outline that slides to the active thumb. */
+  .vg{--cols:5;--gap:6px;--pad:6px;
+    --spring:linear(0, 0.0941 5.6%, 0.2736 11.1%, 0.4548 16.7%, 0.6076 22.2%, 0.7255 27.8%, 0.8119 33.3%, 0.8732 38.9%, 0.9156 44.4%, 0.9444 50.0%, 0.9636 55.6%, 0.9764 61.1%, 0.9848 66.7%, 0.9902 72.2%, 0.9938 77.8%, 0.9960 83.3%, 0.9975 88.9%, 0.9984 94.4%, 1 100%);
+    max-width:860px;margin:0 auto;}
+  .vg-top{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:36px;align-items:center;}
+  .vg-stage{position:relative;aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:var(--navy-3);
+    box-shadow:0 18px 44px rgba(0,0,0,.4);touch-action:pan-y;}
+  .vg-slide{position:absolute;inset:0;opacity:0;transform:scale(1.06);
+    transition:opacity .6s ease,transform .9s cubic-bezier(.32,.72,0,1);}
+  .vg-slide{transition:opacity .6s ease,transform .9s var(--spring);}
+  .vg-slide.is-active{opacity:1;transform:none;z-index:1;}
+  .vg-slide img{display:block;width:100%;height:100%;object-fit:cover;}
+  .vg-slide iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;}
+  .vg-play{position:absolute;inset:0;margin:auto;width:76px;height:76px;border:0;border-radius:50%;cursor:pointer;
+    background:var(--gold);color:var(--navy-dark);font-size:1.5rem;box-shadow:0 8px 24px rgba(0,0,0,.45);transition:transform .15s;}
+  .vg-play:before{content:"\25B6";margin-left:5px;}
+  .vg-play:hover{transform:scale(1.07);}
+  .vg-play:focus-visible{outline:3px solid #fff;outline-offset:4px;}
+  .vg-fallback{display:none;position:absolute;inset:0;padding:24px;place-items:center;text-align:center;
+    color:#fff;font-family:Georgia,'Times New Roman',serif;font-size:1.3rem;background:var(--navy);}
+  .is-missing .vg-fallback{display:grid;}
+  .is-missing img{visibility:hidden;}
+  .vg-info{color:#fff;}
+  .vg-count{color:var(--gold);font-size:.82rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
+  .vg-info h2{font-family:Georgia,'Times New Roman',serif;font-size:2rem;line-height:1.2;margin:10px 0 12px;}
+  .vg-info p{color:#c9d4e6;}
+  .vg-nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;}
+  .vg-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:999px;font:inherit;font-size:.92rem;font-weight:600;
+    cursor:pointer;border:2px solid rgba(255,255,255,.35);background:transparent;color:#fff;text-decoration:none;transition:border-color .15s,background .15s;}
+  .vg-btn:hover{border-color:var(--gold);}
+  .vg-btn.gold{background:var(--gold);border-color:var(--gold);color:var(--navy-dark);}
+  .vg-btn:focus-visible{outline:3px solid #fff;outline-offset:3px;}
+  .vg-strip{position:relative;display:grid;grid-auto-flow:column;gap:var(--gap);padding:var(--pad);margin-top:30px;
+    grid-auto-columns:calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+    overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:var(--gold) transparent;}
+  .vg-thumb{position:relative;aspect-ratio:9/16;padding:0;border:0;border-radius:8px;overflow:hidden;cursor:pointer;
+    background:var(--navy);opacity:.6;transition:opacity .3s ease;scroll-snap-align:start;}
+  .vg-thumb:hover{opacity:.85;}
+  .vg-thumb[aria-selected="true"]{opacity:1;}
+  .vg-thumb:focus-visible{outline:3px solid #fff;outline-offset:-3px;}
+  .vg-thumb img{display:block;width:100%;height:100%;object-fit:cover;}
+  .vg-thumb .vg-fallback{font-size:.78rem;padding:8px;}
+  .vg-num{position:absolute;top:6px;left:6px;z-index:1;padding:1px 7px;border-radius:6px;font-size:.72rem;font-weight:700;
+    background:rgba(19,33,47,.85);color:#fff;}
+  /* One cell plus one gap wide, so translateX(n * 100%) lands exactly on thumb n. */
+  .vg-ind{position:absolute;top:var(--pad);left:var(--pad);pointer-events:none;z-index:2;
+    width:calc((100% - 2 * var(--pad) - (var(--cols) - 1) * var(--gap)) / var(--cols) + var(--gap));
+    transform:translateX(calc(var(--n, 0) * 100%));transition:transform .6s cubic-bezier(.32,.72,0,1);}
+  .vg-ind{transition:transform .6s var(--spring);}
+  /* 2px ring sitting 3px outside the thumb, like the reference's border at -3px. */
+  .vg-ind:before{content:"";display:block;width:calc(100% - var(--gap));aspect-ratio:9/16;border-radius:8px;
+    outline:2px solid var(--gold);outline-offset:1px;}
+  /* ---- Interactive motion ---- */
+  .vg-stage{transform:perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+    transition:transform .5s var(--spring),box-shadow .3s;}
+  .vg-stage:hover{box-shadow:0 26px 60px rgba(0,0,0,.5);}
+  .vg-play:after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--gold);
+    animation:vgPulse 2s ease-out infinite;pointer-events:none;}
+  .vg-play:active{transform:scale(.93);}
+  .vg-slide iframe{animation:vgFade .4s ease;}
+  .vg-progress{position:absolute;left:0;right:0;bottom:0;height:4px;z-index:3;background:rgba(255,255,255,.18);transition:opacity .3s;}
+  .vg-progress i{display:block;height:100%;background:var(--gold);transform-origin:left;transform:scaleX(0);}
+  .vg-progress i.run{animation:vgFill 4s linear forwards;}
+  .vg.is-paused .vg-progress i{animation-play-state:paused;}
+  .vg.is-paused .vg-progress{opacity:.45;}
+  .vg.is-playing .vg-progress,.vg.is-stopped .vg-progress{opacity:0;}
+  .vg-swap{animation:vgIn .55s var(--spring);}
+  .vg-thumb{transition:opacity .3s ease,transform .45s var(--spring);}
+  .vg-thumb:not([aria-selected="true"]):hover{transform:translateY(-4px);}
+  .vg-thumb:active{transform:scale(.95)!important;}
+  .vg-cap{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:22px 8px 8px;text-align:left;
+    font-size:.7rem;line-height:1.25;font-weight:600;color:#fff;background:linear-gradient(transparent,rgba(13,31,74,.95) 45%);
+    transform:translateY(101%);transition:transform .45s var(--spring);}
+  .vg-thumb:hover .vg-cap,.vg-thumb:focus-visible .vg-cap{transform:none;}
+  .vg-auto{width:44px;padding:10px 0;justify-content:center;}
+  .vg.pre .vg-stage,.vg.pre .vg-info,.vg.pre .vg-thumb{opacity:0;}
+  .vg.is-in .vg-stage,.vg.is-in .vg-info{animation:vgRise .8s var(--spring) backwards;}
+  .vg.is-in .vg-info{animation-delay:.12s;}
+  .vg.is-in .vg-thumb{animation:vgRise .7s var(--spring) backwards;animation-delay:calc(.25s + var(--i,0) * 55ms);}
+  @keyframes vgPulse{from{transform:scale(1);opacity:.85}to{transform:scale(1.7);opacity:0}}
+  @keyframes vgFill{to{transform:scaleX(1)}}
+  @keyframes vgIn{from{opacity:0;transform:translateY(12px)}}
+  @keyframes vgRise{from{opacity:0;transform:translateY(24px)}}
+  @keyframes vgFade{from{opacity:0}}
+  @media(hover:none){.vg-cap{display:none;}}
+  @media(prefers-reduced-motion:reduce){
+    .vg-slide,.vg-ind,.vg-stage,.vg-thumb,.vg-cap{transition:none;}
+    .vg *,.vg *:before,.vg *:after{animation:none!important;}
+    .vg-stage{transform:none;}
+    .vg-progress,.vg-auto{display:none;}
+  }
+  @media(max-width:760px){
+    .vg-top{grid-template-columns:1fr;gap:24px;text-align:center;}
+    .vg-stage{width:min(340px,100%);margin:0 auto;}
+    .vg-nav{justify-content:center;}
+    .vg-info h2{font-size:1.6rem;}
+    .vg-num{display:none;}
+  }
 
   /* ----- Resources: financial calculators ----- */
   .calc-cat{margin-bottom:34px;}
@@ -342,12 +442,15 @@
     .submenu{position:static;display:none;box-shadow:none;background:#0f2236;padding:0;min-width:0;}
     .has-sub.open .submenu{display:flex;}
     .submenu a{padding-left:40px;}
-    .hero-wrap{min-height:440px;padding:48px 0;}
+    /* hero: show the photo (headline + Max) as a banner at the top, text below it */
+    .hero{min-height:0;background-size:140% auto;background-position:52% 0;}
+    .hero::before{background:linear-gradient(180deg,rgba(13,31,74,0) 0,rgba(13,31,74,0) 50vw,rgba(13,31,74,.9) 70vw,#0d1f4a 78vw);}
+    .hero-wrap{min-height:0;padding:66vw 0 44px;}
     .hero-info{max-width:100%;}
     .hero-info h1{font-size:2.1rem;}
-    .hero::before{background:linear-gradient(180deg,rgba(8,22,58,.9) 0%,rgba(8,22,58,.78) 55%,rgba(8,22,58,.55) 100%);}
     .page-hero h1{font-size:2.1rem;}
     .about-intro{grid-template-columns:1fr;}
+    .about-intro img{max-width:460px;margin:0 auto;}
     .adv-grid{grid-template-columns:repeat(2,1fr);}
   }
   @media (max-width:600px){
@@ -360,6 +463,9 @@
     .section{padding:46px 0;}
     .section-head{margin-bottom:30px;}
     .section-head h2{font-size:1.6rem;}
+    .hero{background-size:200% auto;}
+    .hero::before{background:linear-gradient(180deg,rgba(13,31,74,0) 0,rgba(13,31,74,0) 76vw,rgba(13,31,74,.9) 100vw,#0d1f4a 111vw);}
+    .hero-wrap{padding:96vw 0 36px;}
     .hero-info h1{font-size:1.75rem;}
     .hero-info p.lede{font-size:.98rem;}
     .hero-cta{flex-direction:column;}
@@ -410,8 +516,7 @@
             <li><a href="financial-calculators.html">Financial Calculators</a></li>
           </ul>
         </li>
-        <li><a href="client-portal.html" target="_blank" rel="noopener">Client Portal</a></li>
-        <li><a href="admin-login.html" target="_blank" rel="noopener">Admin Login</a></li>
+        <li><a href="https://magnumcpa.clientportal.com/#/login" target="_blank" rel="noopener">Client Portal</a></li>
         <li><a href="#request">Request Consultation</a></li>
         <li><a href="#contact">Contact Us</a></li>
         <li class="search-li"><a href="#" class="search-btn" aria-label="Search the site">🔍</a></li>
@@ -444,7 +549,7 @@
         <figcaption>A+ BBB Accredited</figcaption>
       </figure>
       <figure class="plaque-card">
-        <img src="images/Google_2.png" alt="Best of 2026 — Business Rate">
+        <img src="images/google-best-of-2026.jpg" alt="Best of 2026 — Business Rate">
         <figcaption>Best of 2026 · Business Rate</figcaption>
       </figure>
       <figure class="plaque-card">
@@ -536,22 +641,22 @@
     <div class="container">
       <div class="svc-grid">
         <div class="svc-card">
-          <div class="svc-img"><img src="images/Tax.png" alt="Tax Preparation and Planning"></div>
+          <div class="svc-img"><img src="images/tax.jpg" alt="Tax Preparation and Planning"></div>
           <h3>Tax Preparation and Planning</h3>
           <p>Expert assistance to ensure accurate filings and strategic planning to minimize liabilities.</p>
         </div>
         <div class="svc-card">
-          <div class="svc-img"><img src="images/BK%20%26%20Payroll.png" alt="Bookkeeping and Payroll Services"></div>
+          <div class="svc-img"><img src="images/bk-payroll.jpg" alt="Bookkeeping and Payroll Services"></div>
           <h3>Bookkeeping and Payroll Services</h3>
           <p>Reliable management of your financial records and payroll processing.</p>
         </div>
         <div class="svc-card">
-          <div class="svc-img"><img src="images/Consulting.png" alt="Business Consulting"></div>
+          <div class="svc-img"><img src="images/consulting.jpg" alt="Business Consulting"></div>
           <h3>Business Consulting</h3>
           <p>Strategic insights to drive growth and operational efficiency.</p>
         </div>
         <div class="svc-card">
-          <div class="svc-img"><img src="images/Security.png" alt="Future Security"></div>
+          <div class="svc-img"><img src="images/security.jpg" alt="Future Security"></div>
           <h3>Future Security</h3>
           <p>Wealth Management, Retirement, and Estate Planning. This comprehensive approach means every one of you plays a vital role in providing holistic, secure financial guidance.</p>
         </div>
@@ -603,10 +708,24 @@
   <div class="page-hero"><h1>Tax Videos</h1><p>Short, plain-English videos on the tax topics that matter most.</p></div>
   <div class="section">
     <div class="container">
-      <div class="vid-grid">
-        <div class="vid-card"><div class="vid-thumb"><div class="play"></div></div><div class="body"><h3>Understanding Your W-2</h3><p>What each box means and how it affects your return.</p></div></div>
-        <div class="vid-card"><div class="vid-thumb"><div class="play"></div></div><div class="body"><h3>Deductions vs. Credits</h3><p>The difference, and which saves you more.</p></div></div>
-        <div class="vid-card"><div class="vid-thumb"><div class="play"></div></div><div class="body"><h3>Quarterly Taxes 101</h3><p>For freelancers and small business owners.</p></div></div>
+      <div class="vg" id="videoGallery">
+        <div class="vg-top">
+          <div class="vg-stage" id="vgStage" role="tabpanel"></div>
+          <div class="vg-info">
+            <div class="vg-count" id="vgCount"></div>
+            <h2 id="vgTitle"></h2>
+            <p>Plain-English answers from Max Drew, CPA. Press play, or browse every topic below.</p>
+            <div class="vg-nav">
+              <button type="button" class="vg-btn" id="vgPrev" aria-label="Previous video">&larr; Prev</button>
+              <button type="button" class="vg-btn" id="vgNext" aria-label="Next video">Next &rarr;</button>
+              <button type="button" class="vg-btn vg-auto" id="vgAuto" aria-pressed="false" aria-label="Pause auto-advance">&#10074;&#10074;</button>
+              <a class="vg-btn gold" href="#request">Ask Us About This</a>
+            </div>
+          </div>
+        </div>
+        <div class="vg-strip" id="vgStrip" role="tablist" aria-label="Tax videos">
+          <div class="vg-ind" id="vgInd" aria-hidden="true"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -703,6 +822,10 @@
           </div>
 
           <div class="cf-turnstile" data-sitekey="0x4AAAAAAEBKjiEdCTa8l7GC" style="margin-bottom:16px;"></div>
+          <script>
+            /* The normal Turnstile widget is a fixed 300px wide; use the compact one where that won't fit. */
+            if (window.innerWidth < 380) document.querySelector('#leadForm .cf-turnstile').setAttribute('data-size', 'compact');
+          </script>
 
           <button type="submit" class="btn btn-dark" id="leadSubmitBtn" style="width:100%;">RESERVE MY FREE CALL →</button>
           <p class="bookcall-note">🔒 Your information is private and never sold. We'll confirm within 2 hours.</p>
@@ -783,7 +906,7 @@
           <li><a href="#about">About Us</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#contact">Contact Us</a></li>
-          <li><a href="client-portal.html" target="_blank" rel="noopener">Client Portal</a></li>
+          <li><a href="https://magnumcpa.clientportal.com/#/login" target="_blank" rel="noopener">Client Portal</a></li>
         </ul>
       </div>
       <div>
@@ -857,6 +980,13 @@
     // current year
     var y = document.getElementById('year');
     if (y) y.textContent = new Date().getFullYear();
+    // hide the floating booking button while the hero's booking button is visible
+    var fab = document.querySelector('.book-fab'), heroCta = document.querySelector('.hero-cta');
+    if (fab && heroCta && 'IntersectionObserver' in window){
+      new IntersectionObserver(function(entries){
+        fab.classList.toggle('away', entries[0].isIntersecting);
+      }).observe(heroCta);
+    }
   })();
 
   /* ===== Highlight active nav link while scrolling ===== */
@@ -1082,13 +1212,13 @@
        text:'tax planning newsletter retirement contributions 401k ira hsa small business entity llc s-corp sole proprietor charitable giving donor advised capital gains harvesting'},
       {title:'Tax Videos', url:'#tax-videos',
        snippet:'Plain-English videos on key tax topics.',
-       text:'tax videos understanding w-2 deductions credits quarterly taxes freelancers small business watch learn'},
+       text:'tax videos watch learn alternative minimum tax amt audits cancellation of debt insolvency capital gains losses charitable contributions noncash recordkeeping clergy consumer credit crowdfunding dependent digital assets crypto divorce education estimated quarterly taxes extension families children filing status foreign bank accounts fbar gambling high income hobby business household employees identity theft itemized deductions casualty homeowners interest medical kiddie tax like-kind exchange moving expenses multi-state new tax law principal residence home sale standard deduction stock options tax facts figures scams social security irs notice tipped employees trump accounts irs contacts withholding w-4'},
       {title:'Financial Calculators', url:'financial-calculators.html',
        snippet:'Tax, retirement, mortgage, loan, savings & business calculators.',
        text:'financial calculators tax payroll 1040 marginal estate retirement roth ira 401k social security rmd mortgage piti arm loan amortization auto savings college net worth business cash flow breakeven valuation rent vs buy'},
-      {title:'Client Portal', url:'client-portal.html', target:true,
-       snippet:'Log in or sign up to access your documents.',
-       text:'client portal login sign up account documents upload requirements profile messages chat dashboard secure'},
+      {title:'Client Portal', url:'https://magnumcpa.clientportal.com/#/login', target:true,
+       snippet:'Secure client portal (Canopy) for documents and messages.',
+       text:'client portal canopy login documents upload messages secure account'},
       {title:'Contact Us', url:'#contact',
        snippet:'Phone, email, and our Sacramento office location.',
        text:'contact us phone 916 616 1789 email info ask magnumcpa find us 907 green moss drive sacramento ca 95831 map directions location office hours'},
@@ -1151,12 +1281,282 @@
       b.addEventListener('click', function(e){ e.preventDefault(); openSearch(); });
     });
   })();
+
+  /* ===== Tax Videos gallery ===== */
+  (function(){
+    var gallery = document.getElementById('videoGallery');
+    var stage = document.getElementById('vgStage');
+    var strip = document.getElementById('vgStrip');
+    var ind = document.getElementById('vgInd');
+    if (!stage || !strip) return;
+
+    // [number, title, Google Drive file id]. Files must stay shared as
+    // "Anyone with the link" or the thumbnail and player render blank.
+    var VIDEOS = [
+      ['01','Alternative Minimum Tax','1x0Dm__ntt5S04ydgcmL6n74hWmZpq5YL'],
+      ['02','Audits','1bi86JDzXojyaCaSzzAHeVfNyYwkTis34'],
+      ['03','Cancellation of Debt & Insolvency','1ZUy0R69SxYWZtZ0c2E1DxOpUZ5_2WmmN'],
+      ['04','Capital Gains and Losses','1UdfyiyMDoRf0d2crpx2tiR-jprZ7hrXe'],
+      ['05','Charitable Contributions','1JceZIH5ciYXX0944XMQ9zon5xGkHy1RS'],
+      ['06','Charitable Contributions: Recordkeeping','1P3d1ia16Fiypb6Zq83Z_RPN88stLbndJ'],
+      ['07','Charitable Contributions: Noncash Gifts','1wrjWoXmDdpHb1FMrnC8IdZDO3qhsVRLE'],
+      ['08','Clergy & Religious Workers','1Go86qwhFbJaKe24ulLZNzSVUIFzO8rpx'],
+      ['09','Consumer Credit','1sXWnc2JihC_NyYwkm4_5w45hHOwucd2T'],
+      ['10','Crowdfunding','1v2CCBWgcpzI66QaciN26QYJrARZWBK0j'],
+      ['11','Dependent Support Worksheet','1r1l_8AoJXCUHQ7FZdUifT2TuB2q5xTF5'],
+      ['12','Digital Assets','1G2VCnPS4lLL_sHCzn1qNJugUCojKwUs4'],
+      ['13','Divorce and Taxes','1pihCYSgkKL-S3f7k-bY1hvoWVbmQYr0E'],
+      ['14','Education Tax Benefits','1PPVv0oqb7kFRbLtzVk4ciZDGObRw4Cdr'],
+      ['15','Estimated Taxes','1Ieh-3WhGwgd-nTDIfx6zaMmkxJdVB2dh'],
+      ['16','Extending Your Individual Income Tax Return','1tCjeSHSn8r4ZTNCKHdandEp_Nfy1ErsU'],
+      ['17','Families with Children','1zwqijw8W1L-Um8ztP4DT0XYT4SRBaTTd'],
+      ['19','Filing Status','1CQbtEJbdMnQlDoc08T9wdrGGtMvEPy2F'],
+      ['20','Foreign Bank and Financial Accounts','1PSceH5RBDW0yzYbmGeOqIlHa1CGTg2Pl'],
+      ['21','Gambling Log','1MQNNm6tGkZ0p4Bm6p3VmF4scfJMvlKJx'],
+      ['23','High-Income Taxpayers','1JCxRvsYPPSv_GB8Iz0QXnL3sQCSYS3c5'],
+      ['24','Hobby vs. Business','1nETceCt12rkFx_sBZetFvBpccX9EAXRY'],
+      ['25','Household Employees','1KG3PaNckryLQ4MKwv8gQeF9H77p9t6Ok'],
+      ['26','Identity Theft & Your Taxes','1jxgUJ9UgZcGdhzKdSKF4zceOhlGO2ZTg'],
+      ['27','Itemized Deductions: Casualty & Theft Losses','19XWK_Dc4yALAK-Uy0kn7LE_6A-Q899WE'],
+      ['28','Itemized Deductions: Homeowners','1yvzHHItg7sBflomggJALolor4cHZ6sPp'],
+      ['29','Itemized Deductions: Interest Paid','18ZiKPF0r_ktiaO3KyscVYSsyZRXvXrbk'],
+      ['30','Itemized Deductions: Medical Expenses','11RohZimwutVA1cFqL2pVxPy1xnTZCJp1'],
+      ['32','Itemized Deductions: Taxes Paid','1dBRDcTMlQW8kZI11bE-q7yShhe6TxcBU'],
+      ['33','Kiddie Tax','11u_udpl91rCGOaEZLsu690o7sQOPz_iG'],
+      ['34','Like-Kind Exchanges','17he11HU3HQWBUT8m7oLgrL2SScBrbE1y'],
+      ['35','Moving Expenses','1Zj-h0IkEL8NMvpjVPEVSAZcp14PAyhrN'],
+      ['36','Multi-State Taxation','1Dkv9xq4DfIYyTXds8FkP4iVdpiO0E7-2'],
+      ['37','New Tax Law Provisions','1k0GoqJcil-osZDmzcKrjtsgQKGljhFj_'],
+      ['38','Sale of a Principal Residence','1lATjiAMq7orRDfO7Aas35z6OQSmNK32J'],
+      ['39','Standard vs. Itemized Deduction','1wXpnAKaTv32RfBnmtFH_th2rRL2vTU9x'],
+      ['40','Stock Options: Same-Day Sales','1dziMBQ4kAb47WRacNz20tj1zzI6nTUNK'],
+      ['41','Tax Facts and Figures','1ZXqxn-50-VqEP5gyvGpKJgkKsjIyidg0'],
+      ['42','Tax Scams: Protect Yourself','1oxZ5iZxa85M5_GNVfeHuZeAjT68Kg4b7'],
+      ['43','Taxable Social Security Benefits','1iOnVVyp_1IpUP6q98IJrTspqs8vgVnXU'],
+      ['44','Taxpayers Who Receive an IRS Notice','1dyE2MKVmSohynOyvjCRGRvIvYi_z2wXi'],
+      ['45','Tipped Employees','1gCFnWvV7rk2YYD2wKlt0kEKrzu7R0JSc'],
+      ['46','Trump Accounts','1c1Lm7d7MeFTveFfl-4svhmEZfmpjI2d4'],
+      ['47','How the IRS Contacts Taxpayers','1N92pz4iNoczwaCPnt5uZLj9JMWde6Cmk'],
+      ['49','Withholding: Filling Out Form W-4','15_1MDamIXyW8rLGwysFX5-3SEDy-5IhQ']
+    ];
+    var total = VIDEOS.length;
+    var thumbUrl = function(id, w){ return 'https://drive.google.com/thumbnail?id=' + id + '&sz=w' + w; };
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var countEl = document.getElementById('vgCount');
+    var titleEl = document.getElementById('vgTitle');
+    var slides = [], tabs = [], current = -1;
+
+    function el(tag, cls){ var n = document.createElement(tag); if (cls) n.className = cls; return n; }
+    function withFallback(img, box, title){
+      var fb = el('span', 'vg-fallback'); fb.textContent = title; box.appendChild(fb);
+      img.addEventListener('error', function(){ box.classList.add('is-missing'); });
+    }
+
+    VIDEOS.forEach(function(v, i){
+      var title = v[1];
+
+      var slide = el('div', 'vg-slide');
+      var img = el('img');
+      img.alt = 'Cover of the "' + title + '" video with Max Drew, CPA';
+      img.dataset.src = thumbUrl(v[2], 720);
+      slide.appendChild(img);
+      withFallback(img, slide, title);
+      var play = el('button', 'vg-play');
+      play.type = 'button';
+      play.setAttribute('aria-label', 'Play ' + title);
+      play.addEventListener('click', function(){ if (!swiped) startVideo(i); });
+      slide.appendChild(play);
+      slide.inert = true;
+      slide.setAttribute('aria-hidden', 'true');
+      stage.appendChild(slide);
+      slides.push(slide);
+
+      var tab = el('button', 'vg-thumb');
+      tab.type = 'button';
+      tab.id = 'vg-tab-' + i;
+      tab.setAttribute('role', 'tab');
+      tab.setAttribute('aria-selected', 'false');
+      tab.setAttribute('aria-controls', 'vgStage');
+      tab.setAttribute('aria-label', 'Video ' + (i + 1) + ' of ' + total + ': ' + title);
+      tab.tabIndex = -1;
+      tab.style.setProperty('--i', Math.min(i, 8));
+      var num = el('span', 'vg-num'); num.textContent = v[0];
+      var timg = el('img');
+      timg.alt = 'Thumbnail for ' + title;
+      timg.loading = 'lazy';
+      timg.src = thumbUrl(v[2], 240);
+      var cap = el('span', 'vg-cap'); cap.textContent = title; cap.setAttribute('aria-hidden', 'true');
+      tab.appendChild(num);
+      tab.appendChild(timg);
+      tab.appendChild(cap);
+      withFallback(timg, tab, title);
+      tab.addEventListener('click', function(){ select(i); });
+      strip.appendChild(tab);
+      tabs.push(tab);
+    });
+
+    // Load the large cover only for the active slide and its neighbours.
+    function loadCover(i){
+      var img = slides[(i + total) % total].querySelector('img');
+      if (img.dataset.src){ img.src = img.dataset.src; delete img.dataset.src; }
+    }
+
+    function startVideo(i){
+      var slide = slides[i];
+      if (slide.querySelector('iframe')) return;
+      var f = el('iframe');
+      f.src = 'https://drive.google.com/file/d/' + VIDEOS[i][2] + '/preview';
+      f.title = VIDEOS[i][1] + ' video player';
+      f.allow = 'autoplay; fullscreen';
+      f.allowFullscreen = true;
+      slide.appendChild(f);
+      f.focus();
+      stage.style.setProperty('--rx', '0deg');
+      stage.style.setProperty('--ry', '0deg');
+      updatePause();
+    }
+
+    // Restart a CSS animation by removing the class and forcing a reflow.
+    function replay(node, cls){
+      node.classList.remove(cls);
+      void node.offsetWidth;
+      node.classList.add(cls);
+    }
+
+    function select(i, focusTab){
+      i = (i + total) % total;
+      if (i === current) return;
+      if (current >= 0){
+        var prev = slides[current];
+        var frame = prev.querySelector('iframe');
+        if (frame) prev.removeChild(frame);   // stops playback
+        prev.classList.remove('is-active');
+        prev.inert = true;
+        prev.setAttribute('aria-hidden', 'true');
+        tabs[current].setAttribute('aria-selected', 'false');
+        tabs[current].tabIndex = -1;
+      }
+      current = i;
+      loadCover(i); loadCover(i - 1); loadCover(i + 1);
+      slides[i].classList.add('is-active');
+      slides[i].inert = false;
+      slides[i].removeAttribute('aria-hidden');
+      tabs[i].setAttribute('aria-selected', 'true');
+      tabs[i].tabIndex = 0;
+      stage.setAttribute('aria-labelledby', tabs[i].id);
+      ind.style.setProperty('--n', i);
+      countEl.textContent = 'Video ' + (i + 1) + ' of ' + total;
+      titleEl.textContent = VIDEOS[i][1];
+      replay(countEl, 'vg-swap');
+      replay(titleEl, 'vg-swap');
+      replay(bar, 'run');
+      updatePause();
+
+      // Keep the active thumb in view without scrolling the page itself.
+      var t = tabs[i], pad = 6;
+      var left = t.offsetLeft - pad, right = t.offsetLeft + t.offsetWidth + pad - strip.clientWidth;
+      var to = strip.scrollLeft < right ? right : strip.scrollLeft > left ? left : null;
+      if (to !== null) strip.scrollTo({left: to, behavior: reduced.matches ? 'auto' : 'smooth'});
+      if (focusTab) t.focus({preventScroll: true});
+    }
+
+    strip.addEventListener('keydown', function(e){
+      var next = {ArrowLeft: current - 1, ArrowRight: current + 1, Home: 0, End: total - 1}[e.key];
+      if (next === undefined) return;
+      e.preventDefault();
+      select(next, true);
+    });
+    stage.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowLeft'){ e.preventDefault(); select(current - 1); }
+      if (e.key === 'ArrowRight'){ e.preventDefault(); select(current + 1); }
+    });
+    document.getElementById('vgPrev').addEventListener('click', function(){ select(current - 1); });
+    document.getElementById('vgNext').addEventListener('click', function(){ select(current + 1); });
+
+    // Swipe on the cover. Once a video is playing the iframe owns the pointer.
+    var sx = 0, sy = 0, swiped = false;
+    stage.addEventListener('pointerdown', function(e){ sx = e.clientX; sy = e.clientY; swiped = false; });
+    stage.addEventListener('pointerup', function(e){
+      var dx = e.clientX - sx, dy = e.clientY - sy;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)){
+        swiped = true;
+        select(current + (dx < 0 ? 1 : -1));
+      }
+    });
+
+    // Tilt the cover toward the mouse.
+    stage.addEventListener('pointermove', function(e){
+      if (e.pointerType !== 'mouse' || reduced.matches || stage.querySelector('.is-active iframe')) return;
+      var r = stage.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      stage.style.setProperty('--rx', (y * -7).toFixed(2) + 'deg');
+      stage.style.setProperty('--ry', (x * 9).toFixed(2) + 'deg');
+    });
+    stage.addEventListener('pointerleave', function(){
+      stage.style.setProperty('--rx', '0deg');
+      stage.style.setProperty('--ry', '0deg');
+    });
+
+    // Auto-advance. The progress bar is the timer: its fill animation ends,
+    // the next video comes up. Pausing it (hover, keyboard focus, a recent
+    // click, off screen, a video playing) pauses the countdown with it.
+    // Reduced motion disables the animation, so nothing advances on its own.
+    var holdUntil = 0, hovering = false, onScreen = true, stopped = false;
+    var autoBtn = document.getElementById('vgAuto');
+    var prog = el('div', 'vg-progress'), bar = el('i');
+    prog.setAttribute('aria-hidden', 'true');
+    prog.appendChild(bar);
+    stage.appendChild(prog);
+
+    function updatePause(){
+      var playing = !!stage.querySelector('iframe');
+      gallery.classList.toggle('is-playing', playing);
+      gallery.classList.toggle('is-stopped', stopped);
+      gallery.classList.toggle('is-paused', playing || stopped || hovering || !onScreen || document.hidden ||
+        !!gallery.querySelector(':focus-visible') || performance.now() < holdUntil);
+    }
+    bar.addEventListener('animationend', function(){ select(current + 1); });
+
+    ['pointerdown', 'keydown'].forEach(function(ev){
+      gallery.addEventListener(ev, function(){
+        holdUntil = performance.now() + 2500;
+        updatePause();
+        setTimeout(updatePause, 2550);
+      });
+    });
+    gallery.addEventListener('mouseenter', function(){ hovering = true; updatePause(); });
+    gallery.addEventListener('mouseleave', function(){ hovering = false; updatePause(); });
+    gallery.addEventListener('focusin', updatePause);
+    gallery.addEventListener('focusout', function(){ setTimeout(updatePause, 0); });
+    document.addEventListener('visibilitychange', updatePause);
+    autoBtn.addEventListener('click', function(){
+      stopped = !stopped;
+      autoBtn.setAttribute('aria-pressed', stopped);
+      autoBtn.setAttribute('aria-label', stopped ? 'Resume auto-advance' : 'Pause auto-advance');
+      autoBtn.innerHTML = stopped ? '&#9654;' : '&#10074;&#10074;';
+      updatePause();
+    });
+
+    // Rise in the first time the gallery scrolls into view; only count down while it's visible.
+    if ('IntersectionObserver' in window){
+      gallery.classList.add('pre');
+      onScreen = false;
+      new IntersectionObserver(function(entries){
+        onScreen = entries[0].isIntersecting;
+        if (onScreen && gallery.classList.contains('pre')){
+          gallery.classList.remove('pre');
+          gallery.classList.add('is-in');
+        }
+        updatePause();
+      }, {rootMargin: '0px 0px -20% 0px'}).observe(gallery); // fires once the top reaches 80% of the screen, however tall the gallery is
+    }
+
+    select(0);
+  })();
 </script>
 
 <script src="https://embed.acuityscheduling.com/js/embed.js" type="text/javascript"></script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
-<script src="site.js"></script>
-<script src="search.js"></script>
 </body>
 </html>
