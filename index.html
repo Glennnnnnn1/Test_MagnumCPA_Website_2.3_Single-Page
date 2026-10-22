@@ -240,28 +240,49 @@
   .btn.outline{background:transparent;border:2px solid #fff;color:#fff;}
   .btn.green{background:var(--tertiary);color:var(--primary-900);}
 
-  /* client reviews slideshow */
-  .reviews{position:relative;max-width:820px;margin:0 auto;}
-  .review-viewport{overflow:hidden;border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow-lg);}
-  .review-track{display:flex;transition:transform .45s ease;}
-  .review{min-width:100%;box-sizing:border-box;background:#fff;color:var(--text);padding:36px 40px;}
-  .review .stars{color:var(--secondary);font-size:1.15rem;letter-spacing:2px;margin-bottom:10px;}
-  .review h4{color:var(--navy);font-size:1.18rem;margin-bottom:12px;}
-  .review p{color:#33475F;font-size:.97rem;line-height:1.7;}
-  .rev-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;
-    background:var(--primary);color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;z-index:2;box-shadow:0 6px 16px rgba(11,61,145,.3);transition:background .2s,transform .15s;}
-  .rev-nav:hover{background:var(--secondary);}
-  .rev-nav.prev{left:-16px;}.rev-nav.next{right:-16px;}
-  .rev-dots{display:flex;gap:8px;justify-content:center;margin-top:18px;}
-  .rev-dots button{width:11px;height:11px;border-radius:50%;border:0;background:#B9D9F2;cursor:pointer;padding:0;transition:background .2s,width .25s;}
-  .rev-dots button.active{background:var(--primary);width:26px;border-radius:6px;}
+  /* mission + client reviews: one soft panel with wave and dot-grid decorations */
+  .mc{position:relative;overflow:hidden;padding:76px 0 84px;background:linear-gradient(180deg,#F4FAFF 0%,#EAF5FF 100%);}
+  .mc-deco{position:absolute;pointer-events:none;}
+  .mc-deco.tl{top:0;left:0;width:340px;}
+  .mc-deco.bl{bottom:0;left:0;width:520px;}
+  .mc-deco.br{bottom:0;right:0;width:460px;}
+  .mc-dots{position:absolute;width:84px;height:52px;pointer-events:none;opacity:.55;
+    background:radial-gradient(circle,#9CCBF0 2.4px,transparent 2.8px) 0 0/21px 17px;}
+  .mc-dots.tr{top:38px;right:5%;}
+  .mc-dots.br2{bottom:56px;right:6.5%;}
+  .mc .container{position:relative;z-index:1;}
+  .mc-title{text-align:center;color:var(--primary);font-size:2.6rem;font-weight:800;letter-spacing:.5px;line-height:1.15;text-transform:uppercase;}
+  .mc-title span{color:#1C8BDF;}
+  .mc-title:after{content:"";display:block;width:72px;height:5px;border-radius:3px;margin:16px auto 0;background:#3CCFC0;}
+  .mc-mission{max-width:880px;margin:22px auto 64px;text-align:center;color:#1D3F75;font-size:1.14rem;line-height:1.75;}
+  .reviews{position:relative;max-width:1040px;margin:30px auto 0;}
+  .review-viewport{overflow:hidden;border-radius:18px;background:#fff;box-shadow:0 2px 4px rgba(11,61,145,.04),0 24px 60px rgba(11,61,145,.12);}
+  .review-track{display:flex;transition:transform .55s cubic-bezier(.32,.72,0,1);}
+  .review{min-width:100%;box-sizing:border-box;color:var(--text);padding:40px 46px 42px;}
+  .review .stars{color:#1C8BDF;font-size:1.55rem;letter-spacing:4px;line-height:1;margin-bottom:14px;}
+  .review h4{color:var(--primary);font-size:1.45rem;line-height:1.3;margin-bottom:12px;}
+  .review p{color:#2A4A7A;font-size:1.04rem;line-height:1.8;}
+  .rev-nav{position:absolute;top:calc(50% - 22px);transform:translateY(-50%);width:58px;height:58px;border-radius:50%;border:0;z-index:2;cursor:pointer;
+    display:grid;place-items:center;color:#fff;font-size:1.05rem;background:linear-gradient(135deg,#2B9BEA,#0B57C2);
+    box-shadow:0 10px 24px rgba(11,87,194,.35),0 0 0 6px rgba(255,255,255,.7);transition:transform .2s,box-shadow .2s;}
+  .rev-nav:hover{transform:translateY(-50%) scale(1.06);box-shadow:0 14px 30px rgba(11,87,194,.45),0 0 0 6px rgba(255,255,255,.85);}
+  .rev-nav:focus-visible{outline:3px solid var(--secondary);outline-offset:4px;}
+  .rev-nav.prev{left:-29px;}.rev-nav.next{right:-29px;}
+  .rev-dots{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:28px;}
+  .rev-dots button{width:10px;height:10px;border-radius:50%;border:0;background:#9CCBF0;cursor:pointer;padding:0;transition:background .2s,transform .2s;}
+  .rev-dots button:hover{background:#5DB0EE;}
+  .rev-dots button.active{background:#0B57C2;transform:scale(1.4);}
+  .rev-dots button:focus-visible{outline:2px solid var(--secondary);outline-offset:3px;}
   /* smaller screens: arrows sit beside the dots instead of over the review text */
   @media(max-width:880px){
     .rev-dots{min-height:44px;align-items:center;margin-top:14px;}
-    .rev-nav{top:auto;bottom:0;transform:none;}
+    .rev-nav{top:auto;bottom:0;transform:none;width:46px;height:46px;box-shadow:0 8px 18px rgba(11,87,194,.3);}
+    .rev-nav:hover{transform:scale(1.06);}
     .rev-nav.prev{left:0;}.rev-nav.next{right:0;}
+    .mc-title{font-size:1.9rem;}
+    .mc-deco.bl,.mc-deco.br{width:300px;}
   }
-  @media(max-width:560px){.review{padding:26px 22px;}}
+  @media(max-width:560px){.review{padding:28px 22px;}.review h4{font-size:1.15rem;}.review p{font-size:.97rem;}.mc{padding:54px 0 60px;}.mc-dots{display:none;}.mc-title{font-size:1.5rem;}}
 
   /* search */
   .search-li a{font-size:1.05rem;}
@@ -585,7 +606,6 @@
     .hero-cta .btn{width:100%;justify-content:center;}
     .brand img{height:46px;}
     .adv-grid{grid-template-columns:1fr;}
-    .review h4{font-size:1.05rem;}
   }
 
 </style>
@@ -719,42 +739,39 @@
     </div>
   </div>
 
-  <!-- Our Mission -->
-  <div class="section" style="padding-top:0;">
+  <!-- Our Mission + What Our Clients Say -->
+  <div class="mc">
+    <svg class="mc-deco tl" viewBox="0 0 340 150" aria-hidden="true"><path d="M0 0h250C190 40 120 70 0 118Z" fill="#CFE8FB" opacity=".55"/><path d="M0 104C95 72 160 38 215 0" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
+    <svg class="mc-deco bl" viewBox="0 0 520 230" aria-hidden="true"><path d="M0 70C120 70 230 150 330 230H0Z" fill="#CFE8FB" opacity=".6"/><path d="M0 20C150 30 260 120 360 230" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
+    <svg class="mc-deco br" viewBox="0 0 460 170" aria-hidden="true"><path d="M460 30C350 70 250 120 130 170H460Z" fill="#CFE8FB" opacity=".6"/><path d="M460 70C370 110 300 140 220 170" fill="none" stroke="#7FE7D6" stroke-width="2" opacity=".8"/></svg>
+    <span class="mc-dots tr" aria-hidden="true"></span><span class="mc-dots br2" aria-hidden="true"></span>
     <div class="container">
-      <div class="section-head"><h2>OUR MISSION</h2></div>
-      <p style="max-width:860px;margin:0 auto;text-align:center;color:var(--text);font-size:1.12rem;line-height:1.7;">
-        Our mission is to be the trusted financial partner for individuals and businesses, delivering accurate tax compliance, proactive financial planning, and strategic advisory services that secure and grow their wealth.
-      </p>
-    </div>
-  </div>
+      <h2 class="mc-title">Our <span>Mission</span></h2>
+      <p class="mc-mission">Our mission is to be the trusted financial partner for individuals and businesses, delivering accurate tax compliance, proactive financial planning, and strategic advisory services that secure and grow their wealth.</p>
 
-  <!-- Client Reviews -->
-  <div class="section" style="padding-top:0;">
-    <div class="container">
-      <div class="section-head"><h2>WHAT OUR CLIENTS SAY</h2></div>
+      <h2 class="mc-title">What Our <span>Clients Say</span></h2>
       <div class="reviews">
         <div class="review-viewport">
           <div class="review-track" id="reviewTrack">
             <div class="review">
-              <div class="stars">★★★★★</div>
+              <div class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</div>
               <h4>Phenomenal CPA Firm – Highly Professional and Efficient!</h4>
               <p>We've been working with Magnum CPA for our accounting, tax filings, and advisory needs, and I cannot recommend them enough. Sir Max and his entire team are incredibly sharp, thorough, and organized. What really sets them apart is their proactive communication and airtight processes. They keep us completely on track with our project milestones, and their billing is always transparent and clear. It's rare to find an accounting firm that balances top-tier financial expertise with such an approachable, structured administrative team. If you want peace of mind with your business finances, look no further than Magnum.</p>
             </div>
             <div class="review">
-              <div class="stars">★★★★★</div>
+              <div class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</div>
               <h4>Reliable, organized, and stress-free!</h4>
               <p>Switching our accounting and tax preparation over to Magnum CPA was the best decision we made for our business this year. The team is exceptionally responsive and keeps everything running like clockwork. They make complex tax and billing processes incredibly straightforward and stress-free. Huge shout-out to Max and the staff for always being on top of their game. 5 stars all the way!</p>
             </div>
             <div class="review">
-              <div class="stars">★★★★★</div>
+              <div class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</div>
               <h4>Excellent team and seamless processes!</h4>
               <p>I am always impressed by the level of professionalism at Magnum CPA. They handle our corporate filings and accounting with absolute precision. Their internal workflow is incredibly efficient—you never have to worry about missing a deadline or chasing down updates because they are already two steps ahead of you. The customer service is excellent, clear, and consistent. Highly recommend their services to any business looking for a reliable financial partner.</p>
             </div>
           </div>
         </div>
-        <button class="rev-nav prev" onclick="revMove(-1)" aria-label="Previous review">‹</button>
-        <button class="rev-nav next" onclick="revMove(1)" aria-label="Next review">›</button>
+        <button class="rev-nav prev" onclick="revMove(-1)" aria-label="Previous review"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+        <button class="rev-nav next" onclick="revMove(1)" aria-label="Next review"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
         <div class="rev-dots" id="revDots"></div>
       </div>
     </div>
