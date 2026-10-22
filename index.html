@@ -92,21 +92,6 @@
   .hero-info h1{font-family:Georgia,'Times New Roman',serif;font-size:3rem;line-height:1.08;
     font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:18px;text-shadow:0 2px 22px rgba(0,0,0,.45);}
   .hero-info h1 .accent{color:var(--tertiary);}
-  /* interactive plaque-of-achievement cards */
-  .plaque-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto;}
-  .plaque-card{position:relative;background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);
-    margin:0;cursor:pointer;transition:transform .25s,box-shadow .25s,border-color .25s;}
-  .plaque-card img{width:100%;height:260px;object-fit:cover;display:block;background:#fff;transition:transform .4s;}
-  .plaque-card img[src*="best-of"]{object-position:50% 18%;}
-  .plaque-card figcaption{position:relative;z-index:1;background:#fff;padding:14px;text-align:center;color:var(--primary);font-weight:600;font-size:.95rem;letter-spacing:.2px;}
-  /* glossy shine sweep on hover */
-  .plaque-card::after{content:"";position:absolute;top:0;left:-90%;width:60%;height:100%;pointer-events:none;z-index:3;
-    background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,.45) 50%,transparent 100%);
-    transform:skewX(-20deg);transition:left .65s ease;}
-  .plaque-card:hover::after{left:130%;}
-  .plaque-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:var(--secondary);}
-  .plaque-card:hover img{transform:scale(1.05);}
-  @media(max-width:760px){.plaque-grid{grid-template-columns:1fr;}}
   .hero-info p.lede{color:var(--on-dark);max-width:480px;font-size:1.05rem;margin-bottom:28px;text-shadow:0 1px 10px rgba(0,0,0,.35);}
   .hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;}
 
@@ -163,7 +148,6 @@
   .adv-card p{color:var(--muted);font-size:.95rem;}
 
   /* why choose us graphic + full-size viewer */
-  .why-section{scroll-margin-top:118px;}
   .why-figure{margin:0 auto;max-width:1140px;}
   .why-zoom{position:relative;display:block;width:100%;padding:0;font:inherit;cursor:zoom-in;background:#fff;
     border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-lg);transition:transform .35s,box-shadow .35s;}
@@ -419,6 +403,22 @@
   .fld label{display:block;font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px;}
   .fld input,.fld select,.fld textarea{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:8px;font-size:1rem;font-family:inherit;}
   .fld input:focus,.fld select:focus,.fld textarea:focus{outline:2px solid var(--secondary);border-color:transparent;box-shadow:0 0 0 5px rgba(59,167,242,.15);}
+  /* multi-select as tick-box chips */
+  .fld-group{border:0;padding:0;margin:0 0 16px;min-width:0;}
+  .fld-group legend{display:block;font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:8px;text-transform:uppercase;letter-spacing:.3px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{position:relative;cursor:pointer;}
+  .chip input{position:absolute;opacity:0;width:1px;height:1px;}
+  .chip span{display:inline-flex;align-items:center;gap:9px;padding:9px 15px;border:1px solid var(--border);border-radius:999px;
+    background:#fff;color:var(--text);font-size:.92rem;line-height:1.3;transition:border-color .15s,background .15s,color .15s;}
+  .chip span:before{content:"";flex:none;width:17px;height:17px;border-radius:5px;border:1.5px solid #9DB8D6;background:#fff center/12px no-repeat;
+    transition:background-color .15s,border-color .15s;}
+  .chip:hover span{border-color:var(--secondary);}
+  .chip input:checked + span{background:var(--bg);border-color:var(--primary);color:var(--primary);font-weight:600;}
+  .chip input:checked + span:before{border-color:var(--primary);background-color:var(--primary);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.3l2.3 2.3 4.7-5' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");}
+  .chip input:focus-visible + span{outline:2px solid var(--secondary);outline-offset:2px;}
+  .fld-group.invalid .chip span{border-color:#c0392b;}
   .fld-optional{text-transform:none;font-weight:400;color:var(--muted);letter-spacing:0;}
   .fld-error{display:block;color:#c0392b;font-size:.78rem;margin-top:5px;min-height:0;}
   .fld input.invalid,.fld select.invalid,.fld textarea.invalid{border-color:#c0392b;}
@@ -584,23 +584,21 @@
   </div>
 </section>
 
-<!-- ===== Achievements / Plaque (interactive) ===== -->
-<section id="achievements" class="section" style="padding:50px 0;">
+<!-- ===== Why Choose Us ===== -->
+<section id="why-choose-us" class="section why-section" style="padding:50px 0;">
   <div class="container">
-    <div id="plaqueArea" class="plaque-grid">
-      <figure class="plaque-card">
-        <img src="images/BBB.jpg" alt="A+ BBB Accredited">
-        <figcaption>A+ BBB Accredited</figcaption>
+      <figure class="why-figure">
+        <button type="button" class="why-zoom" id="whyOpen" aria-haspopup="dialog" aria-label="Why Choose Us — open the graphic full size">
+          <picture>
+            <source type="image/webp"
+                    srcset="images/why-choose-us-800.webp 800w, images/why-choose-us-1200.webp 1200w, images/why-choose-us-1672.webp 1672w"
+                    sizes="(max-width:1180px) calc(100vw - 32px), 1140px">
+            <img src="images/why-choose-us-1672.jpg" width="1672" height="941" decoding="async"
+                 alt="Why Choose Us? Trusted, experienced, committed to your success. BBB Accredited: our commitment to transparency and ethical service is verified through our Better Business Bureau accreditation. 2025 Best Business Rate in Sacramento: elite, specialized expertise and personalized rates, competitive in the Sacramento region. Trusted by Ramsey: recognized for the reliability and sound financial principles expected of Ramsey-trusted professionals. 2026 Ranked 1 by Momentum Score: excellence in customer satisfaction and review performance. Passion for Precision: professional design with strict procedural compliance, so your reports are as clear as they are accurate.">
+          </picture>
+          <span class="why-hint" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-plus"></i> View full size</span>
+        </button>
       </figure>
-      <figure class="plaque-card">
-        <img src="images/google-best-of-2026.jpg" alt="Best of 2026 — Business Rate">
-        <figcaption>Best of 2026 · Business Rate</figcaption>
-      </figure>
-      <figure class="plaque-card">
-        <img src="images/Ramsey.jpg" alt="Ramsey Trusted">
-        <figcaption>Ramsey Trusted · 10+ Years</figcaption>
-      </figure>
-    </div>
   </div>
 </section>
 
@@ -617,24 +615,6 @@
           <p>Welcome to <b>Magnum CPA PC!</b> Our story began 10 years ago right here in California, established by our founder, Max (Magnum) Drew. We were founded as a professional corporation with a clear vision: to be more than just accountants—we aim to be true financial partners.</p>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Why Choose Us -->
-  <div class="section why-section" id="why-choose-us" style="padding-top:0;">
-    <div class="container">
-      <figure class="why-figure">
-        <button type="button" class="why-zoom" id="whyOpen" aria-haspopup="dialog" aria-label="Why Choose Us — open the graphic full size">
-          <picture>
-            <source type="image/webp"
-                    srcset="images/why-choose-us-800.webp 800w, images/why-choose-us-1200.webp 1200w, images/why-choose-us-1672.webp 1672w"
-                    sizes="(max-width:1180px) calc(100vw - 32px), 1140px">
-            <img src="images/why-choose-us-1672.jpg" width="1672" height="941" loading="lazy" decoding="async"
-                 alt="Why Choose Us? Trusted, experienced, committed to your success. BBB Accredited: our commitment to transparency and ethical service is verified through our Better Business Bureau accreditation. 2025 Best Business Rate in Sacramento: elite, specialized expertise and personalized rates, competitive in the Sacramento region. Trusted by Ramsey: recognized for the reliability and sound financial principles expected of Ramsey-trusted professionals. 2026 Ranked 1 by Momentum Score: excellence in customer satisfaction and review performance. Passion for Precision: professional design with strict procedural compliance, so your reports are as clear as they are accurate.">
-          </picture>
-          <span class="why-hint" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-plus"></i> View full size</span>
-        </button>
-      </figure>
     </div>
   </div>
 
@@ -833,16 +813,18 @@
               <span class="fld-error" id="err-dcState"></span>
             </div>
           </div>
-          <div class="fld"><label>I Need Help With</label>
-            <select id="dcHelp">
-              <option>Tax Strategy &amp; Planning</option>
-              <option>Tax Preparation</option>
-              <option>Bookkeeping &amp; Payroll</option>
-              <option>Business Consulting</option>
-              <option>Wealth, Retirement &amp; Estate Planning</option>
-              <option>Something Else</option>
-            </select>
-          </div>
+          <fieldset class="fld-group" id="dcHelp" aria-describedby="err-dcHelp">
+            <legend>I Need Help With <span class="fld-optional">(choose all that apply)</span></legend>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="dcHelp" value="Tax Strategy &amp; Planning"><span>Tax Strategy &amp; Planning</span></label>
+              <label class="chip"><input type="checkbox" name="dcHelp" value="Tax Preparation"><span>Tax Preparation</span></label>
+              <label class="chip"><input type="checkbox" name="dcHelp" value="Bookkeeping &amp; Payroll"><span>Bookkeeping &amp; Payroll</span></label>
+              <label class="chip"><input type="checkbox" name="dcHelp" value="Business Consulting"><span>Business Consulting</span></label>
+              <label class="chip"><input type="checkbox" name="dcHelp" value="Wealth, Retirement &amp; Estate Planning"><span>Wealth, Retirement &amp; Estate Planning</span></label>
+              <label class="chip"><input type="checkbox" name="dcHelp" value="Something Else"><span>Something Else</span></label>
+            </div>
+            <span class="fld-error" id="err-dcHelp"></span>
+          </fieldset>
           <div class="fld"><label>Annual Revenue (Approximate)</label>
             <select id="dcRevenue">
               <option>Under $250K</option>
@@ -1183,7 +1165,7 @@
       phone: leadStripTags(document.getElementById('dcPhone').value.trim()),
       businessName: leadStripTags(document.getElementById('dcBusiness').value.trim()),
       state: document.getElementById('dcState').value,
-      serviceNeeded: document.getElementById('dcHelp').value,
+      serviceNeeded: [].map.call(document.querySelectorAll('#dcHelp input:checked'), function(i){ return i.value; }).join('; '),
       revenue: document.getElementById('dcRevenue').value,
       preferredContact: document.getElementById('dcContactMethod').value,
       bestTimeToCall: document.getElementById('dcBestTime').value,
@@ -1200,6 +1182,7 @@
     if (!lead.phone){ showLeadFieldError('dcPhone', 'Phone number is required.'); ok = false; }
     else if (!LEAD_PHONE_RE.test(lead.phone)){ showLeadFieldError('dcPhone', 'Enter a valid US phone number.'); ok = false; }
     if (!lead.state){ showLeadFieldError('dcState', 'Please select your state.'); ok = false; }
+    if (!lead.serviceNeeded){ showLeadFieldError('dcHelp', 'Choose at least one.'); ok = false; }
     if (lead.message.length > 2000){ showLeadFieldError('dcMessage', 'Message is too long.'); ok = false; }
     return ok;
   }
@@ -1208,6 +1191,14 @@
     var el = document.querySelector('#leadForm [name="cf-turnstile-response"]');
     return el ? el.value : '';
   }
+
+  // clear the "choose at least one" error as soon as something is ticked
+  document.querySelectorAll('#dcHelp input').forEach(function(cb){
+    cb.addEventListener('change', function(){
+      var g = document.getElementById('dcHelp');
+      if (g.querySelector('input:checked')){ g.classList.remove('invalid'); document.getElementById('err-dcHelp').textContent = ''; }
+    });
+  });
 
   function submitLeadForm(e){
     e.preventDefault();
@@ -1243,7 +1234,7 @@
         return;
       }
       if (result.data && result.data.error === 'validation' && result.data.fields){
-        var fieldMap = { firstName:'dcFirst', lastName:'dcLast', email:'dcEmail', phone:'dcPhone', state:'dcState', message:'dcMessage' };
+        var fieldMap = { firstName:'dcFirst', lastName:'dcLast', email:'dcEmail', phone:'dcPhone', state:'dcState', serviceNeeded:'dcHelp', message:'dcMessage' };
         Object.keys(result.data.fields).forEach(function(f){
           if (fieldMap[f]) showLeadFieldError(fieldMap[f], result.data.fields[f]);
         });
