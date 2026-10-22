@@ -273,6 +273,63 @@
   .rev-dots button:hover{background:#5DB0EE;}
   .rev-dots button.active{background:#0B57C2;transform:scale(1.4);}
   .rev-dots button:focus-visible{outline:2px solid var(--secondary);outline-offset:3px;}
+  .mc{border-top:1px solid rgba(207,229,246,.7);}
+  .mc-dots.bl2{bottom:48px;left:2.5%;}
+  .mc-title.plain{text-transform:none;font-size:2.9rem;letter-spacing:-.3px;}
+  .mc-title.plain:after,.mc-title.grad-bar:after{background:linear-gradient(90deg,#1C8BDF,#3CCFC0);width:84px;}
+
+  /* in-section header (newsletters, tax videos) */
+  .nl-head{margin-bottom:42px;max-width:980px;}
+  .nl-kicker{display:flex;align-items:center;gap:14px;color:#1C8BDF;font-weight:800;font-size:.95rem;letter-spacing:1.6px;text-transform:uppercase;}
+  .nl-kicker .ic{font-size:1.75rem;color:var(--primary);}
+  .nl-kicker .sep{width:1px;height:26px;background:#B9D9F2;}
+  .nl-kicker.line:after{content:"";width:44px;height:2px;background:linear-gradient(90deg,#3BA7F2,#7FE7D6);}
+  .nl-head h2{color:var(--primary);font-size:2.7rem;font-weight:800;line-height:1.15;letter-spacing:-.3px;margin:12px 0 10px;}
+  .grad{background:linear-gradient(90deg,#1C8BDF,#139E92);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .nl-head p{color:var(--muted);font-size:1.14rem;}
+  .nl-bar{display:block;width:76px;height:4px;border-radius:2px;margin-top:16px;background:linear-gradient(90deg,#1C8BDF,#3CCFC0);}
+  .soft-card{background:#fff;border:1px solid rgba(207,229,246,.75);border-radius:18px;
+    box-shadow:0 2px 4px rgba(11,61,145,.04),0 18px 44px rgba(11,61,145,.10);transition:transform .25s,box-shadow .25s;}
+  .soft-card:hover{transform:translateY(-4px);box-shadow:0 4px 8px rgba(11,61,145,.05),0 26px 56px rgba(11,61,145,.15);}
+  /* client newsletter cards */
+  .news-card.soft-card{position:relative;overflow:hidden;padding:28px 30px 30px;border-top:1px solid rgba(207,229,246,.75);}
+  .news-card.soft-card:before{content:"";position:absolute;top:-70px;right:-70px;width:190px;height:190px;border-radius:50%;
+    background:radial-gradient(circle,#DCF3FA 0,rgba(220,243,250,0) 70%);pointer-events:none;}
+  .news-top{position:relative;display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;}
+  .news-card.soft-card .date{background:#E3F0FD;color:var(--primary);border-radius:12px;padding:10px 14px;min-width:66px;margin:0;}
+  .news-card.soft-card .date b{font-size:1.65rem;font-weight:800;line-height:1.1;}
+  .news-card.soft-card .date span{display:block;font-size:.78rem;font-weight:700;letter-spacing:1px;}
+  .news-art{position:relative;font-size:2.7rem;line-height:1;color:#1C8BDF;margin:4px 10px 0 0;}
+  .news-art .bdg{position:absolute;right:-12px;bottom:-8px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+    background:#3CCFC0;color:#fff;font-size:.8rem;border:2px solid #fff;}
+  .news-card.soft-card h3{color:var(--primary);font-size:1.3rem;font-weight:800;line-height:1.25;margin-bottom:10px;}
+  .news-card.soft-card p{color:var(--muted);font-size:.98rem;line-height:1.6;}
+  .news-card.soft-card .nl-bar{width:56px;margin-top:20px;}
+  .btn-pill{display:inline-flex;align-items:center;gap:16px;padding:16px 32px;border-radius:999px;color:#fff;font-weight:700;font-size:.95rem;
+    background:linear-gradient(90deg,var(--primary),#1C8BDF);box-shadow:0 12px 28px rgba(11,61,145,.28);transition:transform .2s,box-shadow .2s;}
+  .btn-pill .sep{width:1px;height:22px;background:rgba(255,255,255,.4);}
+  .btn-pill i{font-size:1.1rem;}
+  .btn-pill .fa-arrow-right{font-size:.85rem;transition:transform .2s;}
+  .btn-pill:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(11,61,145,.36);}
+  .btn-pill:hover .fa-arrow-right{transform:translateX(4px);}
+  .btn-pill:focus-visible{outline:3px solid var(--secondary);outline-offset:4px;}
+  /* tax planning cards */
+  .art-card.soft-card{display:flex;align-items:center;gap:26px;padding:30px 32px;border-top:1px solid rgba(207,229,246,.75);}
+  .art-ic{flex:none;width:96px;height:96px;border-radius:50%;display:grid;place-items:center;font-size:2.2rem;color:#1C8BDF;
+    background:radial-gradient(circle at 35% 30%,#F0FBFD,#D3EEF7);}
+  .art-body{border-left:2px solid #3CCFC0;padding-left:24px;}
+  .art-card.soft-card h3{color:var(--primary);font-size:1.3rem;font-weight:800;line-height:1.25;margin-bottom:8px;}
+  .art-card.soft-card p{color:var(--muted);font-size:.98rem;line-height:1.6;}
+  /* why get tax help video frame */
+  .why-video.framed{max-width:860px;padding:8px;background:#fff;border-radius:18px;border-top:5px solid #2B9BEA;
+    box-shadow:0 2px 4px rgba(11,61,145,.05),0 26px 60px rgba(11,61,145,.16);}
+  .why-video.framed iframe{border-radius:12px;}
+  @media(max-width:600px){
+    .nl-head h2{font-size:1.75rem;}.nl-kicker{font-size:.8rem;}.mc-title.plain{font-size:1.9rem;}
+    .art-card.soft-card{flex-direction:column;align-items:flex-start;gap:18px;padding:24px;}
+    .art-ic{width:68px;height:68px;font-size:1.6rem;}
+    .btn-pill{padding:14px 22px;gap:12px;}
+  }
   /* smaller screens: arrows sit beside the dots instead of over the review text */
   @media(max-width:880px){
     .rev-dots{min-height:44px;align-items:center;margin-top:14px;}
@@ -461,6 +518,40 @@
     .vg-info h2{font-size:1.6rem;}
     .vg-num{display:none;}
   }
+  .vg{--cols:6;--gap:14px;--pad:8px;max-width:1180px;}
+  .vg-top{grid-template-columns:minmax(0,340px) minmax(0,560px);justify-content:center;gap:64px;}
+  .vg-count{display:flex;align-items:center;gap:14px;color:#1C8BDF;font-size:.98rem;font-weight:800;letter-spacing:2px;}
+  .vg-count:after{content:"";width:56px;height:2px;background:linear-gradient(90deg,#3BA7F2,#7FE7D6);}
+  .vg-info h2{font-family:inherit;font-weight:800;font-size:2.6rem;line-height:1.15;letter-spacing:-.3px;margin:14px 0 18px;}
+  .vg-info p{font-size:1.12rem;line-height:1.7;}
+  .vg-nav{gap:12px;margin-top:28px;}
+  .vg-btn{padding:11px 22px;font-size:.96rem;font-weight:700;border:2px solid #1C6FD1;color:#0B57C2;gap:10px;}
+  .vg-btn:hover{background:#EEF7FF;border-color:#0B57C2;}
+  .vg-btn.solid{padding:12px 24px;background:linear-gradient(90deg,var(--primary),#1560C9);border-color:transparent;
+    box-shadow:0 12px 26px rgba(11,61,145,.28);}
+  .vg-btn.solid:hover{background:linear-gradient(90deg,var(--primary-700),#1257B8);}
+  .vg-stripwrap{position:relative;margin-top:44px;}
+  .vg-strip{margin-top:0;padding-bottom:14px;}
+  .vg-thumb{aspect-ratio:auto;display:flex;flex-direction:column;background:#fff;border-radius:14px;opacity:.72;
+    box-shadow:0 2px 4px rgba(11,61,145,.05),0 12px 26px rgba(11,61,145,.10);}
+  .vg-thumb:focus-visible{outline:3px solid var(--secondary);outline-offset:-3px;}
+  .vg-tthumb{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--navy);}
+  .vg-tthumb img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 14%;}
+  .vg-tthumb .vg-fallback{font-size:.78rem;padding:8px;}
+  .vg-tcap{display:block;padding:10px 12px 12px;text-align:left;color:var(--primary);font-size:.8rem;font-weight:600;line-height:1.3;}
+  .vg-tcap small{display:block;color:#1C8BDF;font-size:.72rem;font-weight:600;margin-bottom:2px;}
+  .vg-tcap .t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .vg-ind{bottom:calc(var(--pad) + 14px);}
+  .vg-ind:before{aspect-ratio:auto;height:100%;border-radius:14px;outline-offset:2px;}
+  .vg-sarrow{position:absolute;top:calc(50% - 7px);transform:translateY(-50%);z-index:3;width:50px;height:50px;border-radius:50%;cursor:pointer;
+    display:grid;place-items:center;background:#fff;color:#0B57C2;font-size:1rem;border:1px solid var(--border);
+    box-shadow:0 8px 20px rgba(11,61,145,.16);transition:transform .2s,background .2s,color .2s;}
+  .vg-sarrow:hover{background:#0B57C2;color:#fff;}
+  .vg-sarrow:focus-visible{outline:3px solid var(--secondary);outline-offset:3px;}
+  .vg-sarrow.prev{left:-26px;}.vg-sarrow.next{right:-26px;}
+  @media(max-width:1240px){.vg-sarrow.prev{left:-6px;}.vg-sarrow.next{right:-6px;}}
+  @media(max-width:980px){.vg{--cols:4;}.vg-top{gap:36px;}}
+  @media(max-width:760px){.vg{--cols:3;--gap:10px;}.vg-top{grid-template-columns:1fr;gap:28px;}.vg-info h2{font-size:1.8rem;}.vg-count{justify-content:center;}.vg-sarrow{display:none;}}
 
   /* ----- Resources: financial calculators ----- */
   .calc-cat{margin-bottom:34px;}
@@ -551,6 +642,31 @@
   .cx-map iframe{width:100%;height:200px;border:0;border-radius:12px;box-shadow:0 10px 24px rgba(11,61,145,.12);}
   @media(max-width:860px){.cx-grid{grid-template-columns:1fr;}.cx-cards{grid-template-columns:1fr;}}
   @media(max-width:600px){.contactx{padding:32px 20px;}.contactx h1{font-size:2rem;}}
+  .contactx{border-radius:22px;border-color:rgba(207,229,246,.75);box-shadow:0 2px 4px rgba(11,61,145,.04),0 26px 64px rgba(11,61,145,.12);}
+  .contactx:before{top:26px;left:50%;right:auto;width:120px;height:3px;border-radius:2px;transform:translateX(-50%);
+    background:linear-gradient(90deg,#1C6FD1 0 55%,#BDE6F2 55%);}
+  .contactx h1{font-size:3rem;letter-spacing:.5px;}
+  .contactx h1 span{color:#1C8BDF;}
+  .contactx .sub{color:#4A607E;font-size:1.08rem;max-width:700px;}
+  .cx-photo{border-radius:16px;}
+  .cx-badge{bottom:26px;padding:12px 28px 12px 30px;border-radius:0 16px 16px 0;background:linear-gradient(90deg,var(--primary),#1560C9);}
+  .cx-badge:before{content:"";position:absolute;left:14px;top:12px;bottom:12px;width:3px;border-radius:2px;background:var(--tertiary);}
+  .cx-badge b{font-size:1.15rem;}
+  .cx-badge span{font-size:.86rem;}
+  .cx-name b{font-size:2.4rem;font-weight:800;line-height:1.1;}
+  .cx-name span{font-size:1.15rem;margin:4px 0 0;}
+  .cx-name:after{content:"";display:block;width:50px;height:3px;border-radius:2px;background:#3CCFC0;margin:12px 0 24px;}
+  .cx-card{border-radius:16px;padding:22px 24px;border-color:rgba(207,229,246,.8);box-shadow:0 2px 4px rgba(11,61,145,.04),0 14px 34px rgba(11,61,145,.09);}
+  .cx-card .h{gap:14px;font-size:.9rem;letter-spacing:1.2px;white-space:nowrap;color:#1C8BDF;margin-bottom:20px;}
+  .cx-card .h .dot{width:56px;height:56px;font-size:1.25rem;background:#DDF1FD;color:var(--primary);}
+  .cx-card .h .lbl:after{content:"";display:block;width:34px;height:3px;border-radius:2px;background:#3CCFC0;margin-top:8px;}
+  .cx-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;}
+  .cx-row:last-child{margin-bottom:0;}
+  .cx-row > i{flex:none;width:22px;margin-top:3px;color:#1C8BDF;font-size:1.15rem;text-align:center;}
+  .cx-row p{margin:0;font-size:.96rem;color:#1D3F75;}
+  .cx-map{padding:4px;background:#fff;border-radius:16px;border:1px solid rgba(207,229,246,.8);box-shadow:0 14px 34px rgba(11,61,145,.10);}
+  .cx-map iframe{height:210px;box-shadow:none;}
+  @media(max-width:600px){.contactx h1{font-size:2.1rem;}.cx-name b{font-size:1.9rem;}}
 
   /* ---------- Responsive ---------- */
   @media (max-width:980px){
@@ -779,12 +895,13 @@
 </section>
 
 <!-- ===== Why Get Tax Help ===== -->
-<section class="home-section" style="padding:64px 0;">
+<section class="mc" style="padding:72px 0 80px;">
+    <svg class="mc-deco tl" viewBox="0 0 340 150" aria-hidden="true"><path d="M0 0h250C190 40 120 70 0 118Z" fill="#CFE8FB" opacity=".55"/><path d="M0 104C95 72 160 38 215 0" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
+    <svg class="mc-deco br" viewBox="0 0 460 170" aria-hidden="true"><path d="M460 30C350 70 250 120 130 170H460Z" fill="#CFE8FB" opacity=".6"/><path d="M460 70C370 110 300 140 220 170" fill="none" stroke="#7FE7D6" stroke-width="2" opacity=".8"/></svg>
+    <span class="mc-dots tr" aria-hidden="true"></span><span class="mc-dots bl2" aria-hidden="true"></span>
   <div class="container">
-    <div class="section-head">
-      <h2>Why Get Tax Help?</h2>
-    </div>
-    <div class="why-video">
+    <h2 class="mc-title plain">Why Get Tax Help?</h2>
+    <div class="why-video framed" style="margin-top:40px;">
       <iframe src="https://www.youtube.com/embed/8ZnrVnLpm-o?rel=0"
               title="Magnum CPA PC — Why Get Tax Help?" loading="lazy"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -888,58 +1005,63 @@
 </section>
 
 <!-- ===== Resources: Client Newsletter ===== -->
-<section id="client-newsletter">
-  <div class="sec-head">
-    <div class="container">
-      <div class="sec-kicker">Client Newsletter</div>
-      <h2>Monthly Updates, Firm News &amp; Money Tips</h2>
+<section id="client-newsletter" class="mc">
+    <svg class="mc-deco tl" viewBox="0 0 340 150" aria-hidden="true"><path d="M0 0h250C190 40 120 70 0 118Z" fill="#CFE8FB" opacity=".55"/><path d="M0 104C95 72 160 38 215 0" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
+    <svg class="mc-deco br" viewBox="0 0 460 170" aria-hidden="true"><path d="M460 30C350 70 250 120 130 170H460Z" fill="#CFE8FB" opacity=".6"/><path d="M460 70C370 110 300 140 220 170" fill="none" stroke="#7FE7D6" stroke-width="2" opacity=".8"/></svg>
+    <span class="mc-dots tr" aria-hidden="true"></span><span class="mc-dots bl2" aria-hidden="true"></span>
+  <div class="container">
+    <div class="nl-head">
+      <div class="nl-kicker"><i class="fa-solid fa-newspaper ic" aria-hidden="true"></i><span class="sep" aria-hidden="true"></span>Client Newsletter</div>
+      <h2>Monthly Updates, <span class="grad">Firm News &amp; Money Tips</span></h2>
       <p>Practical insights to keep your finances on track all year.</p>
+      <span class="nl-bar" aria-hidden="true"></span>
     </div>
-  </div>
-  <div class="section">
-    <div class="container">
-      <div class="news-grid">
-        <div class="news-card"><div class="date"><b>15</b><span>JUN</span></div><h3>Mid-Year Money Check-In</h3><p>Five steps to keep your finances on track for the rest of the year.</p></div>
-        <div class="news-card"><div class="date"><b>02</b><span>MAY</span></div><h3>Smart Ways to Use Your Refund</h3><p>Turn this year's refund into next year's progress.</p></div>
-        <div class="news-card"><div class="date"><b>10</b><span>APR</span></div><h3>Last-Minute Filing Tips</h3><p>Avoid the most common mistakes before the deadline.</p></div>
-      </div>
-      <div style="text-align:center;margin-top:40px;"><a href="#contact" class="btn">Subscribe to the Newsletter</a></div>
+    <div class="news-grid">
+      <div class="news-card soft-card"><div class="news-top"><div class="date"><b>15</b><span>JUN</span></div>
+        <span class="news-art" aria-hidden="true"><i class="fa-regular fa-calendar-days"></i><span class="bdg"><i class="fa-solid fa-dollar-sign"></i></span></span></div>
+        <h3>Mid-Year Money Check-In</h3><p>Five steps to keep your finances on track for the rest of the year.</p><span class="nl-bar" aria-hidden="true"></span></div>
+      <div class="news-card soft-card"><div class="news-top"><div class="date"><b>02</b><span>MAY</span></div>
+        <span class="news-art" aria-hidden="true"><i class="fa-solid fa-file-invoice"></i><span class="bdg"><i class="fa-solid fa-dollar-sign"></i></span></span></div>
+        <h3>Smart Ways to Use Your Refund</h3><p>Turn this year's refund into next year's progress.</p><span class="nl-bar" aria-hidden="true"></span></div>
+      <div class="news-card soft-card"><div class="news-top"><div class="date"><b>10</b><span>APR</span></div>
+        <span class="news-art" aria-hidden="true"><i class="fa-regular fa-file-lines"></i><span class="bdg"><i class="fa-regular fa-clock"></i></span></span></div>
+        <h3>Last-Minute Filing Tips</h3><p>Avoid the most common mistakes before the deadline.</p><span class="nl-bar" aria-hidden="true"></span></div>
     </div>
+    <div style="text-align:center;margin-top:44px;"><a href="#contact" class="btn-pill"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sep" aria-hidden="true"></span>Subscribe to the Newsletter <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
   </div>
 </section>
 
 <!-- ===== Resources: Tax Planning Newsletter ===== -->
-<section id="tax-planning-newsletter">
-  <div class="sec-head">
-    <div class="container">
-      <div class="sec-kicker">Tax Planning Newsletter</div>
-      <h2>Strategies for Proactive Tax Savings</h2>
+<section id="tax-planning-newsletter" class="mc">
+    <svg class="mc-deco tl" viewBox="0 0 340 150" aria-hidden="true"><path d="M0 0h250C190 40 120 70 0 118Z" fill="#CFE8FB" opacity=".55"/><path d="M0 104C95 72 160 38 215 0" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
+    <svg class="mc-deco br" viewBox="0 0 460 170" aria-hidden="true"><path d="M460 30C350 70 250 120 130 170H460Z" fill="#CFE8FB" opacity=".6"/><path d="M460 70C370 110 300 140 220 170" fill="none" stroke="#7FE7D6" stroke-width="2" opacity=".8"/></svg>
+    <span class="mc-dots tr" aria-hidden="true"></span><span class="mc-dots bl2" aria-hidden="true"></span>
+  <div class="container">
+    <div class="nl-head">
+      <div class="nl-kicker"><i class="fa-solid fa-envelope-open-text ic" aria-hidden="true"></i><span class="sep" aria-hidden="true"></span>Tax Planning Newsletter</div>
+      <h2>Strategies for <span class="grad">Proactive Tax Savings</span></h2>
       <p>Strategy-focused articles for proactive tax savings all year long.</p>
     </div>
-  </div>
-  <div class="section">
-    <div class="container">
-      <div class="art-grid">
-        <div class="art-card"><h3>Maximizing Retirement Contributions</h3><p>How to use 401(k)s, IRAs, and HSAs to lower this year's tax bill while building wealth.</p></div>
-        <div class="art-card"><h3>Small Business Entity Choices</h3><p>LLC, S-Corp, or sole proprietor? Understand the tax impact of each structure.</p></div>
-        <div class="art-card"><h3>Charitable Giving Strategies</h3><p>Bunching, donor-advised funds, and other ways to give smarter.</p></div>
-        <div class="art-card"><h3>Capital Gains Planning</h3><p>Timing sales and harvesting losses to keep more of your investment returns.</p></div>
-      </div>
+    <div class="art-grid">
+      <div class="art-card soft-card"><span class="art-ic" aria-hidden="true"><i class="fa-solid fa-seedling"></i></span><div class="art-body"><h3>Maximizing Retirement Contributions</h3><p>How to use 401(k)s, IRAs, and HSAs to lower this year's tax bill while building wealth.</p></div></div>
+      <div class="art-card soft-card"><span class="art-ic" aria-hidden="true"><i class="fa-solid fa-store"></i></span><div class="art-body"><h3>Small Business Entity Choices</h3><p>LLC, S-Corp, or sole proprietor? Understand the tax impact of each structure.</p></div></div>
+      <div class="art-card soft-card"><span class="art-ic" aria-hidden="true"><i class="fa-solid fa-hand-holding-heart"></i></span><div class="art-body"><h3>Charitable Giving Strategies</h3><p>Bunching, donor-advised funds, and other ways to give smarter.</p></div></div>
+      <div class="art-card soft-card"><span class="art-ic" aria-hidden="true"><i class="fa-solid fa-chart-line"></i></span><div class="art-body"><h3>Capital Gains Planning</h3><p>Timing sales and harvesting losses to keep more of your investment returns.</p></div></div>
     </div>
   </div>
 </section>
 
 <!-- ===== Resources: Tax Videos ===== -->
-<section id="tax-videos">
-  <div class="sec-head">
-    <div class="container">
-      <div class="sec-kicker">Tax Videos</div>
-      <h2>Plain-English Answers to Your Tax Questions</h2>
-      <p>Short videos on the tax topics that matter most.</p>
-    </div>
-  </div>
-  <div class="section">
-    <div class="container">
+<section id="tax-videos" class="mc">
+    <svg class="mc-deco tl" viewBox="0 0 340 150" aria-hidden="true"><path d="M0 0h250C190 40 120 70 0 118Z" fill="#CFE8FB" opacity=".55"/><path d="M0 104C95 72 160 38 215 0" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
+    <svg class="mc-deco br" viewBox="0 0 460 170" aria-hidden="true"><path d="M460 30C350 70 250 120 130 170H460Z" fill="#CFE8FB" opacity=".6"/><path d="M460 70C370 110 300 140 220 170" fill="none" stroke="#7FE7D6" stroke-width="2" opacity=".8"/></svg>
+    <span class="mc-dots tr" aria-hidden="true"></span><span class="mc-dots bl2" aria-hidden="true"></span>
+  <div class="container">
+      <div class="nl-head">
+        <div class="nl-kicker line"><i class="fa-solid fa-circle-play ic" aria-hidden="true"></i>Tax Videos</div>
+        <h2>Plain-English Answers to<br><span class="grad">Your Tax Questions</span></h2>
+        <p>Short videos on the tax topics that matter most.</p>
+      </div>
       <div class="vg" id="videoGallery">
         <div class="vg-top">
           <div class="vg-stage" id="vgStage" role="tabpanel"></div>
@@ -948,18 +1070,21 @@
             <h2 id="vgTitle"></h2>
             <p>Plain-English answers from Max Drew, CPA. Press play, or browse every topic below.</p>
             <div class="vg-nav">
-              <button type="button" class="vg-btn" id="vgPrev" aria-label="Previous video">&larr; Prev</button>
-              <button type="button" class="vg-btn" id="vgNext" aria-label="Next video">Next &rarr;</button>
+              <button type="button" class="vg-btn" id="vgPrev" aria-label="Previous video"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Prev</button>
+              <button type="button" class="vg-btn" id="vgNext" aria-label="Next video">Next <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
               <button type="button" class="vg-btn vg-auto" id="vgAuto" aria-pressed="false" aria-label="Pause auto-advance">&#10074;&#10074;</button>
-              <a class="vg-btn solid" href="#request">Ask Us About This</a>
+              <a class="vg-btn solid" href="#request"><i class="fa-solid fa-comment-dots" aria-hidden="true"></i> Ask Us About This</a>
             </div>
           </div>
         </div>
-        <div class="vg-strip" id="vgStrip" role="tablist" aria-label="Tax videos">
-          <div class="vg-ind" id="vgInd" aria-hidden="true"></div>
+        <div class="vg-stripwrap">
+          <button type="button" class="vg-sarrow prev" id="vgSPrev" aria-label="Previous video"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+          <div class="vg-strip" id="vgStrip" role="tablist" aria-label="Tax videos">
+            <div class="vg-ind" id="vgInd" aria-hidden="true"></div>
+          </div>
+          <button type="button" class="vg-sarrow next" id="vgSNext" aria-label="Next video"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
         </div>
       </div>
-    </div>
   </div>
 </section>
 
@@ -1092,11 +1217,13 @@
 </section>
 
 <!-- ===== Contact Us ===== -->
-<section id="contact">
-  <div class="section">
+<section id="contact" class="mc" style="padding:72px 0 84px;">
+    <svg class="mc-deco tl" viewBox="0 0 340 150" aria-hidden="true"><path d="M0 0h250C190 40 120 70 0 118Z" fill="#CFE8FB" opacity=".55"/><path d="M0 104C95 72 160 38 215 0" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
+    <svg class="mc-deco br" viewBox="0 0 460 170" aria-hidden="true"><path d="M460 30C350 70 250 120 130 170H460Z" fill="#CFE8FB" opacity=".6"/><path d="M460 70C370 110 300 140 220 170" fill="none" stroke="#7FE7D6" stroke-width="2" opacity=".8"/></svg>
+    <span class="mc-dots tr" aria-hidden="true"></span><span class="mc-dots bl2" aria-hidden="true"></span>
     <div class="container">
       <div class="contactx">
-        <h1>CONTACT US</h1>
+        <h1>CONTACT <span>US</span></h1>
         <p class="sub">Have questions about your accounting needs? We are here to help. Reach out to our dedicated team today.</p>
 
         <div class="cx-grid">
@@ -1110,13 +1237,13 @@
 
             <div class="cx-cards">
               <div class="cx-card">
-                <div class="h"><span class="dot"><i class="fa-solid fa-phone"></i></span> Get In Touch</div>
-                <p><b>Phone:</b> 916-616-1789</p>
-                <p><b>Email:</b> ask@magnumcpa.com</p>
+                <div class="h"><span class="dot"><i class="fa-solid fa-phone" aria-hidden="true"></i></span><span class="lbl">Get In Touch</span></div>
+                <div class="cx-row"><i class="fa-solid fa-phone" aria-hidden="true"></i><p><b>Phone:</b> 916-616-1789</p></div>
+                <div class="cx-row"><i class="fa-solid fa-envelope" aria-hidden="true"></i><p><b>Email:</b> ask@magnumcpa.com</p></div>
               </div>
               <div class="cx-card">
-                <div class="h"><span class="dot"><i class="fa-solid fa-location-dot"></i></span> Find Us</div>
-                <p><b>Address:</b> 907 Green Moss Drive, Sacramento, CA 95831</p>
+                <div class="h"><span class="dot"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span><span class="lbl">Find Us</span></div>
+                <div class="cx-row"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><p><b>Address:</b> 907 Green Moss Drive, Sacramento, CA 95831</p></div>
               </div>
             </div>
 
@@ -1129,7 +1256,6 @@
 
       </div>
     </div>
-  </div>
 </section>
 
 <!-- ===== Footer ===== -->
@@ -1667,16 +1793,19 @@
       tab.setAttribute('aria-label', 'Video ' + (i + 1) + ' of ' + total + ': ' + title);
       tab.tabIndex = -1;
       tab.style.setProperty('--i', Math.min(i, 8));
-      var num = el('span', 'vg-num'); num.textContent = v[0];
+      var box = el('span', 'vg-tthumb');
       var timg = el('img');
       timg.alt = 'Thumbnail for ' + title;
       timg.loading = 'lazy';
-      timg.src = thumbUrl(v[2], 240);
-      var cap = el('span', 'vg-cap'); cap.textContent = title; cap.setAttribute('aria-hidden', 'true');
-      tab.appendChild(num);
-      tab.appendChild(timg);
+      timg.src = thumbUrl(v[2], 320);
+      box.appendChild(timg);
+      withFallback(timg, box, title);
+      var cap = el('span', 'vg-tcap'); cap.setAttribute('aria-hidden', 'true');
+      var capNum = el('small'); capNum.textContent = 'Video ' + (i + 1);
+      var capTitle = el('span', 't'); capTitle.textContent = title;
+      cap.appendChild(capNum); cap.appendChild(capTitle);
+      tab.appendChild(box);
       tab.appendChild(cap);
-      withFallback(timg, tab, title);
       tab.addEventListener('click', function(){ select(i); });
       strip.appendChild(tab);
       tabs.push(tab);
@@ -1759,6 +1888,8 @@
     });
     document.getElementById('vgPrev').addEventListener('click', function(){ select(current - 1); });
     document.getElementById('vgNext').addEventListener('click', function(){ select(current + 1); });
+    document.getElementById('vgSPrev').addEventListener('click', function(){ select(current - 1); });
+    document.getElementById('vgSNext').addEventListener('click', function(){ select(current + 1); });
 
     // Swipe on the cover. Once a video is playing the iframe owns the pointer.
     var sx = 0, sy = 0, swiped = false;
