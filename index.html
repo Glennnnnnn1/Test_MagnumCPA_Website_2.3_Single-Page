@@ -126,14 +126,48 @@
   .panel{background:#fff;color:var(--text);border-radius:14px;box-shadow:var(--shadow-lg);}
 
   /* services */
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+  /* gold is the logo's, used only as a small accent here */
+  #services{--gold:#D9A53A;--gold-ink:#9A6B10;}
+  #services .container{max-width:1340px;}
+  .svc-head{position:relative;overflow:hidden;padding:46px 0 42px;border-bottom:1px solid var(--border);
+    background:linear-gradient(100deg,#fff 0%,var(--bg-alt) 45%,#D6ECFB 100%);}
+  .svc-head:before{content:"";position:absolute;right:4%;top:50%;width:380px;aspect-ratio:600/546;transform:translateY(-50%);
+    background:url('images/globe.webp') center/contain no-repeat;opacity:.16;pointer-events:none;}
+  .svc-head:after{content:"";position:absolute;top:-10px;bottom:-10px;right:-70px;width:150px;transform:skewX(-32deg);pointer-events:none;
+    background:linear-gradient(90deg,var(--gold) 0 7px,rgba(11,61,145,.1) 7px);}
+  .svc-head .container{position:relative;z-index:1;}
+  .svc-kicker{display:flex;align-items:center;gap:12px;color:var(--gold-ink);font-weight:800;font-size:1.1rem;letter-spacing:.6px;text-transform:uppercase;}
+  .svc-kicker:after{content:"";width:46px;height:2px;background:var(--gold);}
+  .svc-head h2{color:var(--primary);font-size:2.15rem;line-height:1.2;margin:6px 0 8px;}
+  .svc-head p{color:var(--muted);font-size:1.12rem;}
   .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
-  .svc-card{background:#fff;color:var(--text);border-radius:12px;padding:0 0 24px;overflow:hidden;
-    box-shadow:var(--shadow);border-top:4px solid var(--secondary);transition:transform .2s,box-shadow .2s,border-color .2s;}
-  .svc-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-top-color:var(--tertiary);}
-  .svc-img{height:230px;background:var(--bg-alt);display:grid;place-items:center;color:var(--navy);font-size:2.6rem;overflow:hidden;}
-  .svc-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;margin:0 auto;}
-  .svc-card h3{color:var(--navy);font-size:1.1rem;text-align:center;margin:20px 18px 10px;}
-  .svc-card p{color:var(--muted);font-size:.93rem;text-align:center;margin:0 20px;}
+  .svc-card{position:relative;display:flex;flex-direction:column;background:#fff;color:var(--text);border-radius:14px;overflow:hidden;
+    border:1px solid var(--border);box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s;}
+  .svc-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
+  /* corner accent: gold stripe, then a primary blue triangle */
+  .svc-card:after{content:"";position:absolute;right:0;bottom:0;width:78px;height:78px;pointer-events:none;
+    background:linear-gradient(135deg,transparent 54%,var(--gold) 54% 61%,var(--primary) 61%);}
+  .svc-img{position:relative;height:180px;}
+  .svc-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.8,.2,1);}
+  .svc-img-wrap{height:100%;overflow:hidden;}
+  .svc-card:hover .svc-img img{transform:scale(1.05);}
+  .svc-ic{position:absolute;left:20px;bottom:-26px;width:58px;height:58px;border-radius:14px;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--primary),#1560C9);color:#fff;font-size:1.55rem;box-shadow:0 10px 22px rgba(11,61,145,.3);
+    border:3px solid #fff;}
+  .svc-body{flex:1;display:flex;flex-direction:column;padding:42px 22px 26px;}
+  .svc-card h3{color:var(--primary);font-size:1.2rem;line-height:1.25;margin-bottom:10px;}
+  .svc-card p{color:var(--muted);font-size:.93rem;line-height:1.5;margin-bottom:14px;}
+  .svc-list{list-style:none;margin:0 0 22px;flex:1;}
+  .svc-list li{position:relative;padding-left:26px;margin-bottom:7px;font-size:.88rem;color:#33475F;}
+  .svc-list li:before{content:"\f00c";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;left:0;top:1px;color:var(--gold);font-size:.85rem;}
+  .svc-more{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;padding:10px 22px;border-radius:999px;
+    background:var(--primary);color:#fff;font-weight:700;font-size:.88rem;transition:background .2s,box-shadow .2s;position:relative;z-index:1;}
+  .svc-more i{font-size:.75rem;transition:transform .2s;}
+  .svc-more:hover{background:var(--primary-700);box-shadow:0 8px 20px rgba(11,61,145,.3);}
+  .svc-more:hover i{transform:translateX(3px);}
+  .svc-more:focus-visible{outline:3px solid var(--secondary);outline-offset:3px;}
+  @media(max-width:600px){.svc-head h2{font-size:1.6rem;}.svc-head:before{opacity:.1;right:-80px;}.svc-head:after{display:none;}}
 
   /* about */
   .about-intro{display:grid;grid-template-columns:0.9fr 1.1fr;gap:40px;align-items:center;}
@@ -677,31 +711,85 @@
 
 <!-- ===== Services ===== -->
 <section id="services">
-  <div class="page-hero"><h1>Services</h1></div>
+  <div class="svc-head">
+    <div class="container">
+      <div class="svc-kicker">Our Services</div>
+      <h2>Comprehensive Solutions for Your Financial Success</h2>
+      <p>Expert guidance. Personalized strategies. Long-term value.</p>
+    </div>
+  </div>
 
   <div class="section">
     <div class="container">
       <div class="svc-grid">
-        <div class="svc-card">
-          <div class="svc-img"><img src="images/tax.jpg" alt="Tax Preparation and Planning"></div>
-          <h3>Tax Preparation and Planning</h3>
-          <p>Expert assistance to ensure accurate filings and strategic planning to minimize liabilities.</p>
-        </div>
-        <div class="svc-card">
-          <div class="svc-img"><img src="images/bk-payroll.jpg" alt="Bookkeeping and Payroll Services"></div>
-          <h3>Bookkeeping and Payroll Services</h3>
-          <p>Reliable management of your financial records and payroll processing.</p>
-        </div>
-        <div class="svc-card">
-          <div class="svc-img"><img src="images/consulting.jpg" alt="Business Consulting"></div>
-          <h3>Business Consulting</h3>
-          <p>Strategic insights to drive growth and operational efficiency.</p>
-        </div>
-        <div class="svc-card">
-          <div class="svc-img"><img src="images/security.jpg" alt="Future Security"></div>
-          <h3>Future Security</h3>
-          <p>Wealth Management, Retirement, and Estate Planning. This comprehensive approach means every one of you plays a vital role in providing holistic, secure financial guidance.</p>
-        </div>
+        <article class="svc-card">
+          <div class="svc-img">
+            <div class="svc-img-wrap"><img src="images/tax.jpg" alt="Tax forms and a calculator on a desk" loading="lazy"></div>
+            <span class="svc-ic" aria-hidden="true"><i class="fa-solid fa-file-invoice-dollar"></i></span>
+          </div>
+          <div class="svc-body">
+            <h3>Tax Preparation and Planning</h3>
+            <p>We help you stay compliant and maximize your tax savings with strategic, year-round planning.</p>
+            <ul class="svc-list">
+              <li>Individual &amp; business tax returns</li>
+              <li>Tax planning and projections</li>
+              <li>IRS representation and support</li>
+              <li>Year-round tax advisory</li>
+            </ul>
+            <a class="svc-more" href="#request" data-service="Tax Preparation">Learn More <i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span class="sr-only"> about Tax Preparation and Planning</span></a>
+          </div>
+        </article>
+        <article class="svc-card">
+          <div class="svc-img">
+            <div class="svc-img-wrap"><img src="images/bk-payroll.jpg" alt="Hands working on a laptop and calculator" loading="lazy"></div>
+            <span class="svc-ic" aria-hidden="true"><i class="fa-solid fa-calculator"></i></span>
+          </div>
+          <div class="svc-body">
+            <h3>Bookkeeping and Payroll Services</h3>
+            <p>Accurate records and timely payroll so you can focus on what matters most — your business.</p>
+            <ul class="svc-list">
+              <li>Daily/Monthly bookkeeping</li>
+              <li>Payroll processing &amp; tax filings</li>
+              <li>Financial statement preparation</li>
+              <li>Clean-up and catch-up services</li>
+            </ul>
+            <a class="svc-more" href="#request" data-service="Bookkeeping &amp; Payroll">Learn More <i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span class="sr-only"> about Bookkeeping and Payroll Services</span></a>
+          </div>
+        </article>
+        <article class="svc-card">
+          <div class="svc-img">
+            <div class="svc-img-wrap"><img src="images/consulting.jpg" alt="Reviewing business charts on a laptop" loading="lazy"></div>
+            <span class="svc-ic" aria-hidden="true"><i class="fa-solid fa-chart-column"></i></span>
+          </div>
+          <div class="svc-body">
+            <h3>Business Consulting</h3>
+            <p>Strategic insights and practical solutions to drive growth, improve efficiency, and increase profitability.</p>
+            <ul class="svc-list">
+              <li>Business strategy and planning</li>
+              <li>Operational improvement</li>
+              <li>Financial analysis and forecasting</li>
+              <li>Succession and growth planning</li>
+            </ul>
+            <a class="svc-more" href="#request" data-service="Business Consulting">Learn More <i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span class="sr-only"> about Business Consulting</span></a>
+          </div>
+        </article>
+        <article class="svc-card">
+          <div class="svc-img">
+            <div class="svc-img-wrap"><img src="images/security.jpg" alt="Hands sheltering a piggy bank" loading="lazy"></div>
+            <span class="svc-ic" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
+          </div>
+          <div class="svc-body">
+            <h3>Future Security</h3>
+            <p>Build, protect, and grow your wealth with a holistic approach to retirement, wealth management, and estate planning.</p>
+            <ul class="svc-list">
+              <li>Retirement planning</li>
+              <li>Wealth management</li>
+              <li>Estate and legacy planning</li>
+              <li>Life and business protection</li>
+            </ul>
+            <a class="svc-more" href="#request" data-service="Wealth, Retirement &amp; Estate Planning">Learn More <i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span class="sr-only"> about Future Security</span></a>
+          </div>
+        </article>
       </div>
     </div>
   </div>
@@ -1191,6 +1279,16 @@
     var el = document.querySelector('#leadForm [name="cf-turnstile-response"]');
     return el ? el.value : '';
   }
+
+  // Services "Learn More" buttons jump to the form with that service already ticked
+  document.querySelectorAll('.svc-more[data-service]').forEach(function(a){
+    a.addEventListener('click', function(){
+      var want = a.getAttribute('data-service');
+      document.querySelectorAll('#dcHelp input').forEach(function(cb){
+        if (cb.value === want && !cb.checked){ cb.checked = true; cb.dispatchEvent(new Event('change')); }
+      });
+    });
+  });
 
   // clear the "choose at least one" error as soon as something is ticked
   document.querySelectorAll('#dcHelp input').forEach(function(cb){
