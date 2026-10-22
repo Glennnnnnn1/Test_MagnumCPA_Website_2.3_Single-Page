@@ -914,6 +914,22 @@
   .wcu-card:hover{transform:translateY(-5px);box-shadow:inset 0 1px 1px #fff,0 14px 30px rgba(11,61,145,.12),0 36px 70px rgba(11,61,145,.16) !important;}
   @media(max-width:1100px){.wcu{background-position:0 0,right center !important;}}
 
+  /* ===== phones and tablets: every line readable and uncut (desktop untouched) ===== */
+  @media(max-width:980px){
+    .hero-info p.lede{max-width:640px;}
+    .wcu{background:linear-gradient(180deg,rgba(242,249,255,.86),rgba(234,245,254,.7) 45%,rgba(242,249,255,.86)),url('images/why-bg.webp') center/cover no-repeat !important;}
+    .wcu-card,.wcu-prec{background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(255,255,255,.6)) !important;}
+    .wcu-card p,.wcu-prec p{color:#33475F;}
+    .wcu-prec{-webkit-mask-image:none;mask-image:none;}
+    .foot-bottom{padding-bottom:96px;}
+  }
+  @media(max-width:600px){
+    .hero .sec-kicker{font-size:.8rem;letter-spacing:.3px;gap:10px;}
+    .wcu-sub{row-gap:2px;}
+    .wcu-sub i:nth-of-type(2){flex-basis:100%;height:0;overflow:hidden;visibility:hidden;}
+    .cta-band .btn{padding:15px 22px;font-size:.95rem;gap:10px;}
+  }
+
   /* ===== request form: fields on the left, booking picker on the right ===== */
   .form-card{max-width:none;padding:34px 38px;}
   .bookcall-title,.bookcall-sub{text-align:center;}
