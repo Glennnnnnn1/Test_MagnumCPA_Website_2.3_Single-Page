@@ -266,7 +266,29 @@
   .sec-head{padding-bottom:18px !important;}
   .sec-head + .section{padding-top:14px !important;}
   .sec-head{-webkit-mask-image:none !important;mask-image:none !important;}
+
+  /* ===== shared-element page transition (card photo <-> service page photo) ===== */
+  @view-transition{navigation:auto;}
+  ::view-transition-group(*){animation-duration:500ms;animation-timing-function:cubic-bezier(.32,.72,0,1);}
+  ::view-transition-old(root){animation:vtOut 220ms ease both;}
+  ::view-transition-new(root){animation:vtIn 360ms cubic-bezier(.32,.72,0,1) 120ms both;}
+  /* keep photos cropped, not stretched, while they change shape */
+  ::view-transition-old(svc-tax),::view-transition-new(svc-tax),::view-transition-old(svc-books),::view-transition-new(svc-books),
+  ::view-transition-old(svc-consult),::view-transition-new(svc-consult),::view-transition-old(svc-future),::view-transition-new(svc-future){
+    height:100%;width:100%;object-fit:cover;overflow:clip;animation-duration:500ms;}
+  @keyframes vtOut{to{opacity:0;}}
+  @keyframes vtIn{from{opacity:0;transform:translateY(8px);}}
+  @media(prefers-reduced-motion:reduce){@view-transition{navigation:none;}}
+
+  /* ===== dropdown navigation: the next page zooms up from card size ===== */
+  html:active-view-transition-type(zoom)::view-transition-old(root){animation:vtShrink 420ms cubic-bezier(.32,.72,0,1) both;}
+  html:active-view-transition-type(zoom)::view-transition-new(root){animation:vtZoom 560ms cubic-bezier(.32,.72,0,1) both;}
+  html:active-view-transition-type(zoom) [style*="view-transition-name"]{view-transition-name:none !important;}
+  @keyframes vtShrink{to{opacity:0;transform:scale(.9);}}
+  @keyframes vtZoom{from{transform:scale(.42);opacity:.5;clip-path:inset(0 round 60px);filter:drop-shadow(0 30px 60px rgba(11,61,145,.3));}
+    to{clip-path:inset(0 round 0);}}
 </style>
+<script>/* links in the Services dropdown (and Switch service) mark the next navigation as a zoom */(function(){var K='vtZoom',RE=/(tax-preparation-planning|bookkeeping-payroll|business-consulting|future-security)\.html$/;function tag(e){try{if(e.viewTransition&&sessionStorage.getItem(K))e.viewTransition.types.add('zoom');}catch(_){}}addEventListener('pageswap',tag);addEventListener('pagereveal',function(e){tag(e);try{sessionStorage.removeItem(K);}catch(_){}});document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.submenu a');if(a&&RE.test(a.getAttribute('href')||'')){try{sessionStorage.setItem(K,'1');}catch(_){}}},true);})();</script>
 </head>
 <body>
 

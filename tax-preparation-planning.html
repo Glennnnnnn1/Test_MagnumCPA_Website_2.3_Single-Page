@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>/* arriving from the zoom on the Services cards: fade the page in */try{if(sessionStorage.getItem('svcZoom')){sessionStorage.removeItem('svcZoom');document.documentElement.classList.add('from-zoom');}}catch(e){}</script>
-
 <title>Tax Preparation and Planning — Magnum CPA PC</title>
 <meta name="description" content="Tax Preparation and Planning from Magnum CPA PC. We help you stay compliant and maximize your tax savings with strategic, year-round planning.">
 <meta name="theme-color" content="#0B3D91">
@@ -269,14 +267,28 @@
   .sec-head + .section{padding-top:14px !important;}
   .sec-head{-webkit-mask-image:none !important;mask-image:none !important;}
 
+  /* ===== shared-element page transition (card photo <-> service page photo) ===== */
+  @view-transition{navigation:auto;}
+  ::view-transition-group(*){animation-duration:500ms;animation-timing-function:cubic-bezier(.32,.72,0,1);}
+  ::view-transition-old(root){animation:vtOut 220ms ease both;}
+  ::view-transition-new(root){animation:vtIn 360ms cubic-bezier(.32,.72,0,1) 120ms both;}
+  /* keep photos cropped, not stretched, while they change shape */
+  ::view-transition-old(svc-tax),::view-transition-new(svc-tax),::view-transition-old(svc-books),::view-transition-new(svc-books),
+  ::view-transition-old(svc-consult),::view-transition-new(svc-consult),::view-transition-old(svc-future),::view-transition-new(svc-future){
+    height:100%;width:100%;object-fit:cover;overflow:clip;animation-duration:500ms;}
+  @keyframes vtOut{to{opacity:0;}}
+  @keyframes vtIn{from{opacity:0;transform:translateY(8px);}}
+  @media(prefers-reduced-motion:reduce){@view-transition{navigation:none;}}
+
+  /* ===== dropdown navigation: the next page zooms up from card size ===== */
+  html:active-view-transition-type(zoom)::view-transition-old(root){animation:vtShrink 420ms cubic-bezier(.32,.72,0,1) both;}
+  html:active-view-transition-type(zoom)::view-transition-new(root){animation:vtZoom 560ms cubic-bezier(.32,.72,0,1) both;}
+  html:active-view-transition-type(zoom) [style*="view-transition-name"]{view-transition-name:none !important;}
+  @keyframes vtShrink{to{opacity:0;transform:scale(.9);}}
+  @keyframes vtZoom{from{transform:scale(.42);opacity:.5;clip-path:inset(0 round 60px);filter:drop-shadow(0 30px 60px rgba(11,61,145,.3));}
+    to{clip-path:inset(0 round 0);}}
+
   /* ===== service detail page ===== */
-  html.from-zoom{background:#fff;}
-  html.from-zoom body{animation:svcPageIn .45s ease both;}
-  html.from-zoom .sd-hero-img{animation:svcRise .6s cubic-bezier(.32,.72,0,1) .05s both;}
-  html.leaving body{opacity:0;transform:scale(.97);transition:opacity .22s ease,transform .22s ease;}
-  @keyframes svcPageIn{from{opacity:0}}
-  @keyframes svcRise{from{opacity:0;transform:translateY(18px) scale(.98)}}
-  @media(prefers-reduced-motion:reduce){html.from-zoom body,html.from-zoom .sd-hero-img{animation:none;}html.leaving body{transition:none;transform:none;}}
   .sd-hero{position:relative;overflow:hidden;padding:30px 0 70px;background:linear-gradient(180deg,#F5FBFF 0%,#E1F0FC 100%);}
   .sd-back{display:inline-flex;align-items:center;gap:8px;color:var(--primary);font-weight:700;font-size:.92rem;padding:8px 14px 8px 10px;border-radius:999px;transition:background .2s;}
   .sd-back:hover{background:#fff;}
@@ -335,6 +347,7 @@
   @media(max-width:900px){.sd-grid{grid-template-columns:1fr;gap:32px;}.sd-hero-img{order:-1;}.sd-items,.sd-steps,.sd-others{grid-template-columns:1fr;}}
   @media(max-width:600px){.sd-hero h1{font-size:2rem;}.sd-sec{padding:50px 0;}.sd-sec h2{font-size:1.6rem;}.sd-item{padding:20px;}}
 </style>
+<script>/* links in the Services dropdown (and Switch service) mark the next navigation as a zoom */(function(){var K='vtZoom',RE=/(tax-preparation-planning|bookkeeping-payroll|business-consulting|future-security)\.html$/;function tag(e){try{if(e.viewTransition&&sessionStorage.getItem(K))e.viewTransition.types.add('zoom');}catch(_){}}addEventListener('pageswap',tag);addEventListener('pagereveal',function(e){tag(e);try{sessionStorage.removeItem(K);}catch(_){}});document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.submenu a');if(a&&RE.test(a.getAttribute('href')||'')){try{sessionStorage.setItem(K,'1');}catch(_){}}},true);})();</script>
 </head>
 <body>
 
@@ -393,7 +406,7 @@
     <div class="sd-bar">
       <a class="sd-back" href="index.html#services"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All Services</a>
       <label class="sd-switch"><span>Switch service</span>
-        <select onchange="if(this.value)location.href=this.value" aria-label="Switch to another service">
+        <select onchange="try{sessionStorage.setItem('vtZoom','1')}catch(e){}if(this.value)location.href=this.value" aria-label="Switch to another service">
           <option value="tax-preparation-planning.html" selected>Tax Preparation and Planning</option>
           <option value="bookkeeping-payroll.html">Bookkeeping and Payroll Services</option>
           <option value="business-consulting.html">Business Consulting</option>
@@ -403,7 +416,7 @@
     </div>
     <h1>Tax Preparation <span class="grad">and Planning</span></h1>
     <div class="sd-hero-img">
-      <img src="images/tax.jpg" width="800" height="1000" alt="">
+      <img src="images/tax.jpg" width="800" height="1000" alt="" style="view-transition-name:svc-tax">
       <span class="svc-ic" aria-hidden="true"><i class="fa-solid fa-file-invoice-dollar"></i></span>
     </div>
   </div>
@@ -572,25 +585,6 @@
     document.querySelectorAll('.search-btn').forEach(function(b){
       b.addEventListener('click', function(e){ e.preventDefault(); openSearch(); });
     });
-  })();
-</script>
-<script>
-  /* "All Services" fades this page out and the Services card zooms back down on the home page */
-  (function(){
-    var page = location.pathname.split('/').pop();
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    document.querySelectorAll('.sd-back').forEach(function(a){
-      a.addEventListener('click', function(e){
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
-        try{ sessionStorage.setItem('svcBack', page); }catch(_){}
-        if (reduce.matches) return;
-        e.preventDefault();
-        document.documentElement.classList.add('leaving');
-        setTimeout(function(){ location.href = a.href; }, 220);
-      });
-    });
-    // returning with the browser's back/forward cache: undo the fade-out
-    window.addEventListener('pageshow', function(e){ if (e.persisted) document.documentElement.classList.remove('leaving'); });
   })();
 </script>
 </body>

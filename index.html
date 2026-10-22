@@ -175,17 +175,6 @@
   .svc-more:hover{background:var(--primary-700);box-shadow:0 8px 20px rgba(11,61,145,.3);}
   .svc-more:hover i{transform:translateX(3px);}
   .svc-more:focus-visible{outline:3px solid var(--secondary);outline-offset:3px;}
-  /* Learn More: the card zooms up to fill the screen, then its page loads */
-  .zoom-layer{position:fixed;z-index:400;overflow:hidden;background:#fff;pointer-events:none;
-    box-shadow:0 2px 6px rgba(11,61,145,.08),0 40px 90px rgba(11,61,145,.28);}
-  .zoom-layer img{display:block;width:100%;height:180px;object-fit:cover;}
-  .zoom-layer .zl-body{padding:28px 24px;}
-  .zoom-layer .zl-body b{display:block;color:var(--primary);font-size:1.3rem;line-height:1.25;}
-  .zoom-layer .zl-line{display:block;height:10px;border-radius:5px;background:#E3EEF8;margin-top:14px;max-width:420px;}
-  .zoom-layer .zl-line + .zl-line{max-width:300px;}
-  .svc-card.zoom-src{visibility:hidden;}
-  .svc-card.zoom-away{opacity:0;transform:scale(.9);transition:opacity .4s ease,transform .55s cubic-bezier(.32,.72,0,1);}
-  .svc-card.zoom-return{transition:opacity .45s ease,transform .55s cubic-bezier(.32,.72,0,1);}
 
   /* about */
   .about-wrap{display:grid;grid-template-columns:minmax(0,420px) 1fr;gap:56px;align-items:center;}
@@ -938,7 +927,29 @@
   @media(max-width:1000px){#leadForm{grid-template-columns:repeat(2,1fr);}#leadForm .fld.full{grid-column:1/-1;}
     #leadForm .cf-turnstile,#leadForm #leadSubmitBtn{grid-column:1/-1;}#leadForm #leadSubmitBtn{margin-top:14px;}}
   @media(max-width:560px){#leadForm{grid-template-columns:1fr;}.form-card{padding:26px 20px;}}
+
+  /* ===== shared-element page transition (card photo <-> service page photo) ===== */
+  @view-transition{navigation:auto;}
+  ::view-transition-group(*){animation-duration:500ms;animation-timing-function:cubic-bezier(.32,.72,0,1);}
+  ::view-transition-old(root){animation:vtOut 220ms ease both;}
+  ::view-transition-new(root){animation:vtIn 360ms cubic-bezier(.32,.72,0,1) 120ms both;}
+  /* keep photos cropped, not stretched, while they change shape */
+  ::view-transition-old(svc-tax),::view-transition-new(svc-tax),::view-transition-old(svc-books),::view-transition-new(svc-books),
+  ::view-transition-old(svc-consult),::view-transition-new(svc-consult),::view-transition-old(svc-future),::view-transition-new(svc-future){
+    height:100%;width:100%;object-fit:cover;overflow:clip;animation-duration:500ms;}
+  @keyframes vtOut{to{opacity:0;}}
+  @keyframes vtIn{from{opacity:0;transform:translateY(8px);}}
+  @media(prefers-reduced-motion:reduce){@view-transition{navigation:none;}}
+
+  /* ===== dropdown navigation: the next page zooms up from card size ===== */
+  html:active-view-transition-type(zoom)::view-transition-old(root){animation:vtShrink 420ms cubic-bezier(.32,.72,0,1) both;}
+  html:active-view-transition-type(zoom)::view-transition-new(root){animation:vtZoom 560ms cubic-bezier(.32,.72,0,1) both;}
+  html:active-view-transition-type(zoom) [style*="view-transition-name"]{view-transition-name:none !important;}
+  @keyframes vtShrink{to{opacity:0;transform:scale(.9);}}
+  @keyframes vtZoom{from{transform:scale(.42);opacity:.5;clip-path:inset(0 round 60px);filter:drop-shadow(0 30px 60px rgba(11,61,145,.3));}
+    to{clip-path:inset(0 round 0);}}
 </style>
+<script>/* links in the Services dropdown (and Switch service) mark the next navigation as a zoom */(function(){var K='vtZoom',RE=/(tax-preparation-planning|bookkeeping-payroll|business-consulting|future-security)\.html$/;function tag(e){try{if(e.viewTransition&&sessionStorage.getItem(K))e.viewTransition.types.add('zoom');}catch(_){}}addEventListener('pageswap',tag);addEventListener('pagereveal',function(e){tag(e);try{sessionStorage.removeItem(K);}catch(_){}});document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.submenu a');if(a&&RE.test(a.getAttribute('href')||'')){try{sessionStorage.setItem(K,'1');}catch(_){}}},true);})();</script>
 </head>
 <body>
 
@@ -1144,7 +1155,7 @@
       <div class="svc-grid">
         <article class="svc-card">
           <div class="svc-img">
-            <div class="svc-img-wrap"><img src="images/tax.jpg" alt="Tax forms and a calculator on a desk" loading="lazy"></div>
+            <div class="svc-img-wrap"><img src="images/tax.jpg" style="view-transition-name:svc-tax" alt="Tax forms and a calculator on a desk" loading="lazy"></div>
             <span class="svc-ic" aria-hidden="true"><i class="fa-solid fa-file-invoice-dollar"></i></span>
           </div>
           <div class="svc-body">
@@ -1161,7 +1172,7 @@
         </article>
         <article class="svc-card">
           <div class="svc-img">
-            <div class="svc-img-wrap"><img src="images/bk-payroll.jpg" alt="Hands working on a laptop and calculator" loading="lazy"></div>
+            <div class="svc-img-wrap"><img src="images/bk-payroll.jpg" style="view-transition-name:svc-books" alt="Hands working on a laptop and calculator" loading="lazy"></div>
             <span class="svc-ic" aria-hidden="true"><i class="fa-solid fa-calculator"></i></span>
           </div>
           <div class="svc-body">
@@ -1178,7 +1189,7 @@
         </article>
         <article class="svc-card">
           <div class="svc-img">
-            <div class="svc-img-wrap"><img src="images/consulting.jpg" alt="Reviewing business charts on a laptop" loading="lazy"></div>
+            <div class="svc-img-wrap"><img src="images/consulting.jpg" style="view-transition-name:svc-consult" alt="Reviewing business charts on a laptop" loading="lazy"></div>
             <span class="svc-ic" aria-hidden="true"><i class="fa-solid fa-chart-column"></i></span>
           </div>
           <div class="svc-body">
@@ -1195,7 +1206,7 @@
         </article>
         <article class="svc-card">
           <div class="svc-img">
-            <div class="svc-img-wrap"><img src="images/security.jpg" alt="Hands sheltering a piggy bank" loading="lazy"></div>
+            <div class="svc-img-wrap"><img src="images/security.jpg" style="view-transition-name:svc-future" alt="Hands sheltering a piggy bank" loading="lazy"></div>
             <span class="svc-ic" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
           </div>
           <div class="svc-body">
@@ -1574,103 +1585,6 @@
         fab.classList.toggle('away', entries[0].isIntersecting);
       }).observe(heroCta);
     }
-  })();
-
-  /* ===== Services: a card zooms up into its page, and back down on return ===== */
-  (function(){
-    var cards = [].slice.call(document.querySelectorAll('#services .svc-card'));
-    if (!cards.length || !Element.prototype.animate) return;
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    var EASE = 'cubic-bezier(.32,.72,0,1)', DUR = 550, IMG_FULL = '46vh';
-    var layer = null, layerCard = null;
-
-    function linkOf(card){ return card.querySelector('.svc-more'); }
-    function lock(on){ document.documentElement.style.overflow = on ? 'hidden' : ''; }
-    function rectFrame(r){ return {left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px', borderRadius: '14px'}; }
-    function fullFrame(){ return {left: '0px', top: '0px', width: innerWidth + 'px', height: innerHeight + 'px', borderRadius: '0px'}; }
-    function imgH(card){ return card.querySelector('.svc-img').offsetHeight + 'px'; }
-
-    function makeLayer(card){
-      var l = document.createElement('div');
-      l.className = 'zoom-layer';
-      l.setAttribute('aria-hidden', 'true');
-      var src = card.querySelector('.svc-img img');
-      var img = document.createElement('img');
-      img.src = src.currentSrc || src.src; img.alt = '';
-      var body = document.createElement('div');
-      body.className = 'zl-body';
-      var b = document.createElement('b'); b.textContent = card.querySelector('h3').textContent;
-      body.appendChild(b);
-      body.appendChild(document.createElement('span')).className = 'zl-line';
-      body.appendChild(document.createElement('span')).className = 'zl-line';
-      l.appendChild(img); l.appendChild(body);
-      document.body.appendChild(l);
-      return l;
-    }
-    function others(card, cls, on){ cards.forEach(function(c){ if (c !== card) c.classList.toggle(cls, on); }); }
-    function reset(){
-      if (layer){ layer.remove(); layer = null; }
-      lock(false);
-      cards.forEach(function(c){ c.classList.remove('zoom-away', 'zoom-src', 'zoom-return'); });
-    }
-
-    // grow from the card's rect to full screen, or the reverse
-    function zoom(card, out, done){
-      var r = card.getBoundingClientRect();
-      layer = makeLayer(card); layerCard = card;
-      var a = [rectFrame(r), fullFrame()], b = [{height: imgH(card)}, {height: IMG_FULL}];
-      if (out){ a.reverse(); b.reverse(); }
-      var anim = layer.animate(a, {duration: DUR, easing: EASE, fill: 'forwards'});
-      layer.querySelector('img').animate(b, {duration: DUR, easing: EASE, fill: 'forwards'});
-      anim.onfinish = done;
-    }
-
-    cards.forEach(function(card){
-      var a = linkOf(card);
-      if (!a) return;
-      // fetch the page early so it is ready when the zoom finishes
-      a.addEventListener('pointerenter', function(){
-        if (a.dataset.pf) return;
-        a.dataset.pf = 1;
-        var l = document.createElement('link'); l.rel = 'prefetch'; l.href = a.href; document.head.appendChild(l);
-      }, {once: true});
-      a.addEventListener('click', function(e){
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
-        try{ sessionStorage.setItem('svcZoom', '1'); }catch(_){}
-        if (reduce.matches) return;   // plain navigation; the page just appears
-        e.preventDefault();
-        lock(true);
-        card.classList.add('zoom-src');
-        others(card, 'zoom-away', true);
-        zoom(card, false, function(){ location.href = a.href; });
-      });
-    });
-
-    // Back button (page restored from the back/forward cache): zoom the card back down
-    window.addEventListener('pageshow', function(e){
-      if (!e.persisted || !layer) return;
-      var card = layerCard;
-      layer.remove(); layer = null;
-      others(card, 'zoom-return', true);
-      others(card, 'zoom-away', false);
-      zoom(card, true, function(){ reset(); linkOf(card).focus({preventScroll: true}); });
-    });
-
-    // "All Services" link on a service page: start full screen and settle into that card
-    var back = null;
-    try{ back = sessionStorage.getItem('svcBack'); sessionStorage.removeItem('svcBack'); }catch(_){}
-    if (!back || reduce.matches) return;
-    var card = cards.filter(function(c){ return linkOf(c) && linkOf(c).getAttribute('href') === back; })[0];
-    if (!card) return;
-    card.scrollIntoView({block: 'center', behavior: 'instant'});
-    lock(true);
-    card.classList.add('zoom-src');
-    others(card, 'zoom-away', true);
-    requestAnimationFrame(function(){
-      others(card, 'zoom-return', true);
-      others(card, 'zoom-away', false);
-      zoom(card, true, function(){ reset(); linkOf(card).focus({preventScroll: true}); });
-    });
   })();
 
   /* ===== Highlight active nav link while scrolling ===== */
