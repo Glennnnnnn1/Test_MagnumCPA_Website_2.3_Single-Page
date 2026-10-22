@@ -22,7 +22,7 @@
     --secondary-ink:#1670B8;   /* secondary, darkened enough for small text on light backgrounds */
     --navy:var(--primary);--navy-dark:var(--primary-800);--navy-3:var(--primary-900);
     --text:#0B1F3F;--muted:#4A607E;--bg-alt:#F3FAFF;--surface:#FFFFFF;
-    --border:#CFE5F6;--radius:10px;--maxw:1180px;
+    --border:#CFE5F6;--radius:10px;--maxw:1400px;
     --shadow:0 1px 2px rgba(11,61,145,.06),0 10px 28px rgba(11,61,145,.10);
     --shadow-lg:0 2px 4px rgba(11,61,145,.06),0 22px 50px rgba(11,61,145,.16);
     --on-dark:#D6E9FB;
@@ -37,7 +37,7 @@
   }
   img{max-width:100%;height:auto;display:block;}
   a{color:inherit;text-decoration:none;}
-  .container{max-width:var(--maxw);margin:0 auto;padding:0 20px;}
+  .container{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,4vw,56px);}
   .globe{width:58px;height:58px;flex:none;display:block;}
   /* anchor offset so sticky header doesn't cover section tops */
   section[id]{scroll-margin-top:118px;}
@@ -148,7 +148,7 @@
   /* services */
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
   /* gold is the logo's, used only as a small accent here */
-  #services .container{max-width:1340px;}
+  #services .container{max-width:var(--maxw);}
   .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
   .svc-card{position:relative;display:flex;flex-direction:column;background:#fff;color:var(--text);border-radius:14px;overflow:hidden;
     border:1px solid var(--border);box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s;}
@@ -206,7 +206,7 @@
   .adv-card p{color:var(--muted);font-size:.95rem;}
 
   /* why choose us */
-  .wcu .container{max-width:1340px;}
+  .wcu .container{max-width:var(--maxw);}
   .wcu{position:relative;padding:20px 0 0;background:linear-gradient(180deg,transparent,#EAF5FF 40%);}
   .wcu-title{color:var(--primary);font-size:2.9rem;font-weight:800;letter-spacing:-.4px;line-height:1.1;}
   .wcu-sub{display:flex;align-items:center;gap:10px;margin:10px 0 28px;color:var(--primary);font-size:.8rem;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;}
@@ -524,7 +524,7 @@
     .vg-info h2{font-size:1.6rem;}
     .vg-num{display:none;}
   }
-  .vg{--cols:6;--gap:14px;--pad:8px;max-width:1180px;}
+  .vg{--cols:6;--gap:14px;--pad:8px;max-width:none;}
   .vg-top{grid-template-columns:minmax(0,340px) minmax(0,560px);justify-content:center;gap:64px;}
   .vg-count{display:flex;align-items:center;gap:14px;color:#1C8BDF;font-size:.98rem;font-weight:800;letter-spacing:2px;}
   .vg-count:after{content:"";width:56px;height:2px;background:linear-gradient(90deg,#3BA7F2,#7FE7D6);}
@@ -625,7 +625,7 @@
   .btn.btn-dark:hover{filter:brightness(1.08);box-shadow:0 12px 26px rgba(11,61,145,.35);}
 
   /* ----- Contact ----- */
-  .contactx{background:#fff;color:var(--primary);border-radius:18px;max-width:1080px;margin:0 auto;
+  .contactx{background:#fff;color:var(--primary);border-radius:18px;max-width:none;margin:0 auto;
     padding:48px 42px 42px;border:1px solid var(--border);box-shadow:var(--shadow-lg);position:relative;overflow:hidden;}
   .contactx:before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--primary),var(--secondary),var(--tertiary));}
   .contactx h1{text-align:center;font-size:2.6rem;font-weight:800;color:var(--primary);letter-spacing:1px;margin:0;}
@@ -745,7 +745,7 @@
   footer{position:relative;overflow:hidden;background:linear-gradient(180deg,#F7FBFF,#EAF5FF);color:var(--primary);padding:64px 0 26px;margin-top:0;}
   footer::before{content:"";position:absolute;left:0;right:0;bottom:0;top:auto;height:260px;pointer-events:none;
     background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 300' preserveAspectRatio='none'%3E%3Cpath d='M0 120C260 200 420 290 640 300H0Z' fill='%237FE7D6' opacity='.35'/%3E%3Cpath d='M0 170C300 230 470 280 700 300' fill='none' stroke='%23BFF3EC' stroke-width='2' opacity='.7'/%3E%3Cpath d='M1600 150C1350 230 1180 280 980 300H1600Z' fill='%233BA7F2' opacity='.35'/%3E%3Cpath d='M1600 190C1380 250 1200 285 1020 300' fill='none' stroke='%23BFE6FF' stroke-width='2' opacity='.7'/%3E%3C/svg%3E") bottom/100% 100% no-repeat;opacity:.9;}
-  footer .container{position:relative;z-index:1;max-width:1340px;}
+  footer .container{position:relative;z-index:1;max-width:var(--maxw);}
   footer .brand img{height:76px;}
   .foot-grid{grid-template-columns:1.45fr 1fr 1.05fr;gap:0;margin-bottom:30px;align-items:start;}
   .foot-grid > div{padding:0 34px;}
@@ -913,41 +913,57 @@
   .wcu-card:hover{transform:translateY(-5px);box-shadow:inset 0 1px 1px #fff,0 14px 30px rgba(11,61,145,.12),0 36px 70px rgba(11,61,145,.16) !important;}
   @media(max-width:1100px){.wcu{background-position:0 0,right center !important;}}
 
-  /* ===== request form: one wide card ===== */
-  .form-card{max-width:1180px;padding:34px 38px;}
+  /* ===== request form: fields on the left, booking picker on the right ===== */
+  .form-card{max-width:none;padding:34px 38px;}
   .bookcall-title,.bookcall-sub{text-align:center;}
-  #leadForm{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-flow:row dense;gap:0 20px;align-items:start;}
-  #leadForm .grid2{display:contents;}
-  #leadForm .fld-group,#leadForm .bookcall-note{grid-column:1/-1;}
-  #leadForm .fld.full{grid-column:span 3;}
-  #leadForm .fld.full textarea{height:48px;min-height:48px;resize:vertical;}
-  #leadForm .cf-turnstile{grid-column:span 2;margin:0 !important;}
-  #leadForm #leadSubmitBtn{grid-column:span 2;align-self:center;}
-  #leadForm .fld-group legend{margin-bottom:10px;}
-  @media(max-width:1000px){#leadForm{grid-template-columns:repeat(2,1fr);}#leadForm .fld.full{grid-column:1/-1;}
-    #leadForm .cf-turnstile,#leadForm #leadSubmitBtn{grid-column:1/-1;}#leadForm #leadSubmitBtn{margin-top:14px;}}
-  @media(max-width:560px){#leadForm{grid-template-columns:1fr;}.form-card{padding:26px 20px;}}
-
-  /* ===== shared-element page transition (card photo <-> service page photo) ===== */
-  @view-transition{navigation:auto;}
-  ::view-transition-group(*){animation-duration:500ms;animation-timing-function:cubic-bezier(.32,.72,0,1);}
-  ::view-transition-old(root){animation:vtOut 220ms ease both;}
-  ::view-transition-new(root){animation:vtIn 360ms cubic-bezier(.32,.72,0,1) 120ms both;}
-  /* keep photos cropped, not stretched, while they change shape */
-  ::view-transition-old(svc-tax),::view-transition-new(svc-tax),::view-transition-old(svc-books),::view-transition-new(svc-books),
-  ::view-transition-old(svc-consult),::view-transition-new(svc-consult),::view-transition-old(svc-future),::view-transition-new(svc-future){
-    height:100%;width:100%;object-fit:cover;overflow:clip;animation-duration:500ms;}
-  @keyframes vtOut{to{opacity:0;}}
-  @keyframes vtIn{from{opacity:0;transform:translateY(8px);}}
-  @media(prefers-reduced-motion:reduce){@view-transition{navigation:none;}}
-
-  /* ===== dropdown navigation: the next page zooms up from card size ===== */
-  html:active-view-transition-type(zoom)::view-transition-old(root){animation:vtShrink 420ms cubic-bezier(.32,.72,0,1) both;}
-  html:active-view-transition-type(zoom)::view-transition-new(root){animation:vtZoom 560ms cubic-bezier(.32,.72,0,1) both;}
-  html:active-view-transition-type(zoom) [style*="view-transition-name"]{view-transition-name:none !important;}
-  @keyframes vtShrink{to{opacity:0;transform:scale(.9);}}
-  @keyframes vtZoom{from{transform:scale(.42);opacity:.5;clip-path:inset(0 round 60px);filter:drop-shadow(0 30px 60px rgba(11,61,145,.3));}
-    to{clip-path:inset(0 round 0);}}
+  #leadForm{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(330px,1fr);gap:22px 32px;align-items:start;}
+  .lf-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:0 16px;align-items:start;}
+  .lf-fields .grid2{display:contents;}
+  .lf-fields .fld-group,.lf-fields .fld.full{grid-column:1/-1;}
+  .lf-fields .fld.full textarea{height:48px;min-height:48px;resize:vertical;}
+  .lf-fields .cf-turnstile{grid-column:1/-1;margin:2px 0 0 !important;}
+  #leadForm .bookcall-note{grid-column:1/-1;margin-top:0;}
+  .bk{background:#fff;border:1px solid var(--border);border-radius:20px;padding:22px 22px 20px;
+    box-shadow:0 2px 4px rgba(11,61,145,.04),0 24px 54px rgba(11,61,145,.13);}
+  .bk.invalid{border-color:#c0392b;}
+  .bk-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;}
+  .bk-title{color:var(--primary);font-size:1.3rem;font-weight:800;line-height:1.2;margin-bottom:8px;}
+  .bk-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:var(--bg);color:var(--primary);font-size:.85rem;font-weight:600;border:1px solid #CFE5F6;}
+  .bk-pill i{color:#1C8BDF;}
+  .bk-nav{display:flex;gap:6px;}
+  .bk-arrow{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:#fff;color:var(--primary);cursor:pointer;transition:background .2s,transform 90ms;}
+  .bk-arrow:hover:not(:disabled){background:var(--bg);}
+  .bk-arrow:active:not(:disabled){transform:scale(.94);}
+  .bk-arrow:disabled{opacity:.35;cursor:default;}
+  .bk-month{color:var(--text);font-weight:800;font-size:1.05rem;margin-bottom:6px;}
+  .bk-dow,.bk-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;}
+  .bk-dow span{font-size:.78rem;font-weight:700;color:var(--muted);padding:4px 0;}
+  .bk-day{height:42px;border:0;border-radius:12px;background:transparent;color:var(--text);font:inherit;font-weight:600;font-size:.95rem;cursor:pointer;
+    transition:transform 600ms var(--spring,cubic-bezier(.32,.72,0,1)),background .2s,color .2s,box-shadow .2s;}
+  .bk-day:hover:not(:disabled){background:var(--bg);}
+  .bk-day:active:not(:disabled){transform:scale(.94);transition-duration:90ms;}
+  .bk-day:disabled{color:#B5C7DC;cursor:default;}
+  .bk-day[aria-pressed="true"]{background:linear-gradient(135deg,var(--primary),#1C6FD1);color:#fff;transform:scale(1.1);box-shadow:0 8px 18px rgba(11,61,145,.3);}
+  .bk-day:focus-visible,.bk-slot:focus-visible,.bk-arrow:focus-visible,.bk-confirm:focus-visible{outline:3px solid var(--secondary);outline-offset:2px;}
+  .bk-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;min-height:46px;}
+  .bk-hint{grid-column:1/-1;color:var(--muted);font-size:.88rem;text-align:center;padding:12px 0;}
+  .bk-slot{height:42px;border-radius:999px;border:1.5px solid var(--border);background:#fff;color:var(--text);font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;
+    opacity:0;transform:translateY(6px);transition:opacity .4s ease,transform 600ms var(--spring,cubic-bezier(.32,.72,0,1)),border-color .2s,background .2s,color .2s;
+    transition-delay:calc(var(--i,0) * 80ms);}
+  .bk-slots.in .bk-slot{opacity:1;transform:none;}
+  .bk-slot:hover{border-color:var(--secondary);}
+  .bk-slot:active{transform:scale(.94) !important;transition-duration:90ms;transition-delay:0s;}
+  .bk-slot[aria-pressed="true"]{border-color:var(--primary);background:#E3F0FD;color:var(--primary);}
+  .bk-tz{color:var(--muted);font-size:.78rem;margin:10px 0 0;}
+  .bk .fld-error{display:block;margin:4px 0 0;}
+  .bk-confirm{width:100%;margin-top:12px;height:52px;border:0;border-radius:999px;font:inherit;font-weight:800;font-size:1rem;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#E6EEF6;color:#7C8EA6;transition:background .3s,color .3s,box-shadow .3s,transform 90ms;}
+  .bk-confirm.ready{background:linear-gradient(90deg,var(--primary),#1C6FD1 55%,#25B7C6);color:#fff;box-shadow:0 12px 26px rgba(11,61,145,.28);}
+  .bk-confirm:active{transform:scale(.97);}
+  .bk-confirm:disabled{opacity:.7;}
+  @media(prefers-reduced-motion:reduce){.bk-slot{transition-delay:0s !important;transform:none !important;}.bk-day[aria-pressed="true"]{transform:none;}}
+  @media(max-width:1000px){#leadForm{grid-template-columns:1fr;}.lf-fields{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.lf-fields{grid-template-columns:1fr;}.form-card{padding:26px 18px;}.bk{padding:18px 14px;}.bk-day{height:38px;font-size:.88rem;}}
 </style>
 <script>/* links in the Services dropdown (and Switch service) mark the next navigation as a zoom */(function(){var K='vtZoom',RE=/(tax-preparation-planning|bookkeeping-payroll|business-consulting|future-security)\.html$/;function tag(e){try{if(e.viewTransition&&sessionStorage.getItem(K))e.viewTransition.types.add('zoom');}catch(_){}}addEventListener('pageswap',tag);addEventListener('pagereveal',function(e){tag(e);try{sessionStorage.removeItem(K);}catch(_){}});document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.submenu a');if(a&&RE.test(a.getAttribute('href')||'')){try{sessionStorage.setItem(K,'1');}catch(_){}}},true);})();</script>
 </head>
@@ -1336,6 +1352,7 @@
         <p class="bookcall-sub">Available slots: Mon–Fri, 9:00am–5:00pm EST · Sat–Sun 2:00pm – 6:00pm </p>
         <div class="form-error-banner" id="formError" style="display:none;"></div>
         <form id="leadForm" onsubmit="return submitLeadForm(event)" novalidate>
+          <div class="lf-fields">
           <div class="grid2">
             <div class="fld"><label>First Name</label><input type="text" id="dcFirst" placeholder="First" required><span class="fld-error" id="err-dcFirst"></span></div>
             <div class="fld"><label>Last Name</label><input type="text" id="dcLast" placeholder="Last" required><span class="fld-error" id="err-dcLast"></span></div>
@@ -1394,14 +1411,6 @@
                 <option>Text Message</option>
               </select>
             </div>
-            <div class="fld"><label>Best Time to Call</label>
-              <select id="dcBestTime">
-                <option>Morning (9am–12pm)</option>
-                <option>Afternoon (12pm–4pm)</option>
-                <option>Evening (4pm–6pm)</option>
-                <option>Anytime</option>
-              </select>
-            </div>
           </div>
           <div class="fld full"><label>Message <span class="fld-optional">(optional)</span></label>
             <textarea id="dcMessage" rows="1" maxlength="2000" placeholder="Anything else we should know?"></textarea>
@@ -1422,14 +1431,35 @@
             if (window.innerWidth < 380) document.querySelector('#leadForm .cf-turnstile').setAttribute('data-size', 'compact');
           </script>
 
-          <button type="submit" class="btn btn-dark" id="leadSubmitBtn" style="width:100%;">RESERVE MY FREE CALL →</button>
+          </div>
+
+          <!-- Preferred day + time. Not live availability: the exact slot is confirmed in the scheduler on the next step. -->
+          <div class="bk" id="dcSlot" aria-describedby="err-dcSlot">
+            <div class="bk-head">
+              <div>
+                <div class="bk-title">Book a time that <span class="grad">works</span></div>
+                <span class="bk-pill"><i class="fa-regular fa-clock" aria-hidden="true"></i> Free 30-minute call</span>
+              </div>
+              <div class="bk-nav">
+                <button type="button" class="bk-arrow" id="bkPrev" aria-label="Earlier dates"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+                <button type="button" class="bk-arrow" id="bkNext" aria-label="Later dates"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <div class="bk-month" id="bkMonth" aria-live="polite"></div>
+            <div class="bk-dow" aria-hidden="true"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+            <div class="bk-days" id="bkDays" role="group" aria-label="Choose a day"></div>
+            <div class="bk-slots" id="bkSlots" role="group" aria-label="Choose a time"></div>
+            <p class="bk-tz">Times shown in Eastern Time (ET).</p>
+            <span class="fld-error" id="err-dcSlot"></span>
+            <button type="submit" class="bk-confirm" id="leadSubmitBtn" aria-disabled="true">Reserve My Free Call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
           <p class="bookcall-note">🔒 Your information is private and never sold. We'll confirm within 2 hours.</p>
         </form>
       </div>
 
       <!-- Step 2: scheduler (revealed after Step 1) -->
       <div id="step2" style="display:none;">
-        <p class="form-intro">Great, <span id="dcGreet"></span>! Pick a date and time that works for you — instantly confirmed online.</p>
+        <p class="form-intro">Great, <span id="dcGreet"></span>! Pick a date and time that works for you — instantly confirmed online.<span id="dcPicked"></span></p>
         <div class="schedule-embed">
           <div class="sched-head">
             <span class="ic">📅</span>
@@ -1633,6 +1663,78 @@
   revShow(0);
   if (revSlides > 1){ setInterval(function(){ revMove(1); }, 7000); }
 
+
+  /* ===== Request form: preferred day + time picker ===== */
+  // Office hours from the form header: Mon–Fri 9–5, Sat–Sun 2–6 (ET). Earliest day is tomorrow.
+  var BK_SLOTS = { weekday: ['9:30 am', '11:00 am', '1:00 pm', '2:30 pm', '4:00 pm'], weekend: ['2:00 pm', '3:30 pm', '5:00 pm'] };
+  var bkState = { start: null, day: null, slot: null };
+  function bkChoice(){
+    if (!bkState.day || !bkState.slot) return '';
+    return bkState.day.toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric'}) + ', ' + bkState.slot;
+  }
+  (function(){
+    var daysEl = document.getElementById('bkDays'), slotsEl = document.getElementById('bkSlots');
+    if (!daysEl) return;
+    var monthEl = document.getElementById('bkMonth'), btn = document.getElementById('leadSubmitBtn');
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var first = new Date(today); first.setDate(first.getDate() - ((first.getDay() + 6) % 7));   // Monday of this week
+    var MAX_WEEKS = 6;
+    bkState.start = new Date(first);
+    function same(a, b){ return a && b && a.getTime() === b.getTime(); }
+    function addDays(d, n){ var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+    function updateBtn(){
+      var ready = !!bkChoice();
+      btn.setAttribute('aria-disabled', ready ? 'false' : 'true');
+      btn.classList.toggle('ready', ready);
+      if (ready){ var e = document.getElementById('err-dcSlot'); e.textContent = ''; document.getElementById('dcSlot').classList.remove('invalid'); }
+    }
+    function renderSlots(){
+      slotsEl.innerHTML = '';
+      if (!bkState.day){ slotsEl.innerHTML = '<p class="bk-hint">Pick a day to see times.</p>'; return; }
+      var wk = bkState.day.getDay() % 6 === 0 ? 'weekend' : 'weekday';
+      BK_SLOTS[wk].forEach(function(t, i){
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'bk-slot'; b.textContent = t;
+        b.style.setProperty('--i', i);
+        b.setAttribute('aria-pressed', t === bkState.slot ? 'true' : 'false');
+        b.addEventListener('click', function(){
+          bkState.slot = t;
+          slotsEl.querySelectorAll('.bk-slot').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+          updateBtn();
+        });
+        slotsEl.appendChild(b);
+      });
+      requestAnimationFrame(function(){ slotsEl.classList.add('in'); });
+    }
+    function renderDays(){
+      daysEl.innerHTML = '';
+      var end = addDays(bkState.start, 13);
+      var m1 = bkState.start.toLocaleDateString('en-US', {month: 'long'}), m2 = end.toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
+      monthEl.textContent = m1 === end.toLocaleDateString('en-US', {month: 'long'}) ? m2 : m1 + ' – ' + m2;
+      for (var i = 0; i < 14; i++){
+        (function(d){
+          var b = document.createElement('button');
+          b.type = 'button'; b.className = 'bk-day'; b.textContent = d.getDate();
+          b.setAttribute('aria-label', d.toLocaleDateString('en-US', {weekday: 'long', month: 'long', day: 'numeric'}));
+          if (d <= today){ b.disabled = true; }
+          b.setAttribute('aria-pressed', same(d, bkState.day) ? 'true' : 'false');
+          b.addEventListener('click', function(){
+            bkState.day = d; bkState.slot = null;
+            daysEl.querySelectorAll('.bk-day').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            slotsEl.classList.remove('in'); void slotsEl.offsetWidth;
+            renderSlots(); updateBtn();
+          });
+          daysEl.appendChild(b);
+        })(addDays(bkState.start, i));
+      }
+      document.getElementById('bkPrev').disabled = same(bkState.start, first);
+      document.getElementById('bkNext').disabled = bkState.start >= addDays(first, (MAX_WEEKS - 2) * 7);
+    }
+    document.getElementById('bkPrev').addEventListener('click', function(){ bkState.start = addDays(bkState.start, -14); if (bkState.start < first) bkState.start = new Date(first); renderDays(); });
+    document.getElementById('bkNext').addEventListener('click', function(){ bkState.start = addDays(bkState.start, 14); renderDays(); });
+    renderDays(); renderSlots(); updateBtn();
+  })();
+
   /* ===== Request a consultation: secure lead capture, then Acuity ===== */
   var ACUITY_BASE = 'https://magnumcpa.as.me/schedule/c78873bb/appointment/7960861?appointmentTypeIds%5B%5D=7960861';
 
@@ -1649,6 +1751,7 @@
       '&phone='     + encodeURIComponent(phone);
     document.getElementById('schedFrame').src = url;
     document.getElementById('dcGreet').textContent = (first || 'there');
+    var pk = bkChoice(); document.getElementById('dcPicked').textContent = pk ? ' You asked for ' + pk + ' ET.' : '';
     document.getElementById('step1').style.display = 'none';
     document.getElementById('step2').style.display = 'block';
     document.getElementById('request').scrollIntoView({behavior:'smooth'});
@@ -1697,7 +1800,7 @@
       serviceNeeded: [].map.call(document.querySelectorAll('#dcHelp input:checked'), function(i){ return i.value; }).join('; '),
       revenue: document.getElementById('dcRevenue').value,
       preferredContact: document.getElementById('dcContactMethod').value,
-      bestTimeToCall: document.getElementById('dcBestTime').value,
+      bestTimeToCall: bkChoice() || 'Anytime',
       message: leadStripTags(document.getElementById('dcMessage').value.trim())
     };
   }
@@ -1712,6 +1815,7 @@
     else if (!LEAD_PHONE_RE.test(lead.phone)){ showLeadFieldError('dcPhone', 'Enter a valid US phone number.'); ok = false; }
     if (!lead.state){ showLeadFieldError('dcState', 'Please select your state.'); ok = false; }
     if (!lead.serviceNeeded){ showLeadFieldError('dcHelp', 'Choose at least one.'); ok = false; }
+    if (!bkChoice()){ showLeadFieldError('dcSlot', 'Pick a day and time.'); ok = false; }
     if (lead.message.length > 2000){ showLeadFieldError('dcMessage', 'Message is too long.'); ok = false; }
     return ok;
   }
@@ -1746,7 +1850,7 @@
 
     var btn = document.getElementById('leadSubmitBtn');
     btn.disabled = true;
-    var originalLabel = btn.textContent;
+    var originalLabel = btn.innerHTML;
     btn.textContent = 'Sending…';
 
     var payload = {
@@ -1786,7 +1890,7 @@
       showLeadFormBanner('Something went wrong — please try again or call us at (916) 616-1789.');
     }).finally(function(){
       btn.disabled = false;
-      btn.textContent = originalLabel;
+      btn.innerHTML = originalLabel;
     });
 
     return false;
