@@ -850,18 +850,81 @@
   /* ===== two-tone gradient headings ===== */
   .grad{background:linear-gradient(90deg,#1C8BDF,#139E92);-webkit-background-clip:text;background-clip:text;color:transparent;}
   .grad-light{background:linear-gradient(90deg,#9FD8FF,#7FE7D6);-webkit-background-clip:text;background-clip:text;color:transparent;}
-  /* ===== soft section joins with a flowing line ===== */
-  .flow-sep{position:relative;z-index:3;height:76px;margin:-38px 0;pointer-events:none;}
-  .flow-sep:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(232,246,255,0),rgba(236,247,255,.95) 50%,rgba(232,246,255,0));}
-  .flow-sep:after{content:"";position:absolute;left:0;right:0;top:3px;height:70px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='70' viewBox='0 0 400 70'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%231C8BDF'/%3E%3Cstop offset='.5' stop-color='%237FE7D6'/%3E%3Cstop offset='1' stop-color='%231C8BDF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 35C50 10 150 10 200 35S350 60 400 35' fill='none' stroke='url(%23g)' stroke-width='2.2' opacity='.85'/%3E%3Cpath d='M0 35C50 60 150 60 200 35S350 10 400 35' fill='none' stroke='url(%23g)' stroke-width='1.4' opacity='.5'/%3E%3C/svg%3E") 0 0/400px 70px repeat-x;
-    animation:flowX 22s linear infinite;
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);}
-  @keyframes flowX{to{background-position:-400px 0;}}
-  @media(prefers-reduced-motion:reduce){.flow-sep:after{animation:none;}}
   .mc{border-top:0 !important;}
   .sec-head{border-top:0;border-bottom:0;-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent);mask-image:linear-gradient(180deg,#000 70%,transparent);}
   /* the full-width dark band melts into the light sections above and below */
   #services .cta-band{-webkit-mask-image:linear-gradient(180deg,transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(180deg,transparent,#000 16%,#000 84%,transparent);padding:96px 0 104px;}
+
+  /* ===== one continuous background: no visible section edges ===== */
+  body{background:#EDF6FE;background-image:radial-gradient(60vw 60vh at 85% 15%,rgba(59,167,242,.10),transparent 70%),
+    radial-gradient(55vw 55vh at 10% 70%,rgba(127,231,214,.10),transparent 70%);background-attachment:fixed;}
+  .mc,.wcu,.hero,.sec-head,.sd-hero,.section{background:transparent !important;}
+  .mc-deco{display:none;}
+  /* ===== small titles are gold, with a gold rule ===== */
+  .sec-kicker.blue,.hero .sec-kicker.blue,.nl-kicker,.wcu-kicker,.sd-kicker,.vg-count{color:var(--gold-ink) !important;}
+  .sec-kicker.blue:after,.hero .sec-kicker.blue:after,.nl-kicker.line:after,.sd-kicker:after,.vg-count:after{background:var(--gold) !important;width:46px !important;height:2px !important;}
+  .wcu-kicker:before,.wcu-kicker:after{background:var(--gold) !important;}
+  .nl-kicker .sep{background:rgba(217,165,58,.5);}
+  .cx-card .h .lbl{color:var(--gold-ink);}
+  /* ===== every section title the same size ===== */
+  .mc-title,.mc-title.plain,.nl-head h2,.wcu-title,.about-txt h2,.contactx h1,.cta-band h2,.sec-head h1,.sec-head h2,.sd-hero h1,.sd-sec h2{
+    font-size:2.15rem !important;font-weight:700 !important;line-height:1.2 !important;letter-spacing:-.2px !important;text-transform:none !important;}
+  .wcu-title .grad{display:inline;}
+  @media(max-width:600px){.mc-title,.mc-title.plain,.nl-head h2,.wcu-title,.about-txt h2,.contactx h1,.cta-band h2,.sec-head h1,.sec-head h2,.sd-hero h1,.sd-sec h2{font-size:1.6rem !important;}}
+  /* ===== footer: soft top, dark blue bottom bar ===== */
+  footer{background:transparent !important;padding-bottom:0 !important;}
+  footer::before{display:none !important;}
+  .foot-bottom{position:relative;margin-top:30px;padding:26px 0 22px;background:linear-gradient(90deg,#051D47,#0B3D91 50%,#072A66);}
+  .foot-bottom .social{margin:0 0 14px;}
+  .foot-bottom .social:before,.foot-bottom .social:after{background:linear-gradient(90deg,transparent,rgba(127,231,214,.5)) !important;}
+  .foot-bottom .social:after{background:linear-gradient(90deg,rgba(127,231,214,.5),transparent) !important;}
+  .foot-bottom .foot-copy{color:#C9DAF2;padding-top:0;}
+  .foot-bottom .social a:hover{background:#fff;color:var(--primary);}
+  .foot-bottom .social a:nth-child(6n+1),.foot-bottom .social a:nth-child(6n){background:#1C8BDF;}
+  .sec-head:before,.sec-head:after{display:none !important;}
+  .sec-head{-webkit-mask-image:none !important;mask-image:none !important;}
+
+  /* ===== hero fills the first screen ===== */
+  .hero{display:flex;align-items:center;min-height:max(600px,calc(100vh - 175px));}
+  .hero:before{display:none;}
+  .hero > .container{width:100%;}
+  .hero-wrap{padding:60px 0;}
+  .hero-info{max-width:780px;}
+  .hero-info h1{font-size:clamp(2.4rem,3.5vw,3.6rem) !important;margin:18px 0 22px;}
+  .hero-info p.lede{font-size:1.22rem;max-width:560px;line-height:1.7;margin-bottom:34px;}
+  .hero .sec-kicker{font-size:1rem;}
+  .hero-cta .btn{padding:18px 36px;font-size:1.08rem;}
+  .hero-photo img{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 24%),linear-gradient(180deg,#000 78%,transparent);
+    -webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0,#000 24%),linear-gradient(180deg,#000 78%,transparent);mask-composite:intersect;}
+  @media(max-width:980px){.hero{display:block;min-height:0;}.hero-wrap{padding:10px 0 40px;}.hero-photo img{-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent);mask-image:linear-gradient(180deg,#000 70%,transparent);}}
+  @media(max-width:600px){.hero-info p.lede{font-size:1.02rem;}.hero-cta .btn{padding:15px 24px;}}
+
+  /* ===== why choose us: frosted glass over a blurred office ===== */
+  .wcu{background:url('images/why-bg.webp') right center/cover no-repeat !important;
+    -webkit-mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent);
+    padding:90px 0 100px;}
+  .wcu-desk,.wcu:before{display:none;}
+  .wcu-card,.wcu-prec{background:linear-gradient(135deg,rgba(255,255,255,.58),rgba(255,255,255,.24)) !important;
+    -webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);
+    border:1px solid rgba(255,255,255,.8) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.3),0 20px 46px rgba(11,61,145,.13) !important;}
+  .wcu-card img{background:rgba(255,255,255,.75);}
+  @media(max-width:1100px){.wcu{background-position:right center !important;}}
+
+  /* ===== request form: one wide card ===== */
+  .form-card{max-width:1180px;padding:34px 38px;}
+  .bookcall-title,.bookcall-sub{text-align:center;}
+  #leadForm{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-flow:row dense;gap:0 20px;align-items:start;}
+  #leadForm .grid2{display:contents;}
+  #leadForm .fld-group,#leadForm .bookcall-note{grid-column:1/-1;}
+  #leadForm .fld.full{grid-column:span 3;}
+  #leadForm .fld.full textarea{height:48px;min-height:48px;resize:vertical;}
+  #leadForm .cf-turnstile{grid-column:span 2;margin:0 !important;}
+  #leadForm #leadSubmitBtn{grid-column:span 2;align-self:center;}
+  #leadForm .fld-group legend{margin-bottom:10px;}
+  @media(max-width:1000px){#leadForm{grid-template-columns:repeat(2,1fr);}#leadForm .fld.full{grid-column:1/-1;}
+    #leadForm .cf-turnstile,#leadForm #leadSubmitBtn{grid-column:1/-1;}#leadForm #leadSubmitBtn{margin-top:14px;}}
+  @media(max-width:560px){#leadForm{grid-template-columns:1fr;}.form-card{padding:26px 20px;}}
 </style>
 </head>
 <body>
@@ -893,7 +956,16 @@
       <ul>
         <li><a href="#home" class="active">Home</a></li>
         <li><a href="#about">About Us</a></li>
-        <li><a href="#services">Services</a></li>
+        <li class="has-sub">
+          <a href="#services" class="sub-toggle">Services ▾</a>
+          <ul class="submenu">
+            <li><a href="tax-preparation-planning.html">Tax Preparation &amp; Planning</a></li>
+            <li><a href="bookkeeping-payroll.html">Bookkeeping &amp; Payroll</a></li>
+            <li><a href="business-consulting.html">Business Consulting</a></li>
+            <li><a href="future-security.html">Future Security</a></li>
+            <li><a href="#services">All Services</a></li>
+          </ul>
+        </li>
         <li class="has-sub">
           <a href="#" class="sub-toggle">Resources ▾</a>
           <ul class="submenu">
@@ -931,20 +1003,9 @@
         </div>
       </div>
     </div>
-    <div class="hero-feats">
-      <div class="hero-feat"><span class="ic" aria-hidden="true"><i class="fa-solid fa-users"></i></span>
-        <div><b>Personalized Guidance</b><span>Tailored strategies for your unique needs.</span></div></div>
-      <div class="hero-feat" style="--ic-bg:#DDF7F2;--ic:#0F9C8A;"><span class="ic" aria-hidden="true"><i class="fa-solid fa-chart-column"></i></span>
-        <div><b>Proactive Financial Planning</b><span>Plan today. Build tomorrow. Stay ahead with smart solutions.</span></div></div>
-      <div class="hero-feat"><span class="ic" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
-        <div><b>Expert Tax &amp; Accounting</b><span>Accurate. Compliant. Maximized savings.</span></div></div>
-      <div class="hero-feat" style="--ic-bg:#DDF7F2;--ic:#0F9C8A;"><span class="ic" aria-hidden="true"><i class="fa-solid fa-handshake"></i></span>
-        <div><b>Long-Term Partnership</b><span>Your success is our success. We're with you at every stage.</span></div></div>
-    </div>
   </div>
 </section>
 
-<div class="flow-sep" aria-hidden="true"></div>
 <!-- ===== Why Choose Us ===== -->
 <section id="why-choose-us" class="wcu">
   <div class="wcu-desk" aria-hidden="true"><img src="images/why-desk.webp" width="332" height="725" alt="" loading="lazy"></div>
@@ -969,7 +1030,6 @@
   </div>
 </section>
 
-<div class="flow-sep" aria-hidden="true"></div>
 <!-- ===== About Us ===== -->
 <section id="about">
   <!-- intro -->
@@ -1001,8 +1061,7 @@
     </div>
   </div>
 
-  <div class="flow-sep" aria-hidden="true"></div>
-  <!-- Our Mission + What Our Clients Say -->
+    <!-- Our Mission + What Our Clients Say -->
   <div class="mc">
     <svg class="mc-deco tl" viewBox="0 0 340 150" aria-hidden="true"><path d="M0 0h250C190 40 120 70 0 118Z" fill="#CFE8FB" opacity=".55"/><path d="M0 104C95 72 160 38 215 0" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
     <svg class="mc-deco bl" viewBox="0 0 520 230" aria-hidden="true"><path d="M0 70C120 70 230 150 330 230H0Z" fill="#CFE8FB" opacity=".6"/><path d="M0 20C150 30 260 120 360 230" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
@@ -1041,7 +1100,6 @@
   </div>
 </section>
 
-<div class="flow-sep" aria-hidden="true"></div>
 <!-- ===== Why Get Tax Help ===== -->
 <section class="mc" style="padding:72px 0 80px;">
     <svg class="mc-deco tl" viewBox="0 0 340 150" aria-hidden="true"><path d="M0 0h250C190 40 120 70 0 118Z" fill="#CFE8FB" opacity=".55"/><path d="M0 104C95 72 160 38 215 0" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
@@ -1058,7 +1116,6 @@
   </div>
 </section>
 
-<div class="flow-sep" aria-hidden="true"></div>
 <!-- ===== Services ===== -->
 <section id="services">
   <div class="sec-head">
@@ -1180,7 +1237,6 @@
   </div>
 </section>
 
-<div class="flow-sep" aria-hidden="true"></div>
 <!-- ===== Resources: Tax Planning Newsletter ===== -->
 <section id="tax-planning-newsletter" class="mc">
     <svg class="mc-deco tl" viewBox="0 0 340 150" aria-hidden="true"><path d="M0 0h250C190 40 120 70 0 118Z" fill="#CFE8FB" opacity=".55"/><path d="M0 104C95 72 160 38 215 0" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
@@ -1201,7 +1257,6 @@
   </div>
 </section>
 
-<div class="flow-sep" aria-hidden="true"></div>
 <!-- ===== Resources: Tax Videos ===== -->
 <section id="tax-videos" class="mc">
     <svg class="mc-deco tl" viewBox="0 0 340 150" aria-hidden="true"><path d="M0 0h250C190 40 120 70 0 118Z" fill="#CFE8FB" opacity=".55"/><path d="M0 104C95 72 160 38 215 0" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
@@ -1239,7 +1294,6 @@
   </div>
 </section>
 
-<div class="flow-sep" aria-hidden="true"></div>
 <!-- ===== Request a Consultation ===== -->
 <section id="request">
   <div class="sec-head">
@@ -1326,7 +1380,7 @@
             </div>
           </div>
           <div class="fld full"><label>Message <span class="fld-optional">(optional)</span></label>
-            <textarea id="dcMessage" rows="4" maxlength="2000" placeholder="Anything else we should know?"></textarea>
+            <textarea id="dcMessage" rows="1" maxlength="2000" placeholder="Anything else we should know?"></textarea>
             <span class="fld-error" id="err-dcMessage"></span>
           </div>
 
@@ -1368,7 +1422,6 @@
   </div>
 </section>
 
-<div class="flow-sep" aria-hidden="true"></div>
 <!-- ===== Contact Us ===== -->
 <section id="contact" class="mc" style="padding:72px 0 84px;">
     <svg class="mc-deco tl" viewBox="0 0 340 150" aria-hidden="true"><path d="M0 0h250C190 40 120 70 0 118Z" fill="#CFE8FB" opacity=".55"/><path d="M0 104C95 72 160 38 215 0" fill="none" stroke="#5FD3E2" stroke-width="2" opacity=".7"/></svg>
@@ -1376,7 +1429,7 @@
     <span class="mc-dots tr" aria-hidden="true"></span><span class="mc-dots bl2" aria-hidden="true"></span>
     <div class="container">
       <div class="contactx">
-        <h1>CONTACT <span class="grad">US</span></h1>
+        <h1>Contact <span class="grad">Us</span></h1>
         <p class="sub">Have questions about your accounting needs? We are here to help. Reach out to our dedicated team today.</p>
 
         <div class="cx-grid">
@@ -1411,7 +1464,6 @@
     </div>
 </section>
 
-<div class="flow-sep" aria-hidden="true"></div>
 <!-- ===== Footer ===== -->
 <footer>
   <div class="container">
@@ -1440,6 +1492,8 @@
       </div>
       <div class="foot-cta"><a class="foot-book" href="#request"><i class="fa-regular fa-calendar-days" aria-hidden="true"></i><span class="sep" aria-hidden="true"></span>Book a Consultation <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
     </div>
+  </div>
+  <div class="foot-bottom"><div class="container">
     <div class="social">
       <a href="https://www.facebook.com/max.drew.522" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
       <a href="https://www.instagram.com/magnumcpa11/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
@@ -1449,7 +1503,7 @@
       <a href="https://www.quora.com/profile/Magnum-CPA" target="_blank" rel="noopener" aria-label="Quora"><i class="fa-brands fa-quora"></i></a>
     </div>
     <div class="foot-copy">© <span id="year"></span> Magnum CPA PC. All rights reserved.</div>
-  </div>
+  </div></div>
 </footer>
 
 <!-- ===== Floating Book a Consultation CTA ===== -->
@@ -1484,7 +1538,7 @@
     // Resources dropdown: tap to expand on mobile
     document.querySelectorAll('.has-sub > .sub-toggle').forEach(function(a){
       a.addEventListener('click', function(e){
-        if (window.matchMedia('(max-width:860px)').matches){
+        if (window.matchMedia('(max-width:980px)').matches){
           e.preventDefault();
           a.parentNode.classList.toggle('open');
         }
