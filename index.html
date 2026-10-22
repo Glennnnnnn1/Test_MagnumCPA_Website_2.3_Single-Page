@@ -882,6 +882,9 @@
   .foot-bottom .social a:hover{background:#fff;color:var(--primary);}
   .foot-bottom .social a:nth-child(6n+1),.foot-bottom .social a:nth-child(6n){background:#1C8BDF;}
   .sec-head:before,.sec-head:after{display:none !important;}
+  /* header band sits right on top of its content */
+  .sec-head{padding-bottom:18px !important;}
+  .sec-head + .section{padding-top:14px !important;}
   .sec-head{-webkit-mask-image:none !important;mask-image:none !important;}
 
   /* ===== hero fills the first screen ===== */
@@ -890,7 +893,8 @@
   .hero > .container{width:100%;}
   .hero-wrap{padding:60px 0;}
   .hero-info{max-width:780px;}
-  .hero-info h1{font-size:clamp(2.4rem,3.5vw,3.6rem) !important;margin:18px 0 22px;}
+  /* sized to the viewport so the headline always ends before the photo's subject */
+  .hero-info h1{font-size:clamp(2rem,2.7vw,3.1rem) !important;margin:18px 0 22px;}
   .hero-info p.lede{font-size:1.22rem;max-width:560px;line-height:1.7;margin-bottom:34px;}
   .hero .sec-kicker{font-size:1rem;}
   .hero-cta .btn{padding:18px 36px;font-size:1.08rem;}
