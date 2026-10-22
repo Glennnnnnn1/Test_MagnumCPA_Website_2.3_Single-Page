@@ -87,9 +87,7 @@
   /* diagonal blue panel with a gold edge, carrying the script tagline */
   .hero-slash{position:absolute;top:0;bottom:0;right:-170px;width:300px;transform:skewX(-22deg);pointer-events:none;
     background:linear-gradient(180deg,rgba(11,61,145,.94),rgba(21,96,201,.82));border-left:6px solid var(--gold);}
-  .hero-tag{position:absolute;right:1.6%;top:34%;z-index:2;margin:0;transform:rotate(-12deg);text-align:right;
-    font-family:'Great Vibes',cursive;font-size:1.95rem;line-height:1.12;color:#fff;text-shadow:0 2px 12px rgba(5,29,71,.45);}
-  .hero-wrap{position:relative;z-index:2;padding:70px 0 10px;}
+  .hero-wrap{position:relative;z-index:2;padding:52px 0 0;}
   .hero-info{max-width:600px;}
   .hero-info h1{color:var(--primary);font-size:clamp(2rem,2.75vw,2.45rem);line-height:1.15;font-weight:800;letter-spacing:-.4px;margin:14px 0 18px;}
   @media(min-width:1100px){.hero-info h1{white-space:nowrap;}}
@@ -99,13 +97,13 @@
   .hero-cta .btn{display:inline-flex;align-items:center;gap:10px;border-radius:999px;padding:14px 28px;}
   .hero-cta .btn i{transition:transform .2s;}
   .hero-cta .btn:hover i{transform:translateX(4px);}
-  .hero-feats{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);margin:44px 0 40px;padding:22px 8px;
+  .hero-feats{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);margin:34px 0 34px;max-width:1060px;padding:22px 8px;
     background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
     border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-lg);}
   .hero-feat{display:flex;gap:14px;align-items:flex-start;padding:4px 20px;}
   .hero-feat + .hero-feat{border-left:1px solid var(--border);}
-  .hero-feat .ic{flex:none;width:50px;height:50px;border-radius:50%;display:grid;place-items:center;font-size:1.2rem;
-    background:var(--bg);color:var(--primary);transition:background .2s,color .2s,transform .2s;}
+  .hero-feat .ic{flex:none;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:1.3rem;
+    background:var(--ic-bg,#E3F0FD);color:var(--ic,var(--primary));transition:background .2s,color .2s,transform .2s;}
   .hero-feat:hover .ic{background:var(--primary);color:#fff;transform:translateY(-2px);}
   .hero-feat b{display:block;color:var(--primary);font-size:.98rem;line-height:1.25;margin-bottom:4px;}
   .hero-feat span{display:block;color:var(--muted);font-size:.84rem;line-height:1.45;}
@@ -207,26 +205,34 @@
   .adv-card h3{color:var(--navy);font-size:1.15rem;margin-bottom:10px;}
   .adv-card p{color:var(--muted);font-size:.95rem;}
 
-  /* why choose us graphic + full-size viewer */
-  .why-figure{margin:0 auto;max-width:1140px;}
-  .why-zoom{position:relative;display:block;width:100%;padding:0;font:inherit;cursor:zoom-in;background:#fff;
-    border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-lg);transition:transform .35s,box-shadow .35s;}
-  .why-zoom img{width:100%;height:auto;transition:transform .7s cubic-bezier(.2,.8,.2,1);}
-  .why-zoom:hover{transform:translateY(-4px);box-shadow:0 30px 64px rgba(11,61,145,.22);}
-  .why-zoom:hover img{transform:scale(1.015);}
-  .why-zoom:focus-visible{outline:3px solid var(--secondary);outline-offset:4px;}
-  .why-hint{position:absolute;right:14px;bottom:14px;display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;
-    background:rgba(5,29,71,.85);color:#fff;font-size:.8rem;font-weight:600;opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s;}
-  .why-zoom:hover .why-hint,.why-zoom:focus-visible .why-hint{opacity:1;transform:none;}
-  @media(hover:none){.why-hint{opacity:1;transform:none;}}
-  .why-dialog{border:0;padding:0;background:transparent;width:min(96vw,1672px);max-width:none;max-height:94vh;overflow:auto;}
-  .why-dialog::backdrop{background:rgba(5,29,71,.8);}
-  .why-dialog img{display:block;width:100%;height:auto;border-radius:12px;}
-  .why-close{position:sticky;top:10px;float:right;margin:10px 10px -54px 0;z-index:1;width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;
-    background:#fff;color:var(--primary);font-size:1.6rem;line-height:1;box-shadow:var(--shadow-lg);}
-  .why-close:focus-visible{outline:3px solid var(--secondary);outline-offset:3px;}
-  /* phones: open wide enough to read, and let it scroll sideways */
-  @media(max-width:700px){.why-dialog img{width:1100px;max-width:none;}}
+  /* why choose us */
+  .wcu .container{max-width:1340px;}
+  .wcu{position:relative;padding:20px 0 0;background:linear-gradient(180deg,transparent,#EAF5FF 40%);}
+  .wcu-title{color:var(--primary);font-size:2.9rem;font-weight:800;letter-spacing:-.4px;line-height:1.1;}
+  .wcu-sub{display:flex;align-items:center;gap:10px;margin:10px 0 28px;color:var(--primary);font-size:.8rem;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;}
+  .wcu-sub:before{content:"";width:40px;height:3px;border-radius:2px;background:var(--primary);}
+  .wcu-sub i{font-style:normal;color:#1C8BDF;}
+  .wcu-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .wcu-card{display:flex;gap:16px;align-items:center;padding:18px 18px;background:#fff;border:1px solid rgba(207,229,246,.8);border-radius:14px;
+    box-shadow:0 2px 4px rgba(11,61,145,.04),0 14px 34px rgba(11,61,145,.09);transition:transform .25s,box-shadow .25s;}
+  .wcu-card:hover{transform:translateY(-4px);box-shadow:0 4px 8px rgba(11,61,145,.05),0 22px 46px rgba(11,61,145,.15);}
+  .wcu-card img{flex:none;width:80px;height:92px;object-fit:contain;}
+  .wcu-card h3{color:var(--primary);font-size:1rem;line-height:1.25;margin-bottom:6px;}
+  .wcu-card p{color:var(--muted);font-size:.8rem;line-height:1.5;}
+  .wcu-band{position:relative;margin-top:-40px;padding:66px 0 30px;color:#fff;overflow:hidden;
+    background:url('images/precision-desk.webp') right center/34% auto no-repeat,linear-gradient(100deg,var(--primary-900) 0%,var(--primary) 45%,#1560C9 64%);}
+  .wcu-band:before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(100deg,transparent 62%,#3BA7F2 62% 64.5%,#7FE7D6 64.5% 65.5%,transparent 65.5%);}
+  .wcu-band .container{position:relative;display:flex;align-items:center;gap:26px;}
+  .wcu-target{flex:none;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-size:1.9rem;color:var(--tertiary);border:2px solid var(--tertiary);}
+  .wcu-band h3{font-size:1.7rem;line-height:1.2;}
+  .wcu-band h3 span{font-weight:500;}
+  .wcu-band p{color:var(--on-dark);max-width:560px;font-size:.95rem;}
+  .wcu + #about{margin-top:0;}
+  @media(max-width:1100px){.wcu-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:900px){.wcu-band{background:linear-gradient(100deg,var(--primary-900),var(--primary) 70%,#1560C9);}.wcu-band:before{display:none;}}
+  @media(max-width:600px){.wcu-title{font-size:2rem;}.wcu-sub{font-size:.66rem;letter-spacing:1.4px;flex-wrap:wrap;}.wcu-grid{grid-template-columns:1fr;}
+    .wcu-band .container{flex-direction:column;align-items:flex-start;gap:14px;}}
 
   /* buttons */
   .btn{display:inline-block;background:linear-gradient(135deg,var(--primary),#1560C9);color:#fff;font-weight:700;padding:12px 26px;border-radius:8px;
@@ -687,7 +693,6 @@
     .hero-photo{position:relative;width:100%;height:52vw;}
     .hero-photo img{-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent);mask-image:linear-gradient(180deg,#000 70%,transparent);}
     .hero-slash{top:0;bottom:auto;height:52vw;right:-120px;width:230px;}
-    .hero-tag{top:12vw;font-size:1.7rem;}
     .hero-wrap{padding:8px 0 0;}
     .hero-info{max-width:100%;}
     .hero-info h1{font-size:2.3rem;}
@@ -708,7 +713,6 @@
     .section-head{margin-bottom:30px;}
     .section-head h2{font-size:1.6rem;}
     .hero-photo,.hero-slash{height:60vw;}
-    .hero-tag{top:14vw;font-size:1.35rem;right:3%;}
     .hero-info h1{font-size:1.85rem;}
     .hero-info p.lede{font-size:.98rem;}
     .hero-feats{grid-template-columns:1fr;padding:12px 6px;}
@@ -783,12 +787,11 @@
     </picture>
   </div>
   <div class="hero-slash" aria-hidden="true"></div>
-  <p class="hero-tag" aria-hidden="true">Your Goals.<br>Our Expertise.<br>Lasting Success.</p>
   <div class="container">
     <div class="hero-wrap">
       <div class="hero-info">
         <div class="sec-kicker blue">Your Trusted Financial Partner</div>
-        <h1>More Than <span class="nw">Accounting—</span><br><span class="accent">We're Your Strategic Partner</span></h1>
+        <h1>More Than <span class="nw">Accounting</span><br><span class="accent">We're Your Strategic Partner</span></h1>
         <p class="lede">At Magnum CPA PC, we provide more than numbers. We deliver personalized tax, accounting, and advisory solutions that help you grow, protect, and build a stronger financial future.</p>
         <div class="hero-cta">
           <a href="#request" class="btn">Schedule a Consultation <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
@@ -798,31 +801,37 @@
     <div class="hero-feats">
       <div class="hero-feat"><span class="ic" aria-hidden="true"><i class="fa-solid fa-users"></i></span>
         <div><b>Personalized Guidance</b><span>Tailored strategies for your unique needs.</span></div></div>
-      <div class="hero-feat"><span class="ic" aria-hidden="true"><i class="fa-solid fa-chart-line"></i></span>
+      <div class="hero-feat" style="--ic-bg:#DDF7F2;--ic:#0F9C8A;"><span class="ic" aria-hidden="true"><i class="fa-solid fa-chart-column"></i></span>
         <div><b>Proactive Financial Planning</b><span>Plan today. Build tomorrow. Stay ahead with smart solutions.</span></div></div>
       <div class="hero-feat"><span class="ic" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
         <div><b>Expert Tax &amp; Accounting</b><span>Accurate. Compliant. Maximized savings.</span></div></div>
-      <div class="hero-feat"><span class="ic" aria-hidden="true"><i class="fa-solid fa-handshake"></i></span>
+      <div class="hero-feat" style="--ic-bg:#DDF7F2;--ic:#0F9C8A;"><span class="ic" aria-hidden="true"><i class="fa-solid fa-handshake"></i></span>
         <div><b>Long-Term Partnership</b><span>Your success is our success. We're with you at every stage.</span></div></div>
     </div>
   </div>
 </section>
 
 <!-- ===== Why Choose Us ===== -->
-<section id="why-choose-us" class="section why-section" style="padding:50px 0;">
+<section id="why-choose-us" class="wcu">
   <div class="container">
-      <figure class="why-figure">
-        <button type="button" class="why-zoom" id="whyOpen" aria-haspopup="dialog" aria-label="Why Choose Us — open the graphic full size">
-          <picture>
-            <source type="image/webp"
-                    srcset="images/why-choose-us-800.webp 800w, images/why-choose-us-1200.webp 1200w, images/why-choose-us-1672.webp 1672w"
-                    sizes="(max-width:1180px) calc(100vw - 32px), 1140px">
-            <img src="images/why-choose-us-1672.jpg" width="1672" height="941" decoding="async"
-                 alt="Why Choose Us? Trusted, experienced, committed to your success. BBB Accredited: our commitment to transparency and ethical service is verified through our Better Business Bureau accreditation. 2025 Best Business Rate in Sacramento: elite, specialized expertise and personalized rates, competitive in the Sacramento region. Trusted by Ramsey: recognized for the reliability and sound financial principles expected of Ramsey-trusted professionals. 2026 Ranked 1 by Momentum Score: excellence in customer satisfaction and review performance. Passion for Precision: professional design with strict procedural compliance, so your reports are as clear as they are accurate.">
-          </picture>
-          <span class="why-hint" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-plus"></i> View full size</span>
-        </button>
-      </figure>
+    <h2 class="wcu-title">Why <span class="grad">Choose Us?</span></h2>
+    <p class="wcu-sub">Trusted <i>•</i> Experienced <i>•</i> Committed to Your Success</p>
+    <div class="wcu-grid">
+      <div class="wcu-card"><img src="images/badge-bbb.webp" width="195" height="235" alt="BBB Accredited Business plaque" loading="lazy">
+        <div><h3>BBB Accredited</h3><p>Our commitment to transparency and ethical service is verified through our Better Business Bureau accreditation.</p></div></div>
+      <div class="wcu-card"><img src="images/badge-sac.webp" width="190" height="235" alt="2025 BusinessRate award plaque, Sacramento" loading="lazy">
+        <div><h3>2025 Best Business Rate in Sacramento</h3><p>We provide elite, specialized expertise and personalized rates, ensuring we are competitive in the Sacramento region.</p></div></div>
+      <div class="wcu-card"><img src="images/badge-ramsey.webp" width="190" height="217" alt="Ramsey Trusted badge" loading="lazy">
+        <div><h3>Trusted by Ramsey</h3><p>We are recognized for providing the high level of reliability and sound financial principles expected of Ramsey-trusted professionals.</p></div></div>
+      <div class="wcu-card"><img src="images/badge-best.webp" width="225" height="202" alt="Best of 2026 BusinessRate badge" loading="lazy">
+        <div><h3>2026 Ranked 1 by Momentum Score</h3><p>Showcasing excellence in customer satisfaction and review performance.</p></div></div>
+    </div>
+  </div>
+  <div class="wcu-band">
+    <div class="container">
+      <span class="wcu-target" aria-hidden="true"><i class="fa-solid fa-bullseye"></i></span>
+      <div><h3>Passion <span>for Precision</span></h3><p>Our team combines a passion for professional design with strict procedural compliance to ensure your reports are as clear as they are accurate.</p></div>
+    </div>
   </div>
 </section>
 
@@ -1299,16 +1308,6 @@
   </div>
 </footer>
 
-<!-- ===== Why Choose Us: full-size viewer ===== -->
-<dialog class="why-dialog" id="whyDialog" aria-label="Why Choose Us">
-  <button type="button" class="why-close" id="whyClose" aria-label="Close">&times;</button>
-  <picture>
-    <source type="image/webp" srcset="images/why-choose-us-1672.webp">
-    <img src="images/why-choose-us-1672.jpg" width="1672" height="941" loading="lazy" decoding="async"
-         alt="Why Choose Us? BBB Accredited; 2025 Best Business Rate in Sacramento; Trusted by Ramsey; 2026 Ranked 1 by Momentum Score; Passion for Precision.">
-  </picture>
-</dialog>
-
 <!-- ===== Floating Book a Consultation CTA ===== -->
 <a class="book-fab" href="#request">📅 Book a Consultation</a>
 
@@ -1365,21 +1364,6 @@
         fab.classList.toggle('away', entries[0].isIntersecting);
       }).observe(heroCta);
     }
-  })();
-
-  /* ===== Why Choose Us: open the graphic full size ===== */
-  (function(){
-    var open = document.getElementById('whyOpen'), dlg = document.getElementById('whyDialog');
-    if (!open || !dlg) return;
-    if (typeof dlg.showModal !== 'function'){
-      // very old browsers: just open the image itself
-      open.addEventListener('click', function(){ window.open('images/why-choose-us-1672.jpg', '_blank', 'noopener'); });
-      return;
-    }
-    open.addEventListener('click', function(){ dlg.showModal(); });
-    document.getElementById('whyClose').addEventListener('click', function(){ dlg.close(); });
-    // a click on the dimmed backdrop lands on the dialog element itself
-    dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
   })();
 
   /* ===== Highlight active nav link while scrolling ===== */
