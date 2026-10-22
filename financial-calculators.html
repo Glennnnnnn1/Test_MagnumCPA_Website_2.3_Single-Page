@@ -22,6 +22,7 @@
     --shadow:0 1px 2px rgba(11,61,145,.06),0 10px 28px rgba(11,61,145,.10);
     --shadow-lg:0 2px 4px rgba(11,61,145,.06),0 22px 50px rgba(11,61,145,.16);
     --on-dark:#D6E9FB;
+    --gold:#D9A53A;--gold-ink:#9A6B10;   /* the logo's gold, used only as a small accent */
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{font-size:17px;scroll-behavior:smooth;}
@@ -60,15 +61,21 @@
   .submenu li{width:100%;}
   .submenu a{display:block;text-align:left;border-radius:5px;}
 
-  /* page banner */
-  .page-hero{position:relative;background:url('images/hero-bg.jpg') right 28%/cover no-repeat;color:#fff;
-    text-align:center;padding:74px 20px;overflow:hidden;}
-  .page-hero::before{content:"";position:absolute;inset:0;
-    background:radial-gradient(120% 140% at 85% 0%,rgba(59,167,242,.28),transparent 55%),linear-gradient(180deg,rgba(11,61,145,.6),rgba(5,29,71,.8));}
-  .page-hero h1{position:relative;z-index:2;font-family:Georgia,'Times New Roman',serif;font-size:3rem;font-weight:700;letter-spacing:.5px;}
-  .page-hero p{position:relative;z-index:2;color:var(--on-dark);margin-top:8px;}
-  .page-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;z-index:2;
-    background:linear-gradient(90deg,var(--secondary),var(--tertiary));}
+  /* light section band: kicker + headline + subtitle, faded globe and gold stripe on the right */
+  .sec-head{position:relative;overflow:hidden;padding:46px 0 42px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+    background:linear-gradient(100deg,#fff 0%,var(--bg-alt) 45%,#D6ECFB 100%);}
+  .sec-head:before{content:"";position:absolute;right:4%;top:50%;width:380px;aspect-ratio:600/546;transform:translateY(-50%);
+    background:url('images/globe.webp') center/contain no-repeat;opacity:.16;pointer-events:none;}
+  .sec-head:after{content:"";position:absolute;top:-10px;bottom:-10px;right:-70px;width:150px;transform:skewX(-32deg);pointer-events:none;
+    background:linear-gradient(90deg,var(--gold) 0 7px,rgba(11,61,145,.1) 7px);}
+  .sec-head .container{position:relative;z-index:1;}
+  .sec-kicker{display:flex;align-items:center;gap:12px;color:var(--gold-ink);font-weight:800;font-size:1.1rem;letter-spacing:.6px;text-transform:uppercase;}
+  .sec-kicker:after{content:"";width:46px;height:2px;background:var(--gold);}
+  .sec-kicker.blue{color:var(--secondary-ink);font-size:.9rem;letter-spacing:1.2px;}
+  .sec-kicker.blue:after{background:linear-gradient(90deg,var(--secondary),var(--tertiary));}
+  .sec-head h1,.sec-head h2{color:var(--primary);font-size:2.15rem;line-height:1.2;margin:6px 0 8px;}
+  .sec-head p{color:var(--muted);font-size:1.12rem;}
+  @media(max-width:600px){.sec-head{padding:34px 0 30px;}.sec-head h1,.sec-head h2{font-size:1.6rem;}.sec-head:before{opacity:.1;right:-80px;}.sec-head:after{display:none;}}
 
   /* sections */
   .section{padding:60px 0;}
@@ -80,8 +87,8 @@
   .btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(11,61,145,.32);filter:brightness(1.08);}
   .btn:focus-visible{outline:3px solid var(--secondary);outline-offset:3px;}
   /* on dark bands the button flips to tertiary mint so it stands out */
-  .hero .btn,.cta-band .btn{background:var(--tertiary);color:var(--primary-900);box-shadow:0 8px 22px rgba(127,231,214,.28);}
-  .hero .btn:hover,.cta-band .btn:hover{box-shadow:0 14px 32px rgba(127,231,214,.42);filter:brightness(1.04);}
+  .cta-band .btn{background:var(--tertiary);color:var(--primary-900);box-shadow:0 8px 22px rgba(127,231,214,.28);}
+  .cta-band .btn:hover{box-shadow:0 14px 32px rgba(127,231,214,.42);filter:brightness(1.04);}
 
   /* calculators */
   .calc-cat{margin-bottom:34px;}
@@ -152,14 +159,11 @@
     .submenu{position:static;display:none;box-shadow:none;border:0;border-radius:0;background:var(--bg-alt);padding:0;min-width:0;}
     .has-sub.open .submenu{display:flex;}
     .submenu a{padding-left:40px;}
-    .page-hero h1{font-size:2.1rem;}
   }
   @media (max-width:600px){
     .container{padding:0 16px;}
     .topbar .container{justify-content:center;text-align:center;gap:2px 14px;font-size:.74rem;padding:7px 14px;}
     .foot-grid{grid-template-columns:1fr;}
-    .page-hero{padding:54px 16px;}
-    .page-hero h1{font-size:1.7rem;}
     .section{padding:46px 0;}
     .brand img{height:46px;}
   }
@@ -207,7 +211,13 @@
   </div>
 </header>
 
-<section class="page-hero"><h1>Financial Calculators</h1><p>Handy tools to provide insight into your financial questions.</p></section>
+<section class="sec-head" style="border-top:0;">
+    <div class="container">
+      <div class="sec-kicker">Resources</div>
+      <h1>Financial Calculators</h1>
+      <p>Handy tools to provide insight into your financial questions.</p>
+    </div>
+  </section>
 
 <section class="section">
   <div class="container">
